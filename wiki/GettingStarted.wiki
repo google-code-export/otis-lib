@@ -1,5 +1,5 @@
+#summary How to get started with Otis library
 #labels Featured,Phase-Implementation
-summary How to get started with Otis library
 
 = Introduction =
 
@@ -14,7 +14,7 @@ There is more than one way to configure mappings
   * Custom mapping providers
 
 ==Configuration via metadata==
-To define transformations via type metadata all you have to do is mark target types and their members with appropriate attributes. To specify that a type is a target type of transformation, mark it with `MapClass` attribute. Then, for every member which will be mapped to source type, specify `Map` attribute. In following example, `UserDTO` is a target type for !UserEntity->UserDTO transformation.
+To define transformations via type metadata all you have to do is mark target types and their members with appropriate attributes. To specify that a type is a target type of transformation, mark it with `MapClass` attribute. Then, for every member which will be mapped to source type, specify `Map` attribute. In following example, `UserDTO` is a target type for `UserEntity->UserDTO` transformation.
 
 ===Sample===
 {{{

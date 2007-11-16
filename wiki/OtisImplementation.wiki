@@ -1,0 +1,14 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+This article desribes the implementation of assembler types.
+
+
+= Details =
+Otis *doesn't* rely on reflection to perform the transformations. There are two problems with that approach:
+  * It is slow
+  * Reflection is useless if assembly with types is obfuscated
+
+Instead, Otis reads the mappings and generates a new assembly which implements a single assembler class, which implements `IAssembler<Target, Source>` interface for all mapped transformations. By default, this assembly is generate in-memory, but the library can also be instructed to generate it on the file system, so that it can be referenced from another assembly. Another options is to just generate the assembler source code, and include that in another project.
+

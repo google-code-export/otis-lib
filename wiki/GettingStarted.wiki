@@ -13,7 +13,7 @@ Otis setup consists of two tasks (and coresponding two lines of code):
   * Instantiating the new Otis.Configuration object
   * Telling it to configure itself from some source
 
-What is left to do is retrieving the required assembler from the configuartion object, and start assembling the objects. Here is the snippet:
+What is left to do is to retrieve the required assembler from the configuration object, and start assembling the objects. Here is the snippet:
 {{{
     // configure the new Configuration object using metadata of types in the current assembly
     Configuration cfg = new Configuration();            // instantiate a new Configuration, one per application is needed
@@ -34,7 +34,7 @@ There is more than one way to configure mappings
   * Custom mapping providers
 
 ==Configuration via metadata==
-To define transformations via type metadata all you have to do is mark target types and their members with appropriate attributes. To specify that a type is a target type of transformation, mark it with `MapClass` attribute. Then, for every member which will be mapped to source type, specify `Map` attribute. In following example, `UserDTO` is a target type for `UserEntity->UserDTO` transformation.
+To define transformations via type metadata all you have to do is mark target types and their members with appropriate attributes. To specify that a type is a target type of transformation, mark it with `[MapClass]` attribute. Then, for every member which will be mapped to source type, specify `[Map]` attribute. In following example, `UserDTO` is a target type for `UserEntity->UserDTO` transformation.
 
 ===Sample===
 Here is a complete sample of defining the mappings via attributes, configuring the assembler and transforming the object:

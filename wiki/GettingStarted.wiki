@@ -1,0 +1,13 @@
+#summary How to get started with Otis library
+
+= Introduction =
+
+This article describes how to get going with Otis. It shows how to configure mappings between types and how to perform the transformations
+
+
+= Details =
+
+There is more than one way to configure mappings
+  * Add metadata to types using attributes
+  * Setup transformations in a xml file
+  * Custom mapping providers

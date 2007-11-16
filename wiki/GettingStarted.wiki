@@ -18,3 +18,89 @@ todo
 
 ==Configuration via XML files==
 todo
+
+===Sample===
+{{{
+// source class for conversion
+class UserEntity
+{
+    public int Id { get ... }
+    public string FirstName { get ... }
+    public string LastName { get ... }
+    public DateTime BirthDate { get ... }
+    public IList<ProjectEntity> Projects { get ... }
+    public UserEntity Boss { get ... }    
+}
+
+// target type for conversion
+[MapClass(typeof(UserEntity))] // defines conversion from UserEntity
+class UserDTO
+{
+    [Map]  // maps to the property of same name   
+    public int Id { get ... }
+
+    [Map("UserName.ToLower()")]
+    public string UserName { get ... }
+        [Map("FirstName + \" \" + LastName")] // planned for C# 3.0: [Map( (User u) => u.FirstName + " " + u.LastName; )]
+    public string FullName { get ... }
+
+    [Map("BirthDate", Format="Born on {0:D}")] // converts DateTime to string, and formats it as long date
+    public string Birthday { get ... }
+    
+    [Map] // source is an IList<ProjectEntity>, target is array
+    public ProjectDTO[] Projects { get ... }  
+    
+    [Map("Projects.Count")]
+    public int ProjectCount { get...} 
+
+    // iterates over all tasks in all projects and calculates average tasks duration
+    [Map("avg:Projects/Tasks/Duration")]
+    public double AvgTaskDuration { get...} 
+
+    // iterates over all tasks in all projects and returns maximum task duration
+    [Map("max:Projects/Tasks/Duration")]
+    public int MaxTaskDuration { get...} 
+    
+    [Map] // recursively maps the Boss property
+    public UserDTO Boss { get ... } 
+}
+
+// usage
+[Test]
+public void Test()
+{
+    Configuration cfg = new Configuration();            // instantiate a new Configuration, one per application is needed
+    cfg.AddType(typeof(UserDTO));                       // initialize it using type metadata, but easier is 
+                                                        // cfg.AddAssembly(Assembly.GetExecutingAssembly()) to register all types at once
+    IAssembler<UserDTO, UserEntity> asm                 // retrieve the assembler
+        = cfg.GetAssembler<UserDTO, UserEntity>();
+    UserEntity entity = ...                             // retrieve a UserEntity instance from somewhere
+    UserDTO dto = asm.AssembleFrom(entity);             // do the transformation
+    
+    Assert.AreEqual(dto.Id,              entity.Id);
+    Assert.AreEqual(dto.UserName,        entity.UserName.ToLower());
+    Assert.AreEqual(dto.FullName,        entity.FirstName + " " + entity.LastName);
+    Assert.AreEqual(dto.Birthday,        entity.BirthDate.ToString("Born on {0:D}"));
+    Assert.AreEqual(dto.Projects.Length, entity.Projects.Count);
+    Assert.AreEqual(dto.ProjectCount,    entity.Projects.Count); 
+      
+    Assert.AreEqual(dto.Boss.Id,         entity.Boss.Id);
+    Assert.AreEqual(dto.Boss.UserName,   entity.Boss.UserName.ToLower());
+    Assert.AreEqual(dto.Boss.FullName,   entity.Boss.FirstName + " " + entity.LastName);
+    
+    // calculating max and avg task duration to test the transformation
+    int max, cnt, sum;
+    
+    foreach(Project project in entity.Projects)
+        foreach(Task task in project.Tasks)
+        {
+            cnt++;
+            sum = sum + task.Duration; 
+            max = task.Duration > max ? task.Duration : max;    
+        }    
+    double avg = (double)sum / cnt; 
+        
+    Assert.AreEqual(avg, dto.AvgTaskDuration);
+    Assert.AreEqual(max, dto.MaxTaskDuration);        
+}
+}}}

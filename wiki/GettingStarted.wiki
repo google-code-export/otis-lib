@@ -103,4 +103,32 @@ public void Test()
 }}}
 
 ==Configuration via XML files==
-todo
+Configuration via XML files makes source code cleaner, and . These files can be standalone files which are deployed with the application, or built into the application as resources.
+If you choose this path, target class will look simply like this:
+
+{{{
+// target type for conversion
+class UserDTO
+{
+    public int Id { get ... }
+    public string UserName { get ... }
+    public string FullName { get ... }
+    public string Birthday { get ... }
+    public ProjectDTO[] Projects { get ... }  
+    public int ProjectCount { get...} 
+    public double AvgTaskDuration { get...} 
+    public int MaxTaskDuration { get...} 
+    public UserDTO Boss { get ... } 
+}
+}}}
+
+The xml mapping looks like this:
+{{{
+	<target name="gen_ddl">
+		<exec program="tools\plural\generator.exe" workingdir=".">
+			<arg value="-s"/>
+			<arg value="-o:src\db\firebird"/>
+			<arg value="${model}"/>
+		</exec>
+	</target>
+}}}

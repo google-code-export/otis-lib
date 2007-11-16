@@ -124,11 +124,11 @@ class UserDTO
 
 The xml mapping looks like this:
 {{{
-	<target name="gen_ddl">
-		<exec program="tools\plural\generator.exe" workingdir=".">
-			<arg value="-s"/>
-			<arg value="-o:src\db\firebird"/>
-			<arg value="${model}"/>
-		</exec>
-	</target>
+<target name="gen_ddl">
+	<exec program="tools\plural\generator.exe" workingdir=".">
+		<arg value="-s"/>
+		<arg value="-o:src\db\firebird"/>
+		<arg value="${model}"/>
+	</exec>
+</target>
 }}}

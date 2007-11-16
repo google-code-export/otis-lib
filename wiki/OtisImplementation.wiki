@@ -1,9 +1,9 @@
-#summary One-sentence summary of this page.
+#summary Discussion on implementation and performance of Otis library
 #labels Featured,Phase-Implementation
 
 = Introduction =
 
-This article describes the implementation of assembler types.
+This article describes the implementation of assembler types, and its repercussions on library performance.
 
 
 = Details =

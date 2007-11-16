@@ -158,6 +158,8 @@ The xml mapping looks like this:
 = See Also =
 [AssemblerInterface IAssembler<Target, Source> interface]
 
+[MappingGuide Type mapping in detail]
+
 [OtisImplementation Otis implementation and performance]
 
 [CustomProviders Custom mapping providers]

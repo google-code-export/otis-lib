@@ -147,13 +147,24 @@ class UserDTO
 
 The xml mapping looks like this:
 {{{
-<target name="gen_ddl">
-    <exec program="tools\plural\generator.exe" workingdir=".">
-        <arg value="-s"/>
-        <arg value="-o:src\db\firebird"/>
-        <arg value="${model}"/>
-    </exec>
-</target>
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- for testing resource reading-->
+<otis-mapping xmlns="urn:otis-mapping-1.0">
+
+    <class name="Otis.Sample.Presentation.UserInfo, Otis.Sample" source="Otis.Sample.Domain.User, Otis.Sample" helper="Otis.Sample.Presentation.Converter.Convert" >
+        <member name="Id" />
+        <member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
+        <member name="Blogs" />
+        <member name="BlogCount" expression="$Blogs.Count" />
+    </class>
+
+    <class name="Otis.Sample.Presentation.BlogInfo, Otis.Sample" source="Otis.Sample.Domain.Blog, Otis.Sample" >
+        <member name="Id" />
+        <member name="Title" expression="$Name + &quot; - &quot; + $Description" />
+        <member name="PostCount" expression="$Posts.Count" />
+    </class>
+
+</otis-mapping>
 }}}
 
 Schema for mapping file is available as part of the archive which can be downloaded from this site. It can be copied into xml\schemas folder under the Visual Studio 2005 installation directory, to provide syntax checking in the VS editor. Of course, the mapping file is checked against the schema during the configuration.

@@ -1,5 +1,6 @@
-#summary How to get started with Otis library
 #labels Featured,Phase-Implementation
+
+#summary How to get started with Otis library
 
 = Introduction =
 
@@ -15,8 +16,11 @@ Otis setup consists of two tasks (and coresponding two lines of code):
 
 What is left to do is retrieving the required assembler from the configuartion object, and start assembling the objects. Here is the snippet:
 {{{
+    // configure the new Configuration object metadata of types in the current assembly
     Configuration cfg = new Configuration();            // instantiate a new Configuration, one per application is needed
-    cfg.AddAssembly(Assembly.GetExecutingAssembly())    // initialize it using type metadata
+    cfg.AddAssembly(Assembly.GetExecutingAssembly())    // initialize it
+
+    // retrieve the assembler and transform the source object
     IAssembler<UserDTO, UserEntity> asm = cfg.GetAssembler<UserDTO, UserEntity>();                  // retrieve the assembler
         
     UserEntity entity = ...                             // retrieve a UserEntity instance from somewhere

@@ -5,9 +5,15 @@
 This article describes how to get going with Otis. It shows how to configure mappings between types and how to perform the transformations
 
 
-= Details =
+= Configuring the mappings =
 
 There is more than one way to configure mappings
   * Add metadata to types using attributes
   * Setup transformations in a xml file
   * Custom mapping providers
+
+==Configuration via metadata==
+todo
+
+==Configuration via XML files==
+todo

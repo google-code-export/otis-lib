@@ -125,7 +125,7 @@ public void Test()
 }}}
 
 ==Configuration via XML files==
-Configuration via XML files makes source code cleaner, and . These files can be standalone files which are deployed with the application, or built into the application as resources.
+Configuration via XML files makes source code cleaner, and is the preferred way to declare the mappings. These configuration files can be standalone files which are deployed with the application, or built into the application as resources.
 If you choose this path, target class will look simply like this:
 
 {{{
@@ -154,6 +154,8 @@ The xml mapping looks like this:
     </exec>
 </target>
 }}}
+
+Schema for mapping file is available as part of the archive which can be downloaded from this site. It can be copied into xml\schemas folder under the Visual Studio 2005 installation directory, to provide syntax checking in the VS editor. Of course, the mapping file is checked against the schema during the configuration.
 
 = See Also =
 [AssemblerInterface IAssembler<Target, Source> interface]

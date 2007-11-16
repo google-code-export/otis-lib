@@ -1,5 +1,5 @@
-#summary How to get started with Otis library
 #labels Featured,Phase-Implementation
+=#summary How to get started with Otis library
 
 = Introduction =
 
@@ -20,7 +20,7 @@ todo
 todo
 
 ===Sample===
-{{{{language:C#}
+{{{language=C#
 // source class for conversion
 class UserEntity
 {

@@ -6,7 +6,7 @@
 This article describes how to get going with Otis. It shows how to configure mappings between types and how to perform the transformations
 
 = Basic idea =
-When implementing code for transformation between the types, the required effort can make significant part of overall effort, thus making the project more expensive and/or delaying release date. Types which implement these transformations are usually called assemblers, and often consist of heaps of trivial code which has to be properly tested and maintained. The idea behind otis is that the assembler requirements should be expressed declaratively, and the library will take care of generating the assembler types.
+When implementing code for transformation between the types, the required effort can make significant part of overall effort on project, thus making the project more expensive and/or delaying release date. Types which implement these transformations are usually called assemblers, and often consist of heaps of trivial code which has to be properly tested and maintained. The idea behind otis is that the assembler requirements should be expressed declaratively, and the library will take care of generating the assembler types.
 
 = Setup =
 Otis setup consists of two tasks (and coresponding two lines of code):
@@ -154,3 +154,8 @@ The xml mapping looks like this:
     </exec>
 </target>
 }}}
+
+= See Also =
+[AssemblerInterface IAssembler<Target, Source> interface]
+[OtisImplementation Otis implementation and performance]
+[CustomProviders Custom mapping providers]

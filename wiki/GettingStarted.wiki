@@ -60,7 +60,8 @@ class UserDTO
 
     [Map("UserName.ToLower()")]
     public string UserName { get ... }
-        [Map("FirstName + \" \" + LastName")] // planned for C# 3.0: [Map( (User u) => u.FirstName + " " + u.LastName; )]
+
+    [Map("FirstName + \" \" + LastName")] // planned for C# 3.0: [Map( (User u) => u.FirstName + " " + u.LastName; )]
     public string FullName { get ... }
 
     [Map("BirthDate", Format="Born on {0:D}")] // converts DateTime to string, and formats it as long date

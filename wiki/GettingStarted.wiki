@@ -5,6 +5,23 @@
 
 This article describes how to get going with Otis. It shows how to configure mappings between types and how to perform the transformations
 
+= Basic idea =
+When implementing code for transformation between the types, the required effort can make significant part of overall effort, thus making the project more expensive and/or delaying release date. Types which implement these transformations are usually called assemblers, and often consist of heaps of trivial code which has to be properly tested and maintained. The idea behind otis is that the assembler requirements should be expressed declaratively, and the library will take care of generating the assembler types.
+
+= Setup =
+Otis setup consists of two tasks (and coresponding two lines of code):
+  * Instatiating the new Otis.Configuration object
+  * Telling it to configure itself from some source
+
+What is left to do is retrieving the required assembler from the configuartion object, and start assembling the objects. Here is the snippet:
+{{{
+    Configuration cfg = new Configuration();            // instantiate a new Configuration, one per application is needed
+    cfg.AddAssembly(Assembly.GetExecutingAssembly())    // initialize it using type metadata
+    IAssembler<UserDTO, UserEntity> asm = cfg.GetAssembler<UserDTO, UserEntity>();                  // retrieve the assembler
+        
+    UserEntity entity = ...                             // retrieve a UserEntity instance from somewhere
+    UserDTO dto = asm.AssembleFrom(entity);             // do the transformation
+}}}
 
 = Configuring the mappings =
 

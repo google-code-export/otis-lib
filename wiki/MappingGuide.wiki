@@ -1,0 +1,11 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+This article goes into details of mapping definitions.
+
+= XML mapping definitions =
+todo
+
+= Metadata mapping definitions =
+todo

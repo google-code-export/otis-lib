@@ -20,7 +20,7 @@ todo
 todo
 
 ===Sample===
-{{{language=C#
+{{{C#
 // source class for conversion
 class UserEntity
 {

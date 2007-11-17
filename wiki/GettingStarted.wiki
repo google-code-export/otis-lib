@@ -156,12 +156,14 @@ The xml mapping looks like this:
         <member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
         <member name="Blogs" />
         <member name="BlogCount" expression="$Blogs.Count" />
+        <member name="TotalPostCount" expression="count:Blogs/Posts" />
     </class>
 
     <class name="Otis.Sample.BlogDTO, Otis.Sample" source="Otis.Sample.Domain.Blog, Otis.Sample" >
         <member name="Id" />
         <member name="Title" expression="$Name + &quot; - &quot; + $Description" />
         <member name="PostCount" expression="$Posts.Count" />
+        <member name="AvgPostRating" expression="avg:Posts/Rating" />
     </class>
 
 </otis-mapping>

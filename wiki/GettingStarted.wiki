@@ -148,7 +148,6 @@ class UserDTO
 The xml mapping looks like this:
 {{{
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- for testing resource reading-->
 <otis-mapping xmlns="urn:otis-mapping-1.0">
 
     <class name="Otis.Sample.UserDTO, Otis.Sample" source="Otis.Sample.Domain.User, Otis.Sample" >

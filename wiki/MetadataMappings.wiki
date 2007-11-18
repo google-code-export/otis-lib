@@ -96,7 +96,7 @@ Otis automatically takes care of converting between different collection types:
     [Map("$ProjectList")]
     public ProjectDTO[] Projects {get; }
 }}}
-Here, `ProjectList` property which is an `IList<Project>` is converted to an array of `ProjectDTO`. Otis transparently creates an array and then transforms each Project into a ProjectDTO instance, which is then put into the array. Of course, conversion can be done the other way round: from an array to a list.
+Here, `ProjectList` property which is an `IList<Project>` is converted to an array of `ProjectDTO`. Otis transparently creates an array and then transforms each `Project` into a `ProjectDTO` instance, which is then put into the array. Of course, conversion can be done the other way round: from an array to a list.
 
 A very convenient feature of Otis library are cumulative functions. These are functions which are calculated over collection expression to provide some result. E.g. following mapping calculates the average duration of all tasks in all projects of the source User object:
 {{{

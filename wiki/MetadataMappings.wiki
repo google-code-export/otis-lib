@@ -1,7 +1,7 @@
 #summary Details on mapping definitions done with attributes
 
 = XML mapping definitions =
-Lets have a look at a class mapping done via attributes}
+Let's have a look at a class mapping done via attributes}
 
 {{{
     // source class

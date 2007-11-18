@@ -2,7 +2,7 @@
 #summary Roadmap for Otis
 
 == Roadmap == 
-This is the current roadmap for Otis library. It contains features which are needed, as well as features which are fun. Some of them will probably never be implemented. It could also be changed at any time.
+This is the current roadmap for Otis library. It contains features which are needed, as well as features which are fun. Some of them will probably never be implemented. It could also be changed at any time. Feel free to suggest anything you think might be missing.
 
 === Version 0.1 (Current) ===
   * Configuration via attributes and XML

@@ -1,3 +1,4 @@
+#labels Featured
 #summary Roadmap for Otis
 
 == Version 0.1 (Current) ==

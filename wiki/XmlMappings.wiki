@@ -1,7 +1,7 @@
 #summary Details on XML mapping definitions
 
 = XML mapping definitions =
-First, lets have a look at sample XML mapping definition:
+First, let's have a look at sample XML mapping definition:
 
 {{{
 <?xml version="1.0" encoding="utf-8" ?>	
@@ -51,4 +51,3 @@ Optional attribute `nullValue` specifies the value which will be assigned to the
 
 `format` attribute specifies formatting string for the mapping. It only applies to the target members which are strings. E.g. mapping `<member name="Birthday" expression="$BirthDate" format="born on {0:D}" />` would be equal to the code expression:
 {{{target.Birthday = string.Format("born on {0:D}", source.BirthDate);}}}
-

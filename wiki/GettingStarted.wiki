@@ -32,6 +32,8 @@ There is more than one way to configure mappings
   * Add metadata to types using attributes
   * Setup transformations in a xml file
   * Custom mapping providers
+  
+This article only gives an overview of the mapping definitions. For more details, refer to MappingGuide.
 
 ==Configuration via metadata==
 To define transformations via type metadata all you have to do is mark target types and their members with appropriate attributes. To specify that a type is a target type of transformation, mark it with `[MapClass]` attribute. Then, for every member which will be mapped to source type, specify `[Map]` attribute. In following example, `UserDTO` is a target type for `UserEntity->UserDTO` transformation.

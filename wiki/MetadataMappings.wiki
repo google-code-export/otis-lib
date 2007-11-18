@@ -18,33 +18,33 @@ Lets have a look at a class mapping done via attributes}
     }
     
     // target class
-	[MapClass(typeof(User))]
-	public class UserDTO
-	{
-		[Map("$Id")]   
-		public int Id {get; }
+    [MapClass(typeof(User))]
+    public class UserDTO
+    {
+        [Map("$Id")]   
+        public int Id {get; }
 
-		[Map]		
-		public int Age {get; }
+        [Map]       
+        public int Age {get; }
 
-		[Map("<NotAvailable>")] 
-		public string UserName {get; }
+        [Map("<NotAvailable>")] 
+        public string UserName {get; }
 
-		[Map("$FirstName + \" \" + $LastName")] 
-		public string FullName {get; }
+        [Map("$FirstName + \" \" + $LastName")] 
+        public string FullName {get; }
 
-		[Map(NullValue="<UNKNOWN>")] 
-		public string Address {get; }
+        [Map(NullValue="<UNKNOWN>")] 
+        public string Address {get; }
 
-		[Map("BirthDate", Format="born on {0:D}")]
-		public string BirthDay {get; }
+        [Map("BirthDate", Format="born on {0:D}")]
+        public string BirthDay {get; }
 
-		[Map("$ProjectList")]
-		public ProjectDTO[] Projects {get; }
+        [Map("$ProjectList")]
+        public ProjectDTO[] Projects {get; }
 
-		[Map("avg:$ProjectList/Tasks/Duration")]
-		public double AverageTaskDuration {get; }
-	}
+        [Map("avg:$ProjectList/Tasks/Duration")]
+        public double AverageTaskDuration {get; }
+    }
 }}}
 
 Mapping above defines the transformation from User class to UserDTO class. This is specified with `[MapClass(typeof(User))]` attribute on `UserDTO` class. `[MapClass]` attribute is initialized with the type of the source class.
@@ -52,7 +52,7 @@ Mapping above defines the transformation from User class to UserDTO class. This 
 It is also possible to specify helper function like this:
 {{{
     [MapClass(typeof(User), Helper = "Otis.Tests.Util.Convert")]
-	public class UserDTO {...}
+    public class UserDTO {...}
 }}}
 
 For more details on helper functions, see [XmlMappings].
@@ -63,38 +63,38 @@ The simplest form of `[Map]` attribute is without any parameters (example: `User
 
 This is usually not enough, so it is possible to define the source expression like this:
 {{{
-	[Map("$FirstName + \" \" + $LastName")] 
-	public string FullName {get; }
+    [Map("$FirstName + \" \" + $LastName")] 
+    public string FullName {get; }
 }}}
 
 This will map `UserDTO.FullName` to the code expression {{{source.FullName + " " + source.LastName}}}. '$' in mapping expression means that it is a reference to the source object, and in the assembler code it will be replaced with the source reference, thus resulting in the stated code expression.
 
 On the other hand, if the expression doesn't reference the source object, it is written as is:
 {{{
-	[Map("<NotAvailable>")] 
-	public string UserName {get; }
+    [Map("<NotAvailable>")] 
+    public string UserName {get; }
 }}}
 This is equivalent to code expression {{{target.UserName = "<NotAvailable>"}}}.
 
 If null values of the source expression needs special handling, it is possible to provide null replacement value via `NullValue` property, like this:
 {{{
-	[Map(NullValue="<UNKNOWN>")] 
-	public string Address {get; }
+    [Map(NullValue="<UNKNOWN>")] 
+    public string Address {get; }
 }}}
 In this case, if `source.Address` is null, `Address` property of the target object will be set to "<UNKNOWN>".
 
 It is also possible to format the source expression, like in this mapping:
 {{{
-	[Map("BirthDate", Format="born on {0:D}")]
-	public string BirthDay {get; }
+    [Map("BirthDate", Format="born on {0:D}")]
+    public string BirthDay {get; }
 }}}
 This would be equal to the code expression:
 {{{target.BirthDay = string.Format("born on {0:D}", source.BirthDate);}}}
 
 Otis automatically takes care of converting between different collection types:
 {{{
-	[Map("$ProjectList")]
-	public ProjectDTO[] Projects {get; }
+    [Map("$ProjectList")]
+    public ProjectDTO[] Projects {get; }
 }}}
 Here, `ProjectList` property which is an `IList<Project>` is converted to an array of `ProjectDTO`. Otis transparently creates an array and then transforms each Project into an ProjectDTO instance, which is then put into the array. Of course, conversion can be done the other way round: from an array to a list.
 
@@ -103,8 +103,8 @@ A very convenient feature of Otis library are cumulative functions. These are fu
     // User class has ProjectList property of type IList<Project>.
     // Project class has Tasks property of type IList<Task>.
     // Task class has an integer property named Duration.
-	[Map("avg:$ProjectList/Tasks/Duration")]
-	public double AverageTaskDuration {get; }
+    [Map("avg:$ProjectList/Tasks/Duration")]
+    public double AverageTaskDuration {get; }
 }}}
 
 Following cumulative functions are implemented by default:

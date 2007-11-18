@@ -47,7 +47,7 @@ Only `name` attribute is mandatory and it specifies the name of the property or 
 
 `expression` attribute specifies the expression which will be assigned to the property on target class specified by `name` attribute. This doesn't have to reference source members only. For example, mapping `<member name="AccessRights" expression="Security.GetDefaultRights()" />` is a valid mapping which will set !AccessRights property of target type to the value returned by !GetDefaultRights() call on Security static class.
 
-Optional attribute `nullValue` specifies the value which will be assigned to the target property if the the source expression equals null. E.g. mapping `<member name="UserID" expression="$UserName" nullValue="[UNKNOWN]" />` will set target.UserID to source.!UserName, but if source.!UserName is null, UserID will be set to "![UNKNOWN]".
+Optional attribute `nullValue` specifies the value which will be assigned to the target property if the the source expression equals null. E.g. mapping `<member name="UserID" expression="$UserName" nullValue="{UNKNOWN}" />` will set target.UserID to source.!UserName, but if source.!UserName is null, UserID will be set to "{UNKNOWN}".
 
 `format` attribute specifies formatting string for the mapping. It only applies to the target members which are strings. E.g. mapping `<member name="Birthday" expression="$BirthDate" format="born on {0:D}" />` would be equal to the code expression:
 {{{target.Birthday = string.Format("born on {0:D}", source.BirthDate);}}}

@@ -47,7 +47,7 @@ Lets have a look at a class mapping done via attributes}
     }
 }}}
 
-Mapping above defines the transformation from User class to UserDTO class. This is specified with `[MapClass(typeof(User))]` attribute on `UserDTO` class. `[MapClass]` attribute is initialized with the type of the source class.
+Mapping above defines the transformation from `User` class to `UserDTO` class. This is specified with `[MapClass(typeof(User))]` attribute on `UserDTO` class. `[MapClass]` attribute is initialized with the type of the source class.
 
 It is also possible to specify helper function like this:
 {{{
@@ -57,7 +57,7 @@ It is also possible to specify helper function like this:
 
 For more details on helper functions, see [XmlMappings].
 
-Member mappings are defined via `[Map]` attribute. This attribute is allowed on properties as well as on fields, as long as they are public. Please note the public fields are usually frowned upon, but feel free to choose for yourself.
+Member mappings are defined via `[Map]` attribute. This attribute is allowed on properties as well as on fields, as long as they are public. Please note that the public fields are usually frowned upon, but feel free to choose for yourself.
 
 The simplest form of `[Map]` attribute is without any parameters (example: `UserDTO.Age` property). This means that the member will be mapped to the source member with the same name (in this case `User.Age`).
 
@@ -96,7 +96,7 @@ Otis automatically takes care of converting between different collection types:
     [Map("$ProjectList")]
     public ProjectDTO[] Projects {get; }
 }}}
-Here, `ProjectList` property which is an `IList<Project>` is converted to an array of `ProjectDTO`. Otis transparently creates an array and then transforms each Project into an ProjectDTO instance, which is then put into the array. Of course, conversion can be done the other way round: from an array to a list.
+Here, `ProjectList` property which is an `IList<Project>` is converted to an array of `ProjectDTO`. Otis transparently creates an array and then transforms each Project into a ProjectDTO instance, which is then put into the array. Of course, conversion can be done the other way round: from an array to a list.
 
 A very convenient feature of Otis library are cumulative functions. These are functions which are calculated over collection expression to provide some result. E.g. following mapping calculates the average duration of all tasks in all projects of the source User object:
 {{{
@@ -108,10 +108,10 @@ A very convenient feature of Otis library are cumulative functions. These are fu
 }}}
 
 Following cumulative functions are implemented by default:
-||*Function* || *Description* ||
-|| min       || returns the element with the smallest value ||
-|| max       || returns the element with the greatest value ||
-|| avg       || returns the average of all element values ||
-|| count     || returns the count of all elements  ||
+|| *Function* || *Description* ||
+|| min        || returns the element with the smallest value ||
+|| max        || returns the element with the greatest value ||
+|| avg        || returns the average of all element values ||
+|| count      || returns the count of all elements  ||
 
 It is also possible to provide custom user-defined cumulative functions. 

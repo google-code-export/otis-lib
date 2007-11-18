@@ -28,7 +28,7 @@ What is left to do is to retrieve the required assembler from the configuration 
 
 = Configuring the mappings =
 
-There is more than one way to configure mappings
+There is more than one way to configure mappings 
   * Add metadata to types using attributes
   * Setup transformations in a xml file
   * Custom mapping providers

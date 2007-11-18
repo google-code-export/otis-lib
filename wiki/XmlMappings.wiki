@@ -1,0 +1,55 @@
+#summary Details on XML mapping definitions
+
+= XML mapping definitions =
+First, lets have a look at sample XML mapping definition:
+
+{{{
+<?xml version="1.0" encoding="utf-8" ?>	
+<otis-mapping xmlns="urn:otis-mapping-1.0">
+	<class name="Otis.Tests.UserDTO, Otis.Tests" source="Otis.Tests.Entity.User, Otis.Tests" >
+		<member name="Id" />
+		<member name="Age" />
+		<member name="UserName" expression="$UserName.ToUpper()" nullValue="[unknown]" />
+		<member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
+		<member name="ProjectCount" expression="$Projects.Count" />
+	</class>
+</otis-mapping>
+}}}
+
+Root element of the document is an `<otis-mapping>` element. Inside it, there is a `<class>` mapping, which defines a mapping from a source class to target class. There can be as many `<class>` elements inside an `<otis-mapping>` element as needed.
+
+== Anatomy of `<class>` element ==
+`<class>` element has two mandatory attributes:
+`name` attribute holds a fully qualified name of the target class for transformation.
+`source` attribute holds a fully qualified name of the source class.
+Optionally, `helper` attribute can be used to specify the helper function for the transformation. Helper method can be a static method on any class with signature `static void HelperFunction(ref TargetClass t, ref SourceClass s)`, or
+a instance method on the target type with the same signature. Here is a sample of setting a helper function with `helper` attribute:
+{{{
+<class name="Otis.Tests.UserDTO, Otis.Tests" source="Otis.Tests.Entity.User, Otis.Tests" helper="Otis.Tests.Util.Convert" >
+}}}
+
+Inside the helper function, you can do any custom transformation, which is too complex to define in some other way. Example:
+{{{
+public class Util
+{
+	public static void Convert(ref UserDTO dto, ref User user)
+	{
+	   dto.SomeComplexProperty = ... // do whatever you want here   
+    }
+}
+}}}
+
+`<class>` element can contains one `<member>` element for every property or field of the target type which must be mapped to some expression. For example, mapping `<member name="ProjectCount" expression="$Projects.Count" />` means that the ProjectCount property will be set to the value of the Count property of the Projects property of source class. In the code, it would look like this:
+`target.ProjectCount = source.Projects.Count;`
+
+There are four possible attributes for `<member>` element: `name`, `expression`, `nullValue` and `format`.
+
+Only `name` attribute is mandatory and it specifies the name of the property or field on the target class which is being mapped. If the `expression` attribute is omitted, target member will be mapped to the source member with the same name. E.g. mapping `<member name="ID" />` will map ID property of the source type to the ID property of the target type (i.e. `target.ID = source.ID;`).
+
+`expression` attribute specifies the expression which will be assigned to the property on target class specified by `name` attribute. This doesn't have to reference source members only. For example, mapping `<member name="AccessRights" expression="Security.GetDefaultRights()" />` is a valid mapping which will set AccessRights property of target type to the value returned by GetDefaultRights() call on Security static class.
+
+Optional attribute `nullValue` specifies the value which will be assigned to the target property if the the source expression equals null. E.g. mapping `<member name="UserID" expression="$UserName" nullValue="[UNKNOWN]" />` will set target.UserID to source.UserName, but if source.UserName is null, UserID will be set to "[UNKNOWN]".
+
+`format` attribute specifies formatting string for the mapping. It only applies to the target members which are strings.E.g. mapping `<member name="Birthday" expression="$BirthDate" format="born on {0:D}" />` would be equal to the code expression:
+{{{target.Birthday = string.Format("born on {0:D}", source.BirthDate);}}}
+

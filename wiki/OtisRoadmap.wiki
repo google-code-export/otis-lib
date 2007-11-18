@@ -1,0 +1,43 @@
+#summary Roadmap for Otis
+
+== Version 0.1 (Current) ==
+  * Configuration via attributes and XML
+  * XML sources: standalone file, embedded resource
+  * Standard expression mapping
+  * IList <-> Array
+  * XML schema to support intellisense in Visual Studio
+  * Custom configuration providers
+  * Assembler generation:  in-memory, on the file system, source code only
+  * Helper functions for custom conversions
+  * Expression formatting
+  * Null Value handling
+
+== Version 0.2 ==
+  * Cumulative functions
+  * Better default value handling (also for value types)
+
+== Version 0.3 ==
+  * NHibernate uninitialized collections and references
+  * Factories, factory methods
+  * Enum conversions
+
+== Version 0.4 ==
+  * Events for hooking into conversion process
+  * Inheritance issues
+  * Better debugging support
+
+== Version 0.5 ==
+  * Move all strings to resources
+  * Localization (e.g. for !DateTime conversions)
+  
+== Future versions ==
+  * Reverse (bidirectional) conversion
+  * Tool for generation of XML mapping from attributes
+  * Object->map transformation: user.!FirstName -> userMap["FirstName"]
+  * Statistics
+  * Contexts
+  * Mapping via delegates (something like {{{[Map({(User u) => u.First + " " + u.Last})]}}} in C#3.0)
+
+
+
+

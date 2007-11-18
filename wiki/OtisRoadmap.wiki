@@ -34,7 +34,7 @@
 == Future versions ==
   * Reverse (bidirectional) conversion
   * Tool for generation of XML mapping from attributes
-  * Object->map transformation: user.!FirstName -> userMap["FirstName"]
+  * Object->map transformation: user.!FirstName -> userMap["!FirstName"]
   * Statistics
   * Contexts
   * Mapping via delegates (something like {{{[Map({(User u) => u.First + " " + u.Last})]}}} in C#3.0)

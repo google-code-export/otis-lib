@@ -27,16 +27,16 @@ Let's have a look at a class mapping done via attributes}
         [Map]       
         public int Age {get; }
 
-        [Map("<NotAvailable>")] 
+        [Map("\"<NotAvailable>\"")] 
         public string UserName {get; }
 
         [Map("$FirstName + \" \" + $LastName")] 
         public string FullName {get; }
 
-        [Map(NullValue="<UNKNOWN>")] 
+        [Map(NullValue="\"<UNKNOWN>\"")] 
         public string Address {get; }
 
-        [Map("BirthDate", Format="born on {0:D}")]
+        [Map("$BirthDate", Format="born on {0:D}")]
         public string BirthDay {get; }
 
         [Map("$ProjectList")]
@@ -71,21 +71,21 @@ This will map `UserDTO.FullName` to the code expression {{{source.FullName + " "
 
 On the other hand, if the expression doesn't reference the source object, it is written as is:
 {{{
-    [Map("<NotAvailable>")] 
+    [Map("\"<NotAvailable>\"")] 
     public string UserName {get; }
 }}}
 This is equivalent to code expression {{{target.UserName = "<NotAvailable>"}}}.
 
 If null values of the source expression needs special handling, it is possible to provide null replacement value via `NullValue` property, like this:
 {{{
-    [Map(NullValue="<UNKNOWN>")] 
+    [Map(NullValue="\"<UNKNOWN>\"")] 
     public string Address {get; }
 }}}
 In this case, if `source.Address` is null, `Address` property of the target object will be set to "<UNKNOWN>".
 
 It is also possible to format the source expression, like in this mapping:
 {{{
-    [Map("BirthDate", Format="born on {0:D}")]
+    [Map("$BirthDate", Format="born on {0:D}")]
     public string BirthDay {get; }
 }}}
 This would be equal to the code expression:

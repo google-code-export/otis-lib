@@ -111,6 +111,7 @@ Following cumulative functions are implemented by default:
 || *Function* || *Description* ||
 || min        || returns the element with the smallest value ||
 || max        || returns the element with the greatest value ||
+|| sum        || returns the sum of all element values ||
 || avg        || returns the average of all element values ||
 || count      || returns the count of all elements  ||
 

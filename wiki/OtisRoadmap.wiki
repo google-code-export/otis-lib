@@ -1,8 +1,8 @@
-#labels Featured, Phase-Requirements
 #summary Roadmap for Otis
+#labels Featured,Phase-Requirements
 
 == Roadmap == 
-This is the current roadmap for Otis library. It contains features which are needed, as well as features which are fun. Some of them will probably never be implemented. It could also be changed at any time. Feel free to suggest anything you think might be missing.
+This is the current roadmap for Otis library. It contains features which are needed, as well as features which are fun. Some of them will probably never be implemented. It could also be changed at any time. Feel free to suggest anything you think might be missing, or boo anything that you consider wrong, broken, stupid or useless.
 
 === Version 0.1 (Current) ===
   * Configuration via attributes and XML
@@ -41,7 +41,5 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Statistics
   * Contexts
   * Mapping via delegates (something like {{{[Map({(User u) => u.First + " " + u.Last})]}}} in C#3.0)
-
-
 
 

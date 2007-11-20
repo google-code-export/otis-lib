@@ -37,7 +37,7 @@ This is the current roadmap for Otis library. It contains features which are nee
 === Future versions ===
   * Reverse (bidirectional) conversion
   * Tool for generation of XML mapping from attributes
-  * standalone assembly/source code generator (can be used as a part of an automated build)
+  * Standalone assembly/source code generator (can be used as a part of an automated build)
   * Object->map transformation: user.!FirstName -> userMap["!FirstName"]
   * Statistics
   * Contexts

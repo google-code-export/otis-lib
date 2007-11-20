@@ -23,7 +23,7 @@ This is the current roadmap for Otis library. It contains features which are nee
 === Version 0.3 ===
   * NHibernate uninitialized collections and references
   * Factories, factory methods
-  * Enum conversions
+  * Enum conversions (enum -> enum, enum->string, constant->enum)
 
 === Version 0.4 ===
   * Events for hooking into conversion process
@@ -39,6 +39,7 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Tool for generation of XML mapping from attributes
   * Standalone assembly/source code generator (can be used as a part of an automated build)
   * Object->map transformation: user.!FirstName -> userMap["!FirstName"]
+  * Filtering: [Map("$Projects/Tasks", Filter("Duration > 3")]
   * Statistics
   * Contexts
   * Mapping via delegates (something like {{{[Map({(User u) => u.First + " " + u.Last})]}}} in C#3.0)

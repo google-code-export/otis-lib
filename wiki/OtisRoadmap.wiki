@@ -43,4 +43,4 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Filtering: [Map("$Projects/Tasks", Filter("Duration > 3")]
   * Statistics
   * Contexts
-  * Type safe mapping via delegates (something like {{{[Map({(User u) => u.First + " " + u.Last})]}}} in C#3.0)
+  * Type safe mapping via delegates: something like {{{[Map({(User u) => u.First + " " + u.Last})]}}} in C#3.0

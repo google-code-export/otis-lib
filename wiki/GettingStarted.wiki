@@ -60,27 +60,27 @@ class UserDTO
     [Map]  // maps to the property of same name   
     public int Id { get ... }
 
-    [Map("UserName.ToLower()")]
+    [Map("$UserName.ToLower()")]
     public string UserName { get ... }
 
-    [Map("FirstName + \" \" + LastName")] // planned for C# 3.0: [Map( (User u) => u.FirstName + " " + u.LastName; )]
+    [Map("$FirstName + \" \" + $LastName")] // planned for C# 3.0: [Map( (User u) => u.FirstName + " " + u.LastName; )]
     public string FullName { get ... }
 
-    [Map("BirthDate", Format="Born on {0:D}")] // converts DateTime to string, and formats it as long date
+    [Map("$BirthDate", Format="Born on {0:D}")] // converts DateTime to string, and formats it as long date
     public string Birthday { get ... }
     
     [Map] // source is an IList<ProjectEntity>, target is array
     public ProjectDTO[] Projects { get ... }  
     
-    [Map("Projects.Count")]
+    [Map("$Projects.Count")]
     public int ProjectCount { get...} 
 
     // iterates over all tasks in all projects and calculates average tasks duration
-    [Map("avg:Projects/Tasks/Duration")]
+    [Map("avg:$Projects/Tasks/Duration")]
     public double AvgTaskDuration { get...} 
 
     // iterates over all tasks in all projects and returns maximum task duration
-    [Map("max:Projects/Tasks/Duration")]
+    [Map("max:$Projects/Tasks/Duration")]
     public int MaxTaskDuration { get...} 
     
     [Map] // recursively maps the Boss property

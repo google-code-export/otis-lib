@@ -98,7 +98,7 @@ Otis automatically takes care of converting between different collection types:
 }}}
 Here, `ProjectList` property which is an `IList<Project>` is converted to an array of `ProjectDTO`. Otis transparently creates an array and then transforms each `Project` into a `ProjectDTO` instance, which is then put into the array. Of course, conversion can be done the other way round: from an array to a list.
 
-A very convenient feature of Otis library are cumulative functions. These are functions which are calculated over collection expression to provide some result. E.g. following mapping calculates the average duration of all tasks in all projects of the source User object:
+A very convenient feature of Otis library are aggregate functions. These are functions which are calculated over collection expression to provide some result. E.g. following mapping calculates the average duration of all tasks in all projects of the source User object:
 {{{
     // User class has ProjectList property of type IList<Project>.
     // Project class has Tasks property of type IList<Task>.
@@ -107,7 +107,7 @@ A very convenient feature of Otis library are cumulative functions. These are fu
     public double AverageTaskDuration {get; }
 }}}
 
-Following cumulative functions are implemented by default:
+Following aggregate functions are implemented by default:
 || *Function* || *Description* ||
 || min        || returns the element with the smallest value ||
 || max        || returns the element with the greatest value ||
@@ -115,4 +115,4 @@ Following cumulative functions are implemented by default:
 || avg        || returns the average of all element values ||
 || count      || returns the count of all elements  ||
 
-It is also possible to provide custom user-defined cumulative functions. 
+It is also possible to provide custom user-defined aggregate functions. 

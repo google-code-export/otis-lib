@@ -17,8 +17,8 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Null Value handling
 
 === Version 0.2 (expected beginning of December, 2007) ===
-  * Aggregate functions (implemented)
-  * Better default value handling (also for value types)
+  * Aggregate functions *(implemented)*
+  * Better default/null value handling (also for value types)
   * String literal expressions
 
 === Version 0.3 ===

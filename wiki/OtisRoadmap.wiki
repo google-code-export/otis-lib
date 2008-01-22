@@ -19,7 +19,7 @@ This is the current roadmap for Otis library. It contains features which are nee
 === Version 0.2 (in work - expected in January, 2008) ===
   * Aggregate functions *(implemented as of 30.11.07.)*
   * Better default/null value handling (also for value types)
-  * String literal expressions
+  * String literal expressions *(implemented as of 20.01.08.)*
 
 === Version 0.3 ===
   * NHibernate uninitialized collections and references

@@ -40,7 +40,7 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Tool for generation of XML mapping from attributes
   * Standalone assembly/source code generator (can be used as a part of an automated build)
   * Object->map transformation: user.!FirstName -> userMap["!FirstName"]
-  * Filtering: [Map("$Projects/Tasks", Filter("Duration > 3")]
+  * Filtering: [Map("$Projects/Tasks", Filter = "$Duration > 3"]
   * Statistics
   * Contexts
   * Type safe mapping via delegates: something like {{{[Map({(User u) => u.First + " " + u.Last})]}}} in C#3.0

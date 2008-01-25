@@ -161,8 +161,8 @@ The xml mapping looks like this:
 <otis-mapping xmlns="urn:otis-mapping-1.0">
 
     <class name="Otis.Sample.UserDTO, Otis.Sample" source="Otis.Sample.Domain.User, Otis.Sample" >
-        <member name="Id" />
-        <member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
+        <member name="Id" />  <!-- maps to the member with the same name -->
+        <member name="FullName" expression="[$FirstName + ' ' + $LastName]" /> <!-- uses [] to avoid "$FirstName + &quot; &quot; + $LastName" -->
         <member name="Title" expression="$Gender" >
             <map from="Gender.Male" to="Mr." />     <!-- projection -->
             <map from="Gender.Female" to="Mrs." />

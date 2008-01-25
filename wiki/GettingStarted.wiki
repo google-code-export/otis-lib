@@ -39,7 +39,7 @@ This article only gives an overview of the mapping definitions. For more details
 To define transformations via type metadata all you have to do is mark target types and their members with appropriate attributes. To specify that a type is a target type of transformation, mark it with `[MapClass]` attribute. Then, for every member which will be mapped to source type, specify `[Map]` attribute. In following example, `UserDTO` is a target type for `UserEntity->UserDTO` transformation.
 
 ===Sample===
-Here is a complete sample of defining the mappings via attributes, configuring the assembler and transforming the object:
+Here is a complete sample of defining the mappings via attributes (for version 0.2), configuring the assembler and transforming the object:
 
 {{{
 // source class for conversion
@@ -50,7 +50,8 @@ class UserEntity
     public string LastName { get ... }
     public DateTime BirthDate { get ... }
     public IList<ProjectEntity> Projects { get ... }
-    public UserEntity Boss { get ... }    
+    public UserEntity Boss { get ... }  
+    public Gender Gender { get ... }  // Gender is an enum with values Male, Female
 }
 
 // target type for conversion
@@ -63,8 +64,13 @@ class UserDTO
     [Map("$UserName.ToLower()")]
     public string UserName { get ... }
 
-    [Map("$FirstName + \" \" + $LastName")] // planned for C# 3.0: [Map( (User u) => u.FirstName + " " + u.LastName; )]
+    // escaped with []: treats ' as " so you don't have to write "$FirstName + \" \" + $LastName"
+    [Map("[$FirstName + ' ' + $LastName]")] // planned for C# 3.0: [Map( (User u) => u.FirstName + " " + u.LastName; )]
     public string FullName { get ... }
+
+    // Map enum values to strings
+    [Map("Gender", Projection="Male=>Mr.; Female=Mrs.")]
+    public string Title { get ... }
 
     [Map("$BirthDate", Format="Born on {0:D}")] // converts DateTime to string, and formats it as long date
     public string Birthday { get ... }

@@ -69,7 +69,7 @@ class UserDTO
     public string FullName { get ... }
 
     // Map enum values to strings, e.g. Gender.Female => "Mrs."
-    [Map("Gender", Projection="Male=>Mr.; Female=Mrs.")]
+    [Map("$Gender", Projection="Male=>Mr.; Female=Mrs.")]
     public string Title { get ... }
 
     [Map("$BirthDate", Format="Born on {0:D}")] // converts DateTime to string, and formats it as long date

@@ -108,6 +108,7 @@ public void Test()
     Assert.AreEqual(dto.Id,              entity.Id);
     Assert.AreEqual(dto.UserName,        entity.UserName.ToLower());
     Assert.AreEqual(dto.FullName,        entity.FirstName + " " + entity.LastName);
+    Assert.AreEqual(dto.Title,           "Mrs."); // entity.Gender == Gender.Female
     Assert.AreEqual(dto.Birthday,        entity.BirthDate.ToString("Born on {0:D}"));
     Assert.AreEqual(dto.Projects.Length, entity.Projects.Count);
     Assert.AreEqual(dto.ProjectCount,    entity.Projects.Count); 
@@ -144,6 +145,7 @@ class UserDTO
     public int Id { get ... }
     public string UserName { get ... }
     public string FullName { get ... }
+    public string Title { get ... }
     public string Birthday { get ... }
     public ProjectDTO[] Projects { get ... }  
     public int ProjectCount { get...} 
@@ -161,6 +163,10 @@ The xml mapping looks like this:
     <class name="Otis.Sample.UserDTO, Otis.Sample" source="Otis.Sample.Domain.User, Otis.Sample" >
         <member name="Id" />
         <member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
+        <member name="Title" expression="$Gender" >
+            <map from="Male" to="Mr." />     <!-- projection -->
+            <map from="Female" to="Mrs." />
+        </member> 
         <member name="Blogs" />
         <member name="BlogCount" expression="$Blogs.Count" />
         <member name="TotalPostCount" expression="count:$Blogs/Posts" />

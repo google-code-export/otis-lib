@@ -69,7 +69,7 @@ class UserDTO
     public string FullName { get ... }
 
     // Projection: map enum values to strings, e.g. Gender.Female => "Mrs."
-    [Map("$Gender", Projection = "Male => Mr.; Female => Mrs.")]
+    [Map("$Gender", Projection = "Gender.Male => Mr.; Gender.Female => Mrs.")]
     public string Title { get ... }
 
     [Map("$BirthDate", Format="Born on {0:D}")] // converts DateTime to string, and formats it as long date
@@ -108,7 +108,7 @@ public void Test()
     Assert.AreEqual(dto.Id,              entity.Id);
     Assert.AreEqual(dto.UserName,        entity.UserName.ToLower());
     Assert.AreEqual(dto.FullName,        entity.FirstName + " " + entity.LastName);
-    Assert.AreEqual(dto.Title,           "Mrs."); // entity.Gender == Gender.Female
+    Assert.AreEqual(dto.Title,           entity.Gender == Gender.Female ? "Mrs." : "Mr.");
     Assert.AreEqual(dto.Birthday,        entity.BirthDate.ToString("Born on {0:D}"));
     Assert.AreEqual(dto.Projects.Length, entity.Projects.Count);
     Assert.AreEqual(dto.ProjectCount,    entity.Projects.Count); 
@@ -164,8 +164,8 @@ The xml mapping looks like this:
         <member name="Id" />
         <member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
         <member name="Title" expression="$Gender" >
-            <map from="Male" to="Mr." />     <!-- projection -->
-            <map from="Female" to="Mrs." />
+            <map from="Gender.Male" to="Mr." />     <!-- projection -->
+            <map from="Gender.Female" to="Mrs." />
         </member> 
         <member name="Blogs" />
         <member name="BlogCount" expression="$Blogs.Count" />

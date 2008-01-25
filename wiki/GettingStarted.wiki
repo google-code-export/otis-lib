@@ -68,7 +68,7 @@ class UserDTO
     [Map("[$FirstName + ' ' + $LastName]")] 
     public string FullName { get ... }
 
-    // Map enum values to strings
+    // Map enum values to strings, e.g. Gender.Female => "Mrs."
     [Map("Gender", Projection="Male=>Mr.; Female=Mrs.")]
     public string Title { get ... }
 

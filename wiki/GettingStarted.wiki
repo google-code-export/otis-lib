@@ -64,7 +64,7 @@ class UserDTO
     [Map("$UserName.ToLower()")]
     public string UserName { get ... }
 
-    // escaped with []: treats ' as " so you don't have to write "$FirstName + \" \" + $LastName"
+    // expression enclosed in []: treats ' as " so you don't have to write "$FirstName + \" \" + $LastName"
     [Map("[$FirstName + ' ' + $LastName]")] // planned for C# 3.0: [Map( (User u) => u.FirstName + " " + u.LastName; )]
     public string FullName { get ... }
 

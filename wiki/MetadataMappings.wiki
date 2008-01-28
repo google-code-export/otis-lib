@@ -31,7 +31,7 @@ Let's have a look at a class mapping done via attributes
         [Map("\"<NotAvailable>\"")] 
         public string UserName {get; }
 
-        [Map("$FirstName + \" \" + $LastName")] 
+        [Map("[$FirstName + ' ' + $LastName]")] // uses simplified string (enclosed in [])
         public string FullName {get; }
 
         [Map(NullValue="\"<UNKNOWN>\"")] 

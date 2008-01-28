@@ -74,7 +74,7 @@ This is usually not enough, so it is possible to define the source expression li
     public string FullName {get; }
 }}}
 
-This will map `UserDTO.FullName` to the code expression {{{source.FullName + " " + source.LastName}}}. '$' in mapping expression means that it is a reference to the source object, and in the assembler code it will be replaced with the source reference, thus resulting in the stated code expression. You can also see one additional feature here: simplified string mappings. When the mapping expression is closed in square brackets, then the single quote character will be treated as double quote character (which needs escaping inside a string). Without this the expression would be "$FirstName + \" \" + $LastName". Of cours, you can use that if you like it.
+This will map `UserDTO.FullName` to the code expression {{{source.FullName + " " + source.LastName}}}. '$' in mapping expression means that it is a reference to the source object, and in the assembler code it will be replaced with the source reference, thus resulting in the stated code expression. You can also see one additional feature here: simplified string mappings. When the mapping expression is closed in square brackets, then the single quote character will be treated as double quote character (which needs escaping inside a string). Without this the expression would be {{{"$FirstName + \" \" + $LastName"}}}. Of course, you can use that if you like it.
 
 On the other hand, if the expression doesn't reference the source object, it is written as is:
 {{{

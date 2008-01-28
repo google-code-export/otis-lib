@@ -14,8 +14,8 @@ Let's have a look at a class mapping done via attributes
         public string LastName { get; }
         public string Address { get; }
         public DateTime BirthDate;
-        IList<Project> ProjectList;
-        Gender Gender; // Gender is an enum with values Male, Female
+        public IList<Project> ProjectList;
+        public Gender Gender; // Gender is an enum with values Male, Female
     }
     
     // target class

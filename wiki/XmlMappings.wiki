@@ -10,8 +10,16 @@ First, let's have a look at sample XML mapping definition:
 		<member name="Id" />
 		<member name="Age" />
 		<member name="UserName" expression="$UserName.ToUpper()" nullValue="[unknown]" />
-		<member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
+		<member name="FullName" expression="[$FirstName + ' ' + $LastName]" />
 		<member name="ProjectCount" expression="$Projects.Count" />
+		<member name="Title" expression="$Gender" >
+            <map from="Gender.Male" to="Mr." />     <!-- projections -->
+            <map from="Gender.Female" to="Mrs." />
+        </member> 
+        <member name="Birthday"  expression="$BirthDate" format="Born on {0:D}"/>
+        <member name="ProjectCount" expression="$Projects.Count" />
+        <member name="AvgTaskDuration" expression="avg:$Projects/Tasks/Duration" />
+        <member name="MaxTaskDuration" expression="max:$Projects/Tasks/Duration" />  		
 	</class>
 </otis-mapping>
 }}}
@@ -46,8 +54,34 @@ There are four possible attributes for `<member>` element: `name`, `expression`,
 Only `name` attribute is mandatory and it specifies the name of the property or field on the target class which is being mapped. If the `expression` attribute is omitted, target member will be mapped to the source member with the same name. E.g. mapping `<member name="ID" />` will map ID property of the source type to the ID property of the target type (i.e. {{{target.ID = source.ID;}}}).
 
 `expression` attribute specifies the expression which will be assigned to the property on target class specified by `name` attribute. This doesn't have to reference source members only. For example, mapping `<member name="AccessRights" expression="Security.GetDefaultRights()" />` is a valid mapping which will set !AccessRights property of target type to the value returned by !GetDefaultRights() call on Security static class.
+If you need to use strings inside the expression, it can become awkward to use
+double quotes which have to be escaped. In this case you can use simplified string expressions: enclose the expression in square brackets and use single quotes instead of double quotes. E.g., instead:
+{{{
+    <member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
+}}}
+you can write:
+{{{
+    <member name="FullName" expression="[$FirstName + ' ' + $LastName]" />
+}}}
+   
+You can also use aggregate expressions. These are functions which are calculated over collection expression to provide some result. E.g. following mapping calculates the average duration of all tasks in all projects of the source User object:
+{{{
+    <member name="AvgTaskDuration" expression="avg:$Projects/Tasks/Duration" />
+}}}
+You can find more details in MetadataMappings.   
 
 Optional attribute `nullValue` specifies the value which will be assigned to the target property if the the source expression equals null. E.g. mapping `<member name="UserID" expression="$UserName" nullValue="{UNKNOWN}" />` will set target.UserID to source.!UserName, but if source.!UserName is null, UserID will be set to "{UNKNOWN}".
 
 `format` attribute specifies formatting string for the mapping. It only applies to the target members which are strings. E.g. mapping `<member name="Birthday" expression="$BirthDate" format="born on {0:D}" />` would be equal to the code expression:
 {{{target.Birthday = string.Format("born on {0:D}", source.BirthDate);}}}
+
+Each `<member>` element can contain `<map>` elements. These are used to provide projection mappings: 
+{{{
+    <member name="Title" expression="$Gender" >
+        <map from="Gender.Male" to="Mr." />     <!-- projections -->
+        <map from="Gender.Female" to="Mrs." />
+    </member> 
+}}}
+
+In the example above, we define mapping from User.Gender property 
+(of Gender enum type) to a string, so Gender.Male value will be converted to "Mr." string, while Gender.Female becomes "Mrs.". You can use projections to define mappings between any two sets of expressions.

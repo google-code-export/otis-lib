@@ -162,23 +162,18 @@ The xml mapping looks like this:
 
     <class name="Otis.Sample.UserDTO, Otis.Sample" source="Otis.Sample.Domain.User, Otis.Sample" >
         <member name="Id" />  <!-- maps to the member with the same name -->
+        <member name="UserName" /> 
+        <member name="Boss" /> 
         <member name="FullName" expression="[$FirstName + ' ' + $LastName]" /> <!-- uses [] to avoid "$FirstName + &quot; &quot; + $LastName" -->
         <member name="Title" expression="$Gender" >
-            <map from="Gender.Male" to="Mr." />     <!-- projection -->
+            <map from="Gender.Male" to="Mr." />     <!-- projections -->
             <map from="Gender.Female" to="Mrs." />
         </member> 
-        <member name="Blogs" />
-        <member name="BlogCount" expression="$Blogs.Count" />
-        <member name="TotalPostCount" expression="count:$Blogs/Posts" />
+        <member name="Birthday"  expression="$BirthDate" format="Born on {0:D}"/>
+        <member name="ProjectCount" expression="$Projects.Count" />
+        <member name="AvgTaskDuration" expression="avg:$Projects/Tasks/Duration" />
+        <member name="MaxTaskDuration" expression="max:$Projects/Tasks/Duration" />
     </class>
-
-    <class name="Otis.Sample.BlogDTO, Otis.Sample" source="Otis.Sample.Domain.Blog, Otis.Sample" >
-        <member name="Id" />
-        <member name="Title" expression="$Name + &quot; - &quot; + $Description" />
-        <member name="PostCount" expression="$Posts.Count" />
-        <member name="AvgPostRating" expression="avg:$Posts/Rating" />
-    </class>
-
 </otis-mapping>
 }}}
 

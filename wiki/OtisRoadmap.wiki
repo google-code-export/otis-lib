@@ -21,7 +21,7 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Simplified string expressions 
   * Projections: constant -> constant (e.g. enum -> enum, enum->string, constant->enum, ...)
 
-=== Version 0.3 (in work - expected in April, 2008) ===
+=== Version 0.3 (in work - expected in March/April, 2008) ===
   * NHibernate uninitialized collections and references
   * Factories, factory methods
   * Better default/null value handling (also for value types)

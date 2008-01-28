@@ -1,6 +1,6 @@
 #summary Details on XML mapping definitions
 
-= Mapping definitions via attributes =
+= XML mapping definitions =
 First, let's have a look at sample XML mapping definition:
 
 {{{

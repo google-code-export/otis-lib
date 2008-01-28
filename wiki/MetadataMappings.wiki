@@ -15,6 +15,7 @@ Let's have a look at a class mapping done via attributes
         public string Address { get; }
         public DateTime BirthDate;
         IList<Project> ProjectList;
+        Gender Gender; // Gender is an enum with values Male, Female
     }
     
     // target class
@@ -44,6 +45,12 @@ Let's have a look at a class mapping done via attributes
 
         [Map("avg:$ProjectList/Tasks/Duration")]
         public double AverageTaskDuration {get; }
+
+        [Map("avg:$Projects/Tasks/Duration")]
+        public double AvgTaskDuration { get...} 
+
+        [Map("$Gender", Projection = "Gender.Male => Mr.; Gender.Female => Mrs.")]
+        public string Title { get ... }
     }
 }}}
 
@@ -63,11 +70,11 @@ The simplest form of `[Map]` attribute is without any parameters (example: `User
 
 This is usually not enough, so it is possible to define the source expression like this:
 {{{
-    [Map("$FirstName + \" \" + $LastName")] 
+    [Map("[$FirstName + ' ' + $LastName]")] 
     public string FullName {get; }
 }}}
 
-This will map `UserDTO.FullName` to the code expression {{{source.FullName + " " + source.LastName}}}. '$' in mapping expression means that it is a reference to the source object, and in the assembler code it will be replaced with the source reference, thus resulting in the stated code expression.
+This will map `UserDTO.FullName` to the code expression {{{source.FullName + " " + source.LastName}}}. '$' in mapping expression means that it is a reference to the source object, and in the assembler code it will be replaced with the source reference, thus resulting in the stated code expression. You can also see one additional feature here: simplified string mappings. When the mapping expression is closed in square brackets, then the single quote character will be treated as double quote character (which needs escaping inside a string). Without this the expression would be "$FirstName + \" \" + $LastName". Of cours, you can use that if you like it.
 
 On the other hand, if the expression doesn't reference the source object, it is written as is:
 {{{
@@ -116,3 +123,10 @@ Following aggregate functions are implemented by default:
 || count      || returns the count of all elements  ||
 
 It is also possible to provide custom user-defined aggregate functions. 
+
+Projections were added in version 0.2. Projection mapping maps a set of values to another set of values. E.g.:
+{{{
+    [Map("$Gender", Projection = "Gender.Male => Mr.; Gender.Female => Mrs.")]
+    public string Title { get ... }
+}}}
+This mapping will map Gender.Male value of User.Gender property to "Mr." value for Title property of UserDTO class. The format of the projection string is "SOURCE => TARGET". Multiple projections are separated by semicolons. You can also use simplified string expressions if you deal with strings.

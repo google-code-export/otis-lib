@@ -4,7 +4,7 @@
 == Roadmap == 
 This is the current roadmap for Otis library. It contains features which are needed, as well as features which are fun. Some of them will probably never be implemented. It could also be changed at any time. Feel free to suggest anything you think might be missing, or boo anything that you consider wrong, broken, stupid or useless.
 
-=== Version 0.1 (Current) ===
+=== Version 0.1 ===
   * Configuration via attributes and XML
   * XML sources: standalone file, embedded resource
   * Standard expression mapping
@@ -16,12 +16,12 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Expression formatting
   * Null Value handling
 
-=== Version 0.2 (in work - expected January 29th, 2008) ===
+=== Version 0.2  (Current) ===
   * Aggregate functions *(implemented as of 30.11.07. / extended 18.01.08)*
   * Simplified string expressions *(implemented as of 20.01.08.)*
   * Projections: constant -> constant (e.g. enum -> enum, enum->string, constant->enum, ...)
 
-=== Version 0.3 ===
+=== Version 0.3 (in work - expected in April, 2008) ===
   * NHibernate uninitialized collections and references
   * Factories, factory methods
   * Better default/null value handling (also for value types)

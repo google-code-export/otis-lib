@@ -17,8 +17,8 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Null Value handling
 
 === Version 0.2  (Current) ===
-  * Aggregate functions *(implemented as of 30.11.07. / extended 18.01.08)*
-  * Simplified string expressions *(implemented as of 20.01.08.)*
+  * Aggregate functions 
+  * Simplified string expressions 
   * Projections: constant -> constant (e.g. enum -> enum, enum->string, constant->enum, ...)
 
 === Version 0.3 (in work - expected in April, 2008) ===

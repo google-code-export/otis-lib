@@ -179,6 +179,16 @@ The xml mapping looks like this:
 
 Schema for mapping file is available as part of the archive which can be downloaded from this site. It can be copied into xml\schemas folder under the Visual Studio 2005 installation directory, to provide syntax checking in the VS editor. Of course, the mapping file is checked against the schema during the configuration.
 
+If you chose to define mappings as XML resources, client code has to be slightly modified. Instead of 
+{{{
+    cfg.AddAssembly(Assembly.GetExecutingAssembly());
+}}}
+which initializes the mapper using attributes on mapped types, you must call
+{{{
+    cfg.AddAssemblyResources(Assembly.GetExecutingAssembly(), "otis.xml"); 
+}}}
+This will tell mapper to read mappings from all assembly resource files which end with "otis.xml".
+
 = See Also =
 [AssemblerInterface IAssembler<Target, Source> interface]
 

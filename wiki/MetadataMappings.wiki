@@ -121,9 +121,9 @@ Following aggregate functions are implemented by default:
 || sum        || returns the sum of all element values ||
 || avg        || returns the average of all element values ||
 || count      || returns the count of all elements  ||
-|| concat     || returns the string consisting of concatenated source elements ||
+|| concat     || returns the string consisting of concatenated source elements [added in 0.2.17] ||
 
-It is also possible to provide custom user-defined aggregate functions. 
+It is also possible to provide custom user-defined aggregate functions (see MedianFn in unit test library). 
 
 Projections were added in version 0.2. Projection mapping maps a set of values to another set of values. E.g.:
 {{{

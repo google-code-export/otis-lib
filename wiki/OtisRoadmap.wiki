@@ -28,12 +28,15 @@ This is the current roadmap for Otis library. It contains features which are nee
   * fixed: issue no. 3: automatically add assemblies for base types/interfaces
   * performance improvements
 
-=== Version 0.3 (in work - expected in March/April, 2008) ===
-  * NHibernate uninitialized collections and references
+=== Version 0.3 (in work - expected in April, 2008) ===
+  * Easier sub-component mapping (like <component> in NHibernate)
   * Factories, factory methods
   * Better default/null value handling (also for value types)
+  * Preprocessing helper functions (like existing helpers, but called before transformation)
+  * Performance improvements (ideally to 10% margin of hand written assemblers performance)
 
 === Version 0.4 ===
+  * NHibernate uninitialized collections and references
   * Events for hooking into conversion process
   * Inheritance issues
   * Better debugging support

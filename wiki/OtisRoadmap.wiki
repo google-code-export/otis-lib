@@ -21,6 +21,13 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Simplified string expressions 
   * Projections: constant -> constant (e.g. enum -> enum, enum->string, constant->enum, ...)
 
+=== Version 0.2.17 ===
+  * this is a nightly build which fixes some bugs and adds some minor features
+  * new aggregate function: concat
+  * support for complex path items in aggregates: $Projects/Name -> $Projects/Name.Length
+  * fixed: issue no. 3: automatically add assemblies for base types/interfaces
+  * performance improvements
+
 === Version 0.3 (in work - expected in March/April, 2008) ===
   * NHibernate uninitialized collections and references
   * Factories, factory methods

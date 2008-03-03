@@ -16,12 +16,12 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Expression formatting
   * Null Value handling
 
-=== Version 0.2  (Current) ===
+=== Version 0.2  (Current Release) ===
   * Aggregate functions 
   * Simplified string expressions 
   * Projections: constant -> constant (e.g. enum -> enum, enum->string, constant->enum, ...)
 
-=== Version 0.2.17 ===
+=== Version 0.2.17  (Available) ===
   * this is a nightly build which fixes some bugs and adds some minor features
   * new aggregate function: concat
   * support for complex path items in aggregates: $Projects/Name -> $Projects/Name.Length

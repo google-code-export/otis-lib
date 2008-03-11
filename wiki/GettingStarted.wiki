@@ -9,6 +9,8 @@ This article describes how to get going with Otis. It shows how to configure map
 When implementing code for transformation between the types, the required effort can make significant part of overall effort on project, thus making the project more expensive and/or delaying release date. Types which implement these transformations are usually called assemblers, and often consist of heaps of trivial code which has to be properly tested and maintained. The idea behind otis is that the assembler requirements should be expressed declaratively, and the library will take care of generating the assembler types.
 
 = Pros & cons =
+Like any other tool/practice, this is not a silver bullet.
+
 Main benefit of declarative assembler is that it reduces the effort needed for writing and maintenance of mapping code (although I am sure that some people will disagree). Otis also supports aggregate functions which can traverse an object graph and calculate or collect needed data. For really hairy problems, you can register a helper function to perform custom processing which is still easier than writing a whole new assembler. 
 
 Disadvantages? In my opinion, the biggest one is lack of type safety due to text expressions being used to define the mapping between types. Otis will try to help you with diagnostic messages, but of course it would be better if compiler could find the error immediately. However, short of this, the best defense is to write a single unit test which tries to build an assembler. If it fails, mappings are invalid, and hopefully, an error message will show you what is wrong.

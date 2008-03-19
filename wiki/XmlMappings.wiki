@@ -6,13 +6,13 @@ First, let's have a look at sample XML mapping definition:
 {{{
 <?xml version="1.0" encoding="utf-8" ?>	
 <otis-mapping xmlns="urn:otis-mapping-1.0">
-	<class name="Otis.Tests.UserDTO, Otis.Tests" source="Otis.Tests.Entity.User, Otis.Tests" >
-		<member name="Id" />
-		<member name="Age" />
-		<member name="UserName" expression="$UserName.ToUpper()" nullValue="[unknown]" />
-		<member name="FullName" expression="[$FirstName + ' ' + $LastName]" />
-		<member name="ProjectCount" expression="$Projects.Count" />
-		<member name="Title" expression="$Gender" >
+    <class name="Otis.Tests.UserDTO, Otis.Tests" source="Otis.Tests.Entity.User, Otis.Tests" >
+        <member name="Id" />
+        <member name="Age" />
+        <member name="UserName" expression="$UserName.ToUpper()" nullValue="[unknown]" />
+        <member name="FullName" expression="[$FirstName + ' ' + $LastName]" />
+        <member name="ProjectCount" expression="$Projects.Count" />
+        <member name="Title" expression="$Gender" >
             <map from="Gender.Male" to="Mr." />     <!-- projections -->
             <map from="Gender.Female" to="Mrs." />
         </member> 
@@ -20,7 +20,7 @@ First, let's have a look at sample XML mapping definition:
         <member name="ProjectCount" expression="$Projects.Count" />
         <member name="AvgTaskDuration" expression="avg:$Projects/Tasks/Duration" />
         <member name="MaxTaskDuration" expression="max:$Projects/Tasks/Duration" />  		
-	</class>
+    </class>
 </otis-mapping>
 }}}
 

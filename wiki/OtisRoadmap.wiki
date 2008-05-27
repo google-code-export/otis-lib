@@ -30,7 +30,7 @@ This is the current roadmap for Otis library. It contains features which are nee
   * fixed issue #5 - NullValue handling
 
 === Version 0.3 (in work - expected in April, 2008) ===
-  * UPDATE: Obviously not available in April, but should be done by mid-June
+  * *UPDATE: Obviously not available in April, but should be done by mid-June*
   * Easier sub-component mapping (like <component> in NHibernate)
   * Factories, factory methods
   * Better default/null value handling (also for value types)

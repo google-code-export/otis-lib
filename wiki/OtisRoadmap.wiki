@@ -27,7 +27,7 @@ This is the current roadmap for Otis library. It contains features which are nee
   * support for complex path items in aggregates: $Projects/Name -> $Projects/Name.Length
   * performance improvements
   * fixed: issue #3: automatically add assemblies for base types/interfaces (in version 0.2.17)
-  * fixed: issue #5 - NullValue handling
+  * fixed: issue #5 - !NullValue handling
 
 === Version 0.3 (in work - expected in April, 2008) ===
   * *UPDATE: Obviously not available in April, but should be done by mid-June. Sorry, too much other work :)*

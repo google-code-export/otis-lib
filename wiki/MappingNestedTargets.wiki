@@ -93,14 +93,14 @@ NOTE: in mapping comments there are two types of descriptions:
 <otis-mapping xmlns="urn:otis-mapping-1.0">
 
     <class name="Test.Domain.TargetRoot, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >
-        <member name="Id" />                       <!-- TargetRoot.Id = SourceRoot.Id -->
-        <member name="SubA" expression="source" /> <!-- TargetRoot.SubA <- SourceRoot -->
+        <member name="Id" />                                   <!-- TargetRoot.Id = SourceRoot.Id -->
+        <member name="SubA" expression="source" />             <!-- TargetRoot.SubA <- SourceRoot -->
     </class>
 
     <class name="Test.Domain.TargetSubA, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >
-        <member name="SubB" expression="$Sub1" />  <!-- TargetSubA.SubB <- SourceRoot.Sub1 -->
-        <member name="SubC" expression="$Sub2" />  <!-- TargetSubA.SubC <- SourceRoot.Sub2 -->
-        <member name="SubD" expression="source" /> <!-- TargetSubA.SubD <- SourceRoot -->
+        <member name="SubB" expression="$Sub1" />              <!-- TargetSubA.SubB <- SourceRoot.Sub1 -->
+        <member name="SubC" expression="$Sub2" />              <!-- TargetSubA.SubC <- SourceRoot.Sub2 -->
+        <member name="SubD" expression="source" />             <!-- TargetSubA.SubD <- SourceRoot -->
     </class>
 
     <class name="Test.Domain.TargetSubD, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >
@@ -109,11 +109,11 @@ NOTE: in mapping comments there are two types of descriptions:
     </class>
 
     <class name="Test.Domain.TargetSubB, Test.Domain" source="Test.Domain.SourceSub1, Test.Domain" >
-        <member name="Name" expression="$Sub1Name" />   <!-- TargetSubB.Name  = SourceSub1.Sub1Name -->
+        <member name="Name" expression="$Sub1Name" />          <!-- TargetSubB.Name  = SourceSub1.Sub1Name -->
     </class>
 	
     <class name="Test.Domain.TargetSubC, Test.Domain" source="Test.Domain.SourceSub2, Test.Domain" >
-        <member name="Name" expression="$Sub2Name" />   <!-- TargetSubC.Name  = SourceSub2.Sub2Name -->
+        <member name="Name" expression="$Sub2Name" />          <!-- TargetSubC.Name  = SourceSub2.Sub2Name -->
     </class>
 
 </otis-mapping>

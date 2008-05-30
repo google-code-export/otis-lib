@@ -93,7 +93,7 @@ NOTE: in mapping comments there are two types of descriptions:
 <otis-mapping xmlns="urn:otis-mapping-1.0">
 
     <class name="Test.Domain.TargetRoot, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >
-        <member name="Id" />
+        <member name="Id" />                       <!-- TargetRoot.Id = SourceRoot.Id -->
         <member name="SubA" expression="source" /> <!-- TargetRoot.SubA <- SourceRoot -->
     </class>
 

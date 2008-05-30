@@ -81,9 +81,9 @@ namespace Test.Domain
 
 Now, we will create the mapping file. 
 
-NOTE: in mapping comment there are two types of descriptions:
+NOTE: in mapping comments there are two types of descriptions:
 
-|| `<!-- TargetRoot.SubA <- SourceRoot -->` || !SourceRoot object is mapped to !TargetRoot.SubA field (of TargetSubA type). This will use the assembler, so we have to define that mapping, otherwise Otis will throw an !OtisException with message "Assembler for transformation [!SourceRoot -> !TargetRoot.SubA] is not configured". ||
+|| `<!-- TargetRoot.SubA <- SourceRoot -->` || !SourceRoot object is mapped to !TargetRoot.SubA field (of TargetSubA type). This will use the assembler, so we have to define that mapping, otherwise Otis will throw an !OtisException with message "Assembler for transformation [ !SourceRoot -> !TargetRoot.SubA ] is not configured". ||
                                         
 || `<!-- TargetSubD.RootName = SourceRoot.Name -->` || TargetSubD.!RootName will be set to value of Name field of the source object (of type !SourceRoot) ||
 
@@ -129,11 +129,11 @@ Most of this mapping is straight forward, but there is a trick which makes it po
 
 we define how !SourceRoot is mapped to !TargetRoot. Line `<member name="SubA" expression="source" />` defines that field SubA of class !TargetRoot is mapped directly to the source object of the mapping (of !SourceRoot type).
 
-This means that when assemble comes to mapping !TargetRoot.SubA to a !SourceRoot instance, it will look for another mapping definition: !SourceRoot -> !TargetSubA, so we have to define that one also. 
+This means that when assemble comes to mapping !TargetRoot.SubA to a !SourceRoot instance, it will look for another mapping definition: !SourceRoot -> TargetSubA, so we have to define that one also. 
 
-Now, in mapping !SourceRoot to !TargetSubA, we define that field !TargetSubA.SubB retrieves the value from field !SourceRoot.Sub1, and field !TargetSubA.SubC retrieves the value from field !SourceRoot.Sub2. Mappings between these classes are then defined in separate <class> elements (the last two in the xml sample). 
+Now, in mapping !SourceRoot to TargetSubA, we define that field TargetSubA.SubB retrieves the value from field !SourceRoot.Sub1, and field TargetSubA.SubC retrieves the value from field !SourceRoot.Sub2. Mappings between these classes are then defined in separate <class> elements (the last two in the xml sample). 
 
-Finally, we need to map !TargetSubA.SubD: this one gets some values from !SourceRoot and others from !SourceSub1. Therefore, it is easiest to map it to topmost object, and reference subelements as needed:
+Finally, we need to map TargetSubA.SubD: this one gets some values from !SourceRoot and others from !SourceSub1. Therefore, it is easiest to map it to topmost object, and reference subelements as needed:
 
 {{{
     <class name="Test.Domain.TargetSubD, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >

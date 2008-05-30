@@ -151,6 +151,12 @@ One of the planned features for version 0.3 is easier mapping of subcomponents. 
         <member name="Id" />                       
         <member name="SubA" expression="source" /> 
         <nested name="TargetSubA" >
+           <nested name="TargetSubB" > 
+               <member name="Name" expression="$Sub1.Sub1Name" /> 
+           </nested>
+           <nested name="TargetSubC" > 
+               <member name="Name" expression="$Sub2.Sub2Name" /> 
+           </nested>
            <nested name="TargetSubD" > 
                <member name="RootName" expression="$Name" />
                <member name="SubName" expression="$Sub1.Sub1Name" /> 

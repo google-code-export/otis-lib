@@ -3,7 +3,7 @@
 
 = Mapping deeply nested targets to flat sources =
 
-=== NOTE: this document is being edited, it is not finished yet ===
+Very often, there is a significant mismatch between source and target object structures. In most cases, it is possible to handle such mappings without using helper methods.
 
 Suppose we have a following transformation which we would like to implement via Otis:
 
@@ -141,3 +141,23 @@ Finally, we need to map TargetSubA.SubD: this one gets some values from !SourceR
         <member name="SubName" expression="$Sub1.Sub1Name" /> <!-- TargetSubD.SubName  = SourceRoot.Sub1.Sub1Name -->
     </class>
 }}}
+
+=== Future ===
+One of the planned features for version 0.3 is easier mapping of subcomponents. The idea is to provide something similar to <component> mapping in NHibernate. A possible syntax would be something like this:
+{{{
+<?xml version="1.0" encoding="utf-8" ?>
+<otis-mapping xmlns="urn:otis-mapping-1.0">
+    <class name="Test.Domain.TargetRoot, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >
+        <member name="Id" />                       
+        <member name="SubA" expression="source" /> 
+        <nested name="TargetSubA" >
+           <nested name="TargetSubD" > 
+               <member name="RootName" expression="$Name" />
+               <member name="SubName" expression="$Sub1.Sub1Name" /> 
+           </nested>
+        </nested>
+    </class>
+</otis-mapping>
+}}}
+
+This is still not the final syntax, and all suggestions are welcome.

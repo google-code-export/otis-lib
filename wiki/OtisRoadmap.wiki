@@ -42,6 +42,7 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Events for hooking into conversion process
   * Inheritance issues
   * Better debugging support
+  * Aggregate function parameters: [Map("concat[delimiter=', ']:$Documents/Name")]
 
 === Version 0.5 ===
   * Move all strings to resources

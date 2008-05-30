@@ -121,10 +121,10 @@ NOTE: in mapping comments there are two types of descriptions:
 
 Most of this mapping is straight forward, but there is a trick which makes it possible to map target subobject to source root. In mapping:
 {{{
-	<class name="Test.Domain.TargetRoot, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >
-		<member name="Id" />
-		<member name="SubA" expression="source" />
-	</class>
+    <class name="Test.Domain.TargetRoot, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >
+       <member name="Id" />
+       <member name="SubA" expression="source" />
+   </class>
 }}}
 
 we define how !SourceRoot is mapped to !TargetRoot. Line `<member name="SubA" expression="source" />` defines that field SubA of class !TargetRoot is mapped directly to the source object of the mapping (of !SourceRoot type).

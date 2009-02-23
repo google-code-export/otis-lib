@@ -8,7 +8,7 @@ This is the current roadmap for Otis library. It contains features which are nee
   * Configuration via attributes and XML
   * XML sources: standalone file, embedded resource
   * Standard expression mapping
-  * IList <-> Array
+  * IList to/from Array
   * XML schema to support intellisense in Visual Studio
   * Custom configuration providers
   * Assembler generation:  in-memory, on the file system, source code only
@@ -35,9 +35,8 @@ This is the current roadmap for Otis library. It contains features which are nee
   * fixed: issue #9
   * fixed: issue #10
 
-=== Version 0.3 (in work - expected in April, 2008) ===
-  * *UPDATE: Obviously not available in April, but should be done by mid-June. Sorry, too much other work :)*
-  * Easier sub-component mapping (like <component> in NHibernate)
+=== Version 0.3 (in work) ===
+  * Easier sub-component mapping (like "[component]" in NHibernate)
   * Factories, factory methods
   * Better default/null value handling (also for value types)
   * Preprocessing helper functions (like existing helpers, but called before transformation) (implemented as of 06.03.08)

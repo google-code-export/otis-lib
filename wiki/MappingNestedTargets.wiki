@@ -143,27 +143,5 @@ Finally, we need to map TargetSubA.SubD: this one gets some values from !SourceR
 }}}
 
 === Next steps ===
-One of the planned features for version 0.3 is easier mapping of subcomponents. The idea is to provide something similar to <component> mapping in NHibernate. A possible syntax would be something like this:
-{{{
-<?xml version="1.0" encoding="utf-8" ?>
-<otis-mapping xmlns="urn:otis-mapping-1.0">
-    <class name="Test.Domain.TargetRoot, Test.Domain" source="Test.Domain.SourceRoot, Test.Domain" >
-        <member name="Id" />                       
-        <member name="SubA" expression="source" /> 
-        <nested name="TargetSubA" >
-           <nested name="TargetSubB" > 
-               <member name="Name" expression="$Sub1.Sub1Name" /> 
-           </nested>
-           <nested name="TargetSubC" > 
-               <member name="Name" expression="$Sub2.Sub2Name" /> 
-           </nested>
-           <nested name="TargetSubD" > 
-               <member name="RootName" expression="$Name" />
-               <member name="SubName" expression="$Sub1.Sub1Name" /> 
-           </nested>
-        </nested>
-    </class>
-</otis-mapping>
-}}}
-
-This is still not the final syntax, and all suggestions are welcome.
+One of the planned features for version 0.3 is easier mapping of subcomponents. The idea is to provide something similar to <component> mapping in NHibernate. A possible syntax 
+is described in ComponentMapping.

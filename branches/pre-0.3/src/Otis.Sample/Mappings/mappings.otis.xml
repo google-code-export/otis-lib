@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- for testing resource reading-->
+<otis-mapping xmlns="urn:otis-mapping-1.0">
+
+	<class name="Otis.Sample.Presentation.ArtistInfo, Otis.Sample" source="Otis.Sample.Domain.Artist, Otis.Sample" >
+		<member name="Id" />
+		<member name="Description" expression="[$Name + ' [' + $Country + ']' ]" />
+		<member name="Records" />
+		<member name="RecordCount" expression="$Records.Count" />
+	</class>
+
+	<class name="Otis.Sample.Presentation.RecordInfo, Otis.Sample" source="Otis.Sample.Domain.Record, Otis.Sample" helper="ConversionHelper" >
+		<member name="Id" />
+		<member name="Description" expression="[$Name + ' [' + $YearPublished + ']' ]" />
+		<member name="SongCount" expression="$Songs.Count" />
+		<member name="TotalCommentCount" expression="count:$Songs/Comments" />
+		<member name="AverageSongRating" expression="avg:$Songs/Ratings/Value"  />
+		<member name="AverageSongDuration" expression="avg:$Songs/DurationInSeconds" format="{0:N2} seconds" />
+		<member name="AlbumDuration" expression="sum:$Songs/DurationInSeconds" />
+		<member name="Category" expression="$Style" >
+			<map from="['Pop']" to="Pop"/>
+			<map from="['Punk']" to="Rock"/>
+			<map from="['Rock']" to="Rock"/>
+			<map from="['Classical']" to="Classical"/>
+		</member>									   		
+	</class>	
+
+</otis-mapping>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:otis-mapping-1.0" xmlns="urn:otis-mapping-1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!-- member element definition -->
+	<xs:complexType name="member" >
+		<xs:sequence minOccurs="0">
+			<xs:element maxOccurs="unbounded" name="map">
+				<xs:complexType>
+					<xs:attribute name="from" type="xs:string" use="optional" />
+					<xs:attribute name="to" type="xs:string" use="required" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="expression" type="xs:string" use="optional" />
+		<xs:attribute name="nullValue" type="xs:string" use="optional" />
+		<xs:attribute name="format" type="xs:string" use="optional" />
+	</xs:complexType>
+
+	<!-- component element definition -->
+	<xs:complexType name="component">
+		<xs:sequence>
+			<xs:element name="member" type="member" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="component" type="component" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<!-- mapping document definition -->
+	<xs:element name="otis-mapping">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" name="class"> <!-- class element definition -->
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="member" type="member" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="component" type="component" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required" />
+						<xs:attribute name="source" type="xs:string" use="required" />
+						<xs:attribute name="helper" type="xs:string" use="optional" />
+						<xs:attribute name="preparer" type="xs:string" use="optional" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

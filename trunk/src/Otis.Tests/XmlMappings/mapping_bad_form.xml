@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- this configuration is not well formed! -->
+<otis-mapping xmlns="urn:otis-mapping-1.0">
+	<class name="Otis.Tests.XmlUserDTO, Otis.Tests" source="Otis.Tests.Entity.User, Otis.Tests" helper="Otis.Tests.Util.Convert" >
+		<member name="Id" />
+		<member name="Age" />
+		<member name="UserName" expression="UserName.ToUpper()" nullValue="[unknown]" />
+		<member name="FullName" expression="FirstName + &quot; &quot; + source.LastName" />
+		<member name="ProjectCount" expression="Projects.Count" >
+		</class>
+	</member>
+</otis-mapping>

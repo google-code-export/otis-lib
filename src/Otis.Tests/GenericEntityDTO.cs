@@ -7,40 +7,40 @@ namespace Otis.Tests
 {
 	public class XmlGenericEntityDTO
 	{
-      private int m_id;
-      private int? m_nullableProperty;
+		private int _id;
+		private int? _nullableProperty;
 
-      public int Id
-      {
-         get { return m_id; }
-         set { m_id = value; }
-      }
+		public int Id
+		{
+			get { return _id; }
+			set { _id = value; }
+		}
 
-      public int? NullableProperty
-      {
-         get { return m_nullableProperty; }
-         set { m_nullableProperty = value; }
-      }
-   }
+		public int? NullableProperty
+		{
+			get { return _nullableProperty; }
+			set { _nullableProperty = value; }
+		}
+	}
 
 	[MapClass(typeof(GenericEntity<int>))]
 	public class AttributedGenericEntityDTO
 	{
-      private int m_id;
-      private int? m_nullableProperty;
-
-      [Map]
-      public int Id
-      {
-         get { return m_id; }
-         set { m_id = value; }
-      }
+		private int _id;
+		private int? _nullableProperty;
 
 		[Map]
-      public int? NullableProperty
-      {
-         get { return m_nullableProperty; }
-         set { m_nullableProperty = value; }
-      }
+		public int Id
+		{
+			get { return _id; }
+			set { _id = value; }
+		}
+
+		[Map]
+		public int? NullableProperty
+		{
+			get { return _nullableProperty; }
+			set { _nullableProperty = value; }
+		}
 	}
 }

@@ -2,32 +2,32 @@ using System.Collections.Generic;
 
 namespace Otis
 {
-	class CodeGeneratorContext
+	public class CodeGeneratorContext
 	{
-		private IList<IMappingDescriptorProvider> m_providers;
-		private FunctionMap m_functionMap;
-		private readonly AssemblerGenerationOptions m_options;
+		private IList<IMappingDescriptorProvider> _providers;
+		private FunctionMap _functionMap;
+		private readonly AssemblerGenerationOptions _options;
 
 		public CodeGeneratorContext(IList<IMappingDescriptorProvider> providers, FunctionMap functionMap, AssemblerGenerationOptions options)
 		{
-			m_providers = providers;
-			m_functionMap = functionMap;
-			m_options = options;
+			_providers = providers;
+			_functionMap = functionMap;
+			_options = options;
 		}
 
 		public IList<IMappingDescriptorProvider> Providers
 		{
-			get { return m_providers; }
+			get { return _providers; }
 		}
 
 		public FunctionMap FunctionMap
 		{
-			get { return m_functionMap; }
+			get { return _functionMap; }
 		}
 
 		public AssemblerGenerationOptions AssemblerGenerationOptions
 		{
-			get { return m_options; }
+			get { return _options; }
 		}
 	}
 }

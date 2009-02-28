@@ -7,7 +7,7 @@ namespace Otis
 	/// <summary>
 	/// <c>IAssembler</c> interface provides a method for conversion between two types.
 	/// There is a specialization of this interface for every configured type transformation. Client
-	/// application obtain an instanc of the <c>IAssembler</c> by calling <see cref="Configuration.GetAssembler"/>
+	/// application obtain an instanc of the <c>IAssembler</c> by calling <see cref="Configuration.GetAssembler&lt;AssemblerType&gt;()"/>
 	/// with appropriate type parameters
 	/// </summary>
 	/// <typeparam name="Target">Target type</typeparam>

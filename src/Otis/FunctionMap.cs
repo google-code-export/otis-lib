@@ -10,9 +10,9 @@ namespace Otis
 	/// is a class which implements <see cref="IAggregateFunction{T}"/> interface, and can be used
 	/// in mapping to process a set of values on the source side.
 	/// </summary>
-	class FunctionMap  
+	public class FunctionMap  
 	{
-		Dictionary<string, Type> m_map = new Dictionary<string, Type>();
+		Dictionary<string, Type> _map = new Dictionary<string, Type>();
 
 		/// <summary>
 		/// Registers a new aggregate function function. If another function with   the specified name
@@ -28,7 +28,7 @@ namespace Otis
 				if (itf == typeof(IAggregateFunctionCodeGenerator)
 					|| (itf.IsGenericType && itf.GetGenericTypeDefinition() == typeof(IAggregateFunction<>)))
 				{
-					m_map[name] = type;
+					_map[name] = type;
 					return;
 				}
 			}
@@ -46,14 +46,14 @@ namespace Otis
 		/// <exception cref="OtisException">Thrown if specified function hasn't been registered yet</exception>
 		public Type GetTypeForFunction(string name)
 		{
-			if(!m_map.ContainsKey(name))
+			if(!_map.ContainsKey(name))
 			{
 				string msg = string.Format("Can't retrieve aggregate function '{0}', it hasn't been registered", name);
 				throw new OtisException(msg);
 			}
 			else
 			{
-				return m_map[name];
+				return _map[name];
 			}
 		}
 	}

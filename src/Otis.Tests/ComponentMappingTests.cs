@@ -63,7 +63,7 @@ namespace Otis.Tests
 			Configuration cfg = new Configuration();
 			cfg.AddXmlString(xmlCfg);
 
-			IAssembler<OrderDTO, Order> asm = cfg.GetAssembler<OrderDTO, Order>();
+			IAssembler<OrderDTO, Order> asm = cfg.GetAssembler<IAssembler<OrderDTO,Order>>();
 			Order user = GetDefaultOrder();
 		/*	UserWithComponentsDTO dto = asm.AssembleFrom(user);
 			Assert.That("X Y", Is.EqualTo(dto.FullName));

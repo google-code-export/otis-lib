@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -85,7 +86,7 @@ namespace Otis.Parsing
 		{
 			return (type.IsArray
 			        || type.GetInterface(typeof (ICollection<>).FullName) != null
-			        || typeof (System.Collections.ICollection).IsAssignableFrom(type));
+			        || typeof (ICollection).IsAssignableFrom(type));
 		}
 
 		private static Type ToInstanceType(MemberMappingDescriptor member, Type type)
@@ -94,7 +95,7 @@ namespace Otis.Parsing
 			{
 				return type.GetElementType();
 			}
-			if(typeof(System.Collections.ICollection).IsAssignableFrom(type))
+			if(typeof(ICollection).IsAssignableFrom(type))
 			{
 				string msg = ErrorBuilder.CantAggregateOverUntypedCollections(member);
 				throw new OtisException(msg);
@@ -120,7 +121,7 @@ namespace Otis.Parsing
 
 		public static string NormalizeExpression(string input)
 		{
-			if (ExpressionParser.IsLiteralExpression(input))
+			if (IsLiteralExpression(input))
 				input = input.Replace('\'', '\"').Substring(1, input.Length - 2);
 
 			return input;			

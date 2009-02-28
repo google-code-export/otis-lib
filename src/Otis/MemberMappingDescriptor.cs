@@ -10,34 +10,37 @@ namespace Otis
 	/// </summary>
 	public class MemberMappingDescriptor
 	{
-		private string m_member;
-		private string m_expression;
-		private string m_format;
-		private string m_nullValue;
-		private Type m_type;
-		private Type m_ownerType;
-		private bool m_isArray;
-		private bool m_isList;
-		private AggregateMappingDescription m_aggregateDescriptor = null;
-		ProjectionInfo m_projections = new ProjectionInfo();
-		List<string> m_nullableParts = new List<string>();
+		private string _expression;
+		private string _nullValue;
+		private AggregateMappingDescription _aggregateDescriptor = null;
+
+		private string _member;
+		private string _format;
+		private Type _type;
+		private Type _ownerType;
+		private Type _sourceType;
+		private Type _sourceOwnerType;
+		private List<string> _nullableParts;
+		private ProjectionInfo _projections;
 
 		public MemberMappingDescriptor()
 		{
+			NullableParts = new List<string>();
+			Projections = new ProjectionInfo();
 		}
 
 		public MemberMappingDescriptor(MemberMappingDescriptor copyFrom)
 		{
-			m_member = copyFrom.m_member;
-			m_expression = copyFrom.m_expression;
-			m_format = copyFrom.m_format;
-			m_nullValue = copyFrom.m_nullValue;
-			m_type = copyFrom.m_type;
-			m_ownerType = copyFrom.m_ownerType;
-			m_isArray = copyFrom.m_isArray;
-			m_isList = copyFrom.m_isList;
-			m_projections = copyFrom.m_projections;
-			m_nullableParts = copyFrom.m_nullableParts;
+			Member = copyFrom.Member;
+			_expression = copyFrom._expression;
+			Format = copyFrom.Format;
+			_nullValue = copyFrom._nullValue;
+			Type = copyFrom.Type;
+			OwnerType = copyFrom.OwnerType;
+			Projections = copyFrom.Projections;
+			NullableParts = copyFrom.NullableParts;
+			SourceType = copyFrom.SourceType;
+			SourceOwnerType = copyFrom.SourceOwnerType;
 		}
 
 		/// <summary>
@@ -45,8 +48,8 @@ namespace Otis
 		/// </summary>
 		public string Member
 		{
-			get { return m_member; }
-			set { m_member = value; }
+			get { return _member; }
+			set { _member = value; }
 		}
 
 		/// <summary>
@@ -54,11 +57,11 @@ namespace Otis
 		/// </summary>
 		public string Expression
 		{
-			get { return m_expression; }
+			get { return _expression; }
 			set
 			{
-				m_expression = ExpressionParser.NormalizeExpression(value.Trim());
-				UpdateNullableParts(m_expression);
+				_expression = ExpressionParser.NormalizeExpression(value.Trim());
+				UpdateNullableParts(_expression);
 			}
 		}
 
@@ -68,13 +71,13 @@ namespace Otis
 		/// </summary>
 		public string NullValue
 		{
-			get { return m_nullValue; }
+			get { return _nullValue; }
 			set
 			{
 				if (value == null)
-					m_nullValue = null;
+					_nullValue = null;
 				else
-					m_nullValue = ExpressionParser.NormalizeExpression(value.Trim());
+					_nullValue = ExpressionParser.NormalizeExpression(value.Trim());
 			}
 		}
 
@@ -83,8 +86,8 @@ namespace Otis
 		/// </summary>
 		public string Format
 		{
-			get { return m_format; }
-			set { m_format = value; }
+			get { return _format; }
+			set { _format = value; }
 		}
 
 		/// <summary>
@@ -92,8 +95,19 @@ namespace Otis
 		/// </summary>
 		public Type Type
 		{
-			get { return m_type; }
-			set { m_type = value; }
+			get { return _type; }
+			set { _type = value; }
+		}
+
+		/// <summary>
+		/// Gets/sets the type of the target member's singluar form if it is an Enumerable type
+		/// </summary>
+		public Type SingularType
+		{
+			get
+			{
+				return TypeHelper.GetSingularType(Type);
+			}
 		}
 
 		/// <summary>
@@ -101,8 +115,38 @@ namespace Otis
 		/// </summary>
 		public Type OwnerType
 		{
-			get { return m_ownerType; }
-			set { m_ownerType = value; }
+			get { return _ownerType; }
+			set { _ownerType = value; }
+		}
+
+		/// <summary>
+		/// Gets/sets the type of the source member, or null if complex expression
+		/// </summary>
+		public Type SourceType
+		{
+			get { return _sourceType; }
+			set { _sourceType = value; }
+		}
+
+		/// <summary>
+		/// Gets/sets the type of the source member's singluar form if it is an Enumerable type
+		/// </summary>
+		public Type SourceSingluarType
+		{
+			get
+			{
+				return TypeHelper.GetSingularType(SourceType);
+			}
+		}
+
+
+		/// <summary>
+		/// Gets/sets the type of the source where source member is defined
+		/// </summary>
+		public Type SourceOwnerType
+		{
+			get { return _sourceOwnerType; }
+			set { _sourceOwnerType = value; }
 		}
 
 		/// <summary>
@@ -110,8 +154,7 @@ namespace Otis
 		/// </summary>
 		public bool IsArray
 		{
-			get { return m_isArray; }
-			set { m_isArray = value; }
+			get { return Type.IsArray; }
 		}
 
 		/// <summary>
@@ -119,8 +162,7 @@ namespace Otis
 		/// </summary>
 		public bool IsList
 		{
-			get { return m_isList; }
-			set { m_isList = value; }
+			get { return TypeHelper.IsList(Type); }
 		}
 
 		/// <summary>
@@ -128,7 +170,7 @@ namespace Otis
 		/// </summary>
 		public bool HasFormatting
 		{
-			get { return !string.IsNullOrEmpty(m_format); }
+			get { return !string.IsNullOrEmpty(Format); }
 		}
 
 		/// <summary>
@@ -146,10 +188,10 @@ namespace Otis
 		{
 			get
 			{
-				if (m_aggregateDescriptor == null)
-					m_aggregateDescriptor = new AggregateMappingDescription(Expression, Type);
+				if (_aggregateDescriptor == null)
+					_aggregateDescriptor = new AggregateMappingDescription(Expression, Type);
 
-				return m_aggregateDescriptor;
+				return _aggregateDescriptor;
 			}
 		}
 
@@ -158,16 +200,17 @@ namespace Otis
 		/// </summary>
 		public ProjectionInfo Projections
 		{
-			get { return m_projections; }
-			set { m_projections = value; }
+			get { return _projections; }
+			set { _projections = value; }
 		}
-																	   
+
 		/// <summary>
 		/// Returns the list of nullable parts in the mapped expression
 		/// </summary>
 		public List<string> NullableParts
 		{
-			get { return m_nullableParts; }
+			get { return _nullableParts; }
+			private set { _nullableParts = value; }
 		}
 
 		/// <summary>
@@ -186,10 +229,9 @@ namespace Otis
 			get { return NullValue != null; }
 		}
 
-
 		private void UpdateNullableParts(string expression)
 		{
-			m_nullableParts.Clear();
+			NullableParts.Clear();
 			Regex regex = new Regex(@"(\$[A-Za-z]\w*(\(.*?\))?)");
 			MatchCollection matches = regex.Matches(expression);
 			if (matches.Count == 0)
@@ -197,7 +239,7 @@ namespace Otis
 
 			foreach (Match match in matches)
 			{
-				m_nullableParts.Add(match.Value);
+				NullableParts.Add(match.Value);
 			}
 
 		}

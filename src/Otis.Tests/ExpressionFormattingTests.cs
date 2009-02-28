@@ -18,7 +18,7 @@ namespace Otis.Tests
 		{
 			Configuration cfg = new Configuration();
 			cfg.AddType(typeof(Dummy));
-			IAssembler<Dummy, User> asm = cfg.GetAssembler<Dummy, User>();
+			IAssembler<Dummy, User> asm = cfg.GetAssembler<IAssembler<Dummy, User>>();
 			Dummy dummy = asm.AssembleFrom(Helpers.CreateComplexUser());
 
 			Assert.AreEqual("2 documents", dummy.DocumentInfo);
@@ -31,7 +31,7 @@ namespace Otis.Tests
 			Configuration cfg = new Configuration();
 			cfg.RegisterFunction<MedianFn>("median");
 			cfg.AddType(typeof(Dummy2));
-			IAssembler<Dummy2, User> asm = cfg.GetAssembler<Dummy2, User>();
+			IAssembler<Dummy2, User> asm = cfg.GetAssembler<IAssembler<Dummy2, User>>();
 			Dummy2 dummy = asm.AssembleFrom(Helpers.CreateComplexUser());
 
 			Assert.AreEqual("Median document length: 4.00 characters", dummy.MedianDocumentNameLengthInfo);

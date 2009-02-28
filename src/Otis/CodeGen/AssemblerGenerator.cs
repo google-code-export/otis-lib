@@ -1,82 +1,92 @@
 using System;
 using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
-using Microsoft.CSharp;
+using Otis.Utils;
 
 namespace Otis.CodeGen
 {
-	class AssemblerGenerator
+	public class AssemblerGenerator : IAssemblerGenerator
 	{
-		private readonly CodeGeneratorContext m_context;
-		private CodeNamespace m_namespace;
-		private CodeTypeDeclaration m_assemblerClass;
-		private ClassMappingGenerator m_generator;
-		List<string> m_explicitAssemblies = new List<string>(3);
-		//List<string> m_referencedAssemblies = new List<string>(3);
-		private IDictionary<int, bool> m_typeCache = new Dictionary<int, bool>();
+		protected readonly CodeGeneratorContext _context;
+		protected readonly CodeNamespace _namespace;
+		protected readonly ClassMappingGenerator _generator;
+		protected readonly AssemblerBase _assemblerBase;
+		protected readonly List<string> _explicitAssemblies = new List<string>(3);
+		protected readonly IDictionary<int, bool> _typeCache = new Dictionary<int, bool>();
 
-		public AssemblerGenerator(CodeGeneratorContext context)
+		public AssemblerGenerator(CodeNamespace @namespace, CodeGeneratorContext context, AssemblerBase assemblerBase)
 		{
-			m_context = context;
-			string ns;
-			if (string.IsNullOrEmpty(m_context.AssemblerGenerationOptions.Namespace))
-				ns = "NS" + Guid.NewGuid().ToString("N");
-			else
-				ns = m_context.AssemblerGenerationOptions.Namespace;
+			_context = context;
+			_assemblerBase = assemblerBase;
+			_namespace = @namespace;
 
-			m_generator = new ClassMappingGenerator(m_context);
+			_generator = new ClassMappingGenerator(_context);
 
-			m_namespace = new CodeNamespace(ns);
-			m_namespace.Imports.Add(new CodeNamespaceImport("System"));
-			m_namespace.Imports.Add(new CodeNamespaceImport("System.Text"));
-			m_namespace.Imports.Add(new CodeNamespaceImport("System.Collections"));
-			m_namespace.Imports.Add(new CodeNamespaceImport("System.Collections.Generic"));
-			m_namespace.Imports.Add(new CodeNamespaceImport("Otis"));
-			m_assemblerClass = new CodeTypeDeclaration("Assembler");
-			m_assemblerClass.IsClass = true;
-			m_assemblerClass.Attributes = MemberAttributes.Public;
-			m_namespace.Types.Add(m_assemblerClass);
-			m_explicitAssemblies.Add(Assembly.GetExecutingAssembly().CodeBase.Substring(8));
+			AddAdditonalNamespaceImports();
+
+			_explicitAssemblies.Add("System.Dll");
+			_explicitAssemblies.Add(Assembly.GetExecutingAssembly().CodeBase.Substring(8));
 		}
 
-		public void AddMapping(ClassMappingDescriptor descriptor, CodeGeneratorContext context)
+		#region Implementation of IAssemblerGenerator
+
+		public virtual void AddMapping(ClassMappingDescriptor descriptor)
 		{
-			CodeMemberMethod methodAssembleFrom = m_generator.CreateTypeTransformationMethod(descriptor);
-			m_assemblerClass.Members.Add(methodAssembleFrom);
+			CodeTypeDeclaration assemblerClass = new CodeTypeDeclaration(descriptor.AssemblerName);
+			assemblerClass.IsClass = true;
+			assemblerClass.Attributes = MemberAttributes.Public;
+			
+			CodeMemberMethod methodAssembleFrom = _generator.CreateTypeTransformationMethod(descriptor);
+			assemblerClass.Members.Add(methodAssembleFrom);
 
-			CodeMemberMethod methodAssemble = m_generator.CreateInPlaceTransformationMethod(descriptor);
-			m_assemblerClass.Members.Add(methodAssemble);
+			CodeMemberMethod methodAssemble = _generator.CreateInPlaceTransformationMethod(descriptor);
+			assemblerClass.Members.Add(methodAssemble);
 
-			CodeMemberMethod methodAssembleValueType = m_generator.CreateInPlaceTransformationMethodForValueTypes(descriptor);
-			m_assemblerClass.Members.Add(methodAssembleValueType);
+			CodeMemberMethod methodAssembleValueType = _generator.CreateInPlaceTransformationMethodForValueTypes(descriptor);
+			assemblerClass.Members.Add(methodAssembleValueType);
 
-			CodeMemberMethod methodToList = m_generator.CreateToListMethod(descriptor);
-			m_assemblerClass.Members.Add(methodToList);
+			CodeMemberMethod methodToList = _generator.CreateToListMethod(descriptor);
+			assemblerClass.Members.Add(methodToList);
 
-			CodeMemberMethod methodToArray = m_generator.CreateToArrayMethod(descriptor);
-			m_assemblerClass.Members.Add(methodToArray);
+			CodeMemberMethod methodToArray = _generator.CreateToArrayMethod(descriptor);
+			assemblerClass.Members.Add(methodToArray);
 
 
 			string interfaceType = string.Format(	"IAssembler<{0}, {1}>", 
-													TypeHelper.GetTypeDefinition(descriptor.TargetType),
-													TypeHelper.GetTypeDefinition(descriptor.SourceType));
+			                                     	TypeHelper.GetTypeDefinition(descriptor.TargetType),
+			                                     	TypeHelper.GetTypeDefinition(descriptor.SourceType));
 
-			m_assemblerClass.BaseTypes.Add(interfaceType);
+			assemblerClass.BaseTypes.Add(interfaceType);
 			AddReferencedAssemblies(descriptor);
+
+			_namespace.Types.Add(assemblerClass);
 		}
 
-		private void AddReferencedAssemblies(ClassMappingDescriptor descriptor)
+		public virtual AssemblerGeneratorResult GetAssemblers()
+		{
+			return new AssemblerGeneratorResult(_explicitAssemblies);
+		}
+
+		#endregion
+
+		protected void AddAdditonalNamespaceImports()
+		{
+			foreach (string namespaceImport in _assemblerBase.NamespaceImports)
+			{
+				_namespace.Imports.Add(new CodeNamespaceImport(namespaceImport));
+			}
+		}
+
+		protected void AddReferencedAssemblies(ClassMappingDescriptor descriptor)
 		{
 			AddAssembliesForType(descriptor.TargetType);
 			AddAssembliesForType(descriptor.SourceType);
 		}
 
-		private void AddAssembliesForType(Type type)
+		protected void AddAssembliesForType(Type type)
 		{
-			if (m_typeCache.ContainsKey(type.GetHashCode())) // already processed
+			if (_typeCache.ContainsKey(type.GetHashCode())) // already processed
 				return;
 
 			if(type.BaseType != null)
@@ -87,97 +97,27 @@ namespace Otis.CodeGen
 				AddAssembliesForType(itf);
 			}
 
-			m_typeCache[type.GetHashCode()] = true;
+			_typeCache[type.GetHashCode()] = true;
 			
 			string assembly = type.Assembly.GetName().CodeBase.Substring(8);
-			if (!m_explicitAssemblies.Contains(assembly))
-				m_explicitAssemblies.Add(assembly);
+			if (!_explicitAssemblies.Contains(assembly))
+				_explicitAssemblies.Add(assembly);
 		}
 
-		public object GetAssembler()
+		public static IAssemblerGenerator CreateAssemblerGenerator(
+			string assemblerGenerator, CodeNamespace @namepsace, CodeGeneratorContext context, AssemblerBase assemblerBase)
 		{
-			GenerateSupportMethods();
-			object ret = null;
-			if (m_context.AssemblerGenerationOptions.OutputType == OutputType.SourceCode)
+
+			try
 			{
-				GenerateAssemblerSource();
+				IAssemblerGenerator generator = (IAssemblerGenerator) Activator.CreateInstance(
+					ReflectHelper.ClassForFullName(assemblerGenerator), @namepsace, context, assemblerBase);
+				return generator;
 			}
-			else
+			catch(TypeLoadException e)
 			{
-				bool inMemory = m_context.AssemblerGenerationOptions.OutputType == OutputType.InMemoryAssembly;
-				ret = GenerateAssemblerAssembly(inMemory, m_context.AssemblerGenerationOptions.OutputFile);
+				throw new OtisException("Unable to Create AssemblerGenerator from: {0}, see inner exception for details.", e, assemblerGenerator);
 			}
-			m_typeCache.Clear();
-			return ret;
-		}
-
-		private object GenerateAssemblerAssembly(bool inMemory, string outputFile)
-		{
-			CSharpCodeProvider csp = new CSharpCodeProvider();
-
-			CodeCompileUnit compileUnit = new CodeCompileUnit();
-			compileUnit.Namespaces.Add(m_namespace);
-
-			// todo
-			List<string> assemblies =new List<string>(10);
-			assemblies.AddRange(m_explicitAssemblies);
-			//assemblies.AddRange(m_typeCache.Values);
-			CompilerParameters cp = new CompilerParameters(assemblies.ToArray());
-
-			cp.GenerateInMemory = inMemory;
-			cp.OutputAssembly = outputFile;
-
-			cp.IncludeDebugInformation = m_context.AssemblerGenerationOptions.IncludeDebugInformationInAssembly;
-			//cp.TempFiles = new TempFileCollection("d:\\compile", true); 
-
-			CompilerResults results = csp.CompileAssemblyFromDom(cp, compileUnit);
-			if(results.Errors.HasErrors)
-			{
-				string errors = Util.GetCompilationErrors(results);
-				throw new OtisException("Error during assembler generation: " + errors);
-			}
-
-			object assembler = null;
-			if (!m_context.AssemblerGenerationOptions.SupressInstanceCreation)
-			{
-				assembler = results.CompiledAssembly.CreateInstance(m_namespace.Name + ".Assembler");
-			}
-			return assembler;
-		}
-
-		private void GenerateAssemblerSource()
-		{
-			CSharpCodeProvider csp = new CSharpCodeProvider();
-			CodeGeneratorOptions cop = new CodeGeneratorOptions();
-			cop.BracingStyle = "C";
-			StreamWriter sw = File.CreateText(m_context.AssemblerGenerationOptions.OutputFile);
-			ICodeGenerator gen = csp.CreateGenerator(sw);
-			gen.GenerateCodeFromNamespace(m_namespace, sw, cop);
-			sw.Close();
-		}
-
-		private void GenerateSupportMethods()
-		{
-			// method without null value parameter
-			CodeMemberMethod method = Util.CreateTransformMethod(false);
-			m_assemblerClass.Members.Add(method);
-
-			// method with null value parameter
-			method = Util.CreateTransformMethod(true);
-			m_assemblerClass.Members.Add(method);
-
-			// method with null value parameter
-			method = Util.CreateTransformToArrayMethod();
-			m_assemblerClass.Members.Add(method);
-
-			// method with null value parameter
-			method = Util.CreateTransformToListMethod();
-			m_assemblerClass.Members.Add(method);
-		}
-
-		public void AddAssemblies(ICollection<string> assemblies)
-		{
-			m_explicitAssemblies.AddRange(assemblies);
 		}
 	}
 }

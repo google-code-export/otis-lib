@@ -11,14 +11,14 @@ namespace Otis.Tests
 	[TestFixture]
 	public class GenericsMappingTests
 	{
-		private GenericEntity<int> m_source;
+		private GenericEntity<int> _source;
 
 		[SetUp]
 		public void TestFixtureSetup()
 		{
-			m_source = new GenericEntity<int>();
-			m_source.Id = 1;
-			m_source.NullableProperty = 2;
+			_source = new GenericEntity<int>();
+			_source.Id = 1;
+			_source.NullableProperty = 2;
 		}
 
 		public IAssembler<XmlGenericEntityDTO, GenericEntity<int>> CreateXmlAssembler()
@@ -26,7 +26,7 @@ namespace Otis.Tests
 			Configuration cfg = new Configuration();
 			cfg.AddAssemblyReference(Assembly.GetAssembly(typeof(GenericsMappingTests)));
 			cfg.AddAssemblyResources(Assembly.GetAssembly(typeof(XmlGenericEntityDTO)), "otis.xml");
-			return cfg.GetAssembler<XmlGenericEntityDTO, GenericEntity<int>>();
+			return cfg.GetAssembler<IAssembler<XmlGenericEntityDTO, GenericEntity<int>>>();
 		}
 
 		public IAssembler<AttributedGenericEntityDTO, GenericEntity<int>> CreateAttributedAssembler()
@@ -37,7 +37,7 @@ namespace Otis.Tests
 			cfg.AddAssemblyReference(Assembly.GetAssembly(typeof(GenericsMappingTests)));
 			cfg.AddAssemblyResources(Assembly.GetAssembly(typeof(XmlGenericEntityDTO)), "otis.xml");
 			
-			return cfg.GetAssembler<AttributedGenericEntityDTO, GenericEntity<int>>();
+			return cfg.GetAssembler<IAssembler<AttributedGenericEntityDTO, GenericEntity<int>>>();
 		}
 
 		[Test]
@@ -45,13 +45,13 @@ namespace Otis.Tests
 		{
 			IAssembler<AttributedGenericEntityDTO, GenericEntity<int>> asm = CreateAttributedAssembler();
 
-			AttributedGenericEntityDTO dto = asm.AssembleFrom(m_source);
+			AttributedGenericEntityDTO dto = asm.AssembleFrom(_source);
 			Assert.That(dto.Id, Is.EqualTo(1));
 			Assert.That(dto.NullableProperty, Is.EqualTo(2));
 
 			// test nullables
-			m_source.NullableProperty = null;
-			dto = asm.AssembleFrom(m_source);
+			_source.NullableProperty = null;
+			dto = asm.AssembleFrom(_source);
 			Assert.That(dto.NullableProperty, Is.Null);
 		}
 
@@ -60,13 +60,13 @@ namespace Otis.Tests
 		{
 			IAssembler<XmlGenericEntityDTO, GenericEntity<int>> asm = CreateXmlAssembler();
 
-			XmlGenericEntityDTO xmlDto = asm.AssembleFrom(m_source);
+			XmlGenericEntityDTO xmlDto = asm.AssembleFrom(_source);
 			Assert.That(xmlDto.Id,Is.EqualTo(1));
 			Assert.That(xmlDto.NullableProperty, Is.EqualTo(2));
 
 			// test nullables
-			m_source.NullableProperty = null;
-			xmlDto = asm.AssembleFrom(m_source);
+			_source.NullableProperty = null;
+			xmlDto = asm.AssembleFrom(_source);
 			Assert.That(xmlDto.NullableProperty, Is.Null);
 		}
 

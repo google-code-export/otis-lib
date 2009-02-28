@@ -6,100 +6,100 @@ namespace Otis.Tests.Entity
 {
 	public abstract class Entity
 	{
-		private int m_id;
+		private int _id;
 			
 		public int Id
 		{
-			get { return m_id; }
-			set { m_id = value; }
+			get { return _id; }
+			set { _id = value; }
 		}
 	}
 
 	public class NamedEntity : Entity
 	{
-		private string m_name;
+		private string _name;
 
 		public NamedEntity()
 		{
-			m_name = "Unknown";
+			_name = "Unknown";
 		}
 
 		public NamedEntity(string name)
 		{
-			m_name = name;
+			_name = name;
 		}
 
 		public string Name
 		{
-			get { return m_name; }
-			set { m_name = value; }
+			get { return _name; }
+			set { _name = value; }
 		}
 	}
 
 	public class User : Entity
 	{
-		private User m_boss;
-		private string m_userName;
-		private string m_firstName;
-		private string m_lastName;
-		private IList<Project> m_projects = new List<Project>();
-		private int m_age;
-		private DateTime m_birthDay;
-		private NamedEntity[] m_documents;
-		private string m_userGender;
+		private User _boss;
+		private string _userName;
+		private string _firstName;
+		private string _lastName;
+		private IList<Project> _projects = new List<Project>();
+		private int _age;
+		private DateTime _birthDay;
+		private NamedEntity[] _documents;
+		private string _userGender;
 
 		public User Boss
 		{
-			get { return m_boss; }
-			set { m_boss = value; }
+			get { return _boss; }
+			set { _boss = value; }
 		}
 
 		public string UserName
 		{
-			get { return m_userName; }
-			set { m_userName = value; }
+			get { return _userName; }
+			set { _userName = value; }
 		}
 
 		public string FirstName
 		{
-			get { return m_firstName; }
-			set { m_firstName = value; }
+			get { return _firstName; }
+			set { _firstName = value; }
 		}
 
 		public string LastName
 		{
-			get { return m_lastName; }
-			set { m_lastName = value; }
+			get { return _lastName; }
+			set { _lastName = value; }
 		}
 
 		public IList<Project> Projects
 		{
-			get { return m_projects; }
-			set { m_projects = value; }
+			get { return _projects; }
+			set { _projects = value; }
 		}
 
 		public int Age
 		{
-			get { return m_age; }
-			set { m_age = value; }
+			get { return _age; }
+			set { _age = value; }
 		}
 
 		public NamedEntity[] Documents
 		{
-			get { return m_documents; }
-			set { m_documents = value; }
+			get { return _documents; }
+			set { _documents = value; }
 		}
 
 		public DateTime BirthDay
 		{
-			get { return m_birthDay; }
-			set { m_birthDay = value; }
+			get { return _birthDay; }
+			set { _birthDay = value; }
 		}
 
 		public string UserGender
 		{
-			get { return m_userGender; }
-			set { m_userGender = value; }
+			get { return _userGender; }
+			set { _userGender = value; }
 		}
 	}
 
@@ -109,85 +109,85 @@ namespace Otis.Tests.Entity
 		{
 			
 		}
-		private IList<Task> m_tasks = new List<Task>();
+		private IList<Task> _tasks = new List<Task>();
 
 		public IList<Task> Tasks
 		{
-			get { return m_tasks; }
-			set { m_tasks = value; }
+			get { return _tasks; }
+			set { _tasks = value; }
 		}
 	}
 
 	public class Task : NamedEntity
 	{
-		private int m_duration;
+		private int _duration;
 
 		public Task(){}
 
-		public Task(int duration) { m_duration = duration; }
+		public Task(int duration) { _duration = duration; }
 
 		public int Duration
 		{
-			get { return m_duration; }
-			set { m_duration = value; }
+			get { return _duration; }
+			set { _duration = value; }
 		}
 	}
 
 	public class Company : NamedEntity
 	{
-		private IList<User> m_employees;
-		private Registry m_registry;
+		private IList<User> _employees;
+		private Registry _registry;
 
 		public IList<User> Employees
 		{
-			get { return m_employees; }
-			set { m_employees = value; }
+			get { return _employees; }
+			set { _employees = value; }
 		}
 
 		public Registry Registry
 		{
-			get { return m_registry; }
-			set { m_registry = value; }
+			get { return _registry; }
+			set { _registry = value; }
 		}
 	}
 
 	public class Registry : Entity
 	{
-		private IList<User> m_employees;
+		private IList<User> _employees;
 
 		public IList<User> Employees
 		{
-			get { return m_employees; }
-			set { m_employees = value; }
+			get { return _employees; }
+			set { _employees = value; }
 		}
 	}
 
 	public class DerivedUser : User
 	{
-	   private string m_derivedProperty;
+	   private string _derivedProperty;
 
 	   public string DerivedProperty
 	   {
-	      get { return m_derivedProperty; }
-	      set { m_derivedProperty = value; }
+	      get { return _derivedProperty; }
+	      set { _derivedProperty = value; }
 	   }
 	}
 
 	public class GenericEntity<T>
 	{
-	   private T m_id;
-	   private int? m_nullableProperty;
+	   private T _id;
+	   private int? _nullableProperty;
 
 	   public T Id
 	   {
-	      get { return m_id; }
-	      set { m_id = value; }
+	      get { return _id; }
+	      set { _id = value; }
 	   }
 
 	   public int? NullableProperty
 	   {
-	      get { return m_nullableProperty; }
-	      set { m_nullableProperty = value; }
+	      get { return _nullableProperty; }
+	      set { _nullableProperty = value; }
 	   }
 	}
 }

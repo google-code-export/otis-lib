@@ -19,21 +19,21 @@ namespace Otis.Tests
 		private const string errSourceCodeGeneration = "It is not possible to retrieve assembler because source code generation is chosen.";
 		private const string errInstanceSuppressed = "It is not possible to retrieve assembler because SupressInstanceCreation option is turned on.";
 
-		private User m_user;
+		private User _user;
 
 		[SetUp]
 		public void SetUp()
 		{
-			m_user = new User();
-			m_user.FirstName = "Zdeslav";
-			m_user.LastName = "Vojkovic";
-			m_user.Age = 33;
-			m_user.Id = 1;
-			m_user.UserName = "zdeslavv";
-			m_user.Projects.Add(new Project("proj1"));
-			m_user.Projects.Add(new Project("proj2"));
-			m_user.Projects.Add(new Project("proj3"));
-			m_user.UserGender = "M";
+			_user = new User();
+			_user.FirstName = "Zdeslav";
+			_user.LastName = "Vojkovic";
+			_user.Age = 33;
+			_user.Id = 1;
+			_user.UserName = "zdeslavv";
+			_user.Projects.Add(new Project("proj1"));
+			_user.Projects.Add(new Project("proj2"));
+			_user.Projects.Add(new Project("proj3"));
+			_user.UserGender = "M";
 		}
 
 		[Test]
@@ -42,25 +42,25 @@ namespace Otis.Tests
 			Configuration cfg = new Configuration();
 			cfg.AddType(typeof(AttributedUserDTO));
 
-			IAssembler<AttributedUserDTO, User> asm = cfg.GetAssembler<AttributedUserDTO, User>();
-			AttributedUserDTO dto = asm.AssembleFrom(m_user);
+			IAssembler<AttributedUserDTO, User> asm = cfg.GetAssembler<IAssembler<AttributedUserDTO,User>>();
+			AttributedUserDTO dto = asm.AssembleFrom(_user);
 
-			Assert.AreEqual(dto.Id, m_user.Id);
-			Assert.AreEqual(dto.Age, m_user.Age);
-			Assert.AreEqual(dto.UserName, m_user.UserName.ToUpper());
-			Assert.AreEqual(dto.ProjectCount, m_user.Projects.Count);
-			Assert.AreEqual(dto.FullName, m_user.FirstName + " " + m_user.LastName);
+			Assert.AreEqual(dto.Id, _user.Id);
+			Assert.AreEqual(dto.Age, _user.Age);
+			Assert.AreEqual(dto.UserName, _user.UserName.ToUpper());
+			Assert.AreEqual(dto.ProjectCount, _user.Projects.Count);
+			Assert.AreEqual(dto.FullName, _user.FirstName + " " + _user.LastName);
 			Assert.AreEqual(dto.Gender, Gender.Male);
 			Assert.AreEqual(dto.GenderCode, "M");
 
 
 			AttributedUserDTO dto2 = new AttributedUserDTO();
-			asm.Assemble(ref dto2, ref m_user);
+			asm.Assemble(ref dto2, ref _user);
 
-			Assert.AreEqual(dto2.Id, m_user.Id);
-			Assert.AreEqual(dto2.Age, m_user.Age);
-			Assert.AreEqual(dto2.UserName, m_user.UserName.ToUpper());
-			Assert.AreEqual(dto2.ProjectCount, m_user.Projects.Count);
+			Assert.AreEqual(dto2.Id, _user.Id);
+			Assert.AreEqual(dto2.Age, _user.Age);
+			Assert.AreEqual(dto2.UserName, _user.UserName.ToUpper());
+			Assert.AreEqual(dto2.ProjectCount, _user.Projects.Count);
 		}
 
 		[Test]
@@ -95,10 +95,10 @@ namespace Otis.Tests
 			cfg.AddType(typeof(AttributedUserDTO));
 			cfg.AddXmlFile("XmlMappings\\mappings.xml");
 
-			IAssembler<AttributedUserDTO, User> asm1 = cfg.GetAssembler<AttributedUserDTO, User>();
+			IAssembler<AttributedUserDTO, User> asm1 = cfg.GetAssembler<IAssembler<AttributedUserDTO,User>>();
 			Assert.IsNotNull(asm1);
 
-			IAssembler<XmlUserDTO, User> asm2 = cfg.GetAssembler<XmlUserDTO, User>();
+			IAssembler<XmlUserDTO, User> asm2 = cfg.GetAssembler<IAssembler<XmlUserDTO,User>>();
 			Assert.IsNotNull(asm2);
 		}
 
@@ -109,7 +109,7 @@ namespace Otis.Tests
 			Configuration cfg = new Configuration();
 			cfg.AddType(typeof(AttributedUserDTO));
 
-			IAssembler<string, User> asm = cfg.GetAssembler<string, User>();
+			IAssembler<string, User> asm = cfg.GetAssembler<IAssembler<string,User>>();
 		}
 
 		[Test]
@@ -126,8 +126,8 @@ namespace Otis.Tests
 			Assert.IsTrue(File.Exists("src.cs"));
 			string content = File.ReadAllText("src.cs");
 			Assert.IsTrue(content.Length > 100);
-			Assert.IsTrue(content.StartsWith("namespace OtisTest"));
-			Assert.IsTrue(content.Contains("public class Assembler : IAssembler<Otis.Tests.AttributedUserDTO, Otis.Tests.Entity.User>"));
+			Assert.IsTrue(content.Contains("namespace OtisTest"));
+			Assert.IsTrue(content.Contains("public class UserToAttributedUserDTOAssembler : IAssembler<Otis.Tests.AttributedUserDTO, Otis.Tests.Entity.User>"));
 			Assert.IsTrue(content.Contains("AssembleFrom(Otis.Tests.Entity.User source)"));
 			Assert.IsTrue(content.Contains("return target;"));
 			Assert.IsTrue(content.Contains("Assemble(Otis.Tests.AttributedUserDTO target, Otis.Tests.Entity.User source)"));
@@ -153,7 +153,7 @@ namespace Otis.Tests
 			Assert.IsTrue(File.Exists("src.dll"));
 			Assembly assembly = Assembly.LoadFrom("src.dll");
 			
-			Type type = assembly.GetType("OtisTest.Assembler");
+			Type type = assembly.GetType("OtisTest.UserToAttributedUserDTOAssembler");
 			Assert.IsNotNull(type);
 			Type[] interfaces = type.GetInterfaces();
 			Assert.AreEqual(1, interfaces.Length);
@@ -174,14 +174,14 @@ namespace Otis.Tests
 		{
 			Configuration cfg = new Configuration();
 			cfg.AddType(typeof(AttributedUserDTO));
-			IAssembler<AttributedUserDTO, User> asm = cfg.GetAssembler<AttributedUserDTO, User>();
-			AttributedUserDTO dto = asm.AssembleFrom(m_user);
+			IAssembler<AttributedUserDTO, User> asm = cfg.GetAssembler<IAssembler<AttributedUserDTO,User>>();
+			AttributedUserDTO dto = asm.AssembleFrom(_user);
 
 			Assert.AreEqual(dto.Gender, Gender.Male);
 			Assert.AreEqual(dto.GenderCode, "M");
 
-			m_user.UserGender = "W";
-			dto = asm.AssembleFrom(m_user);
+			_user.UserGender = "W";
+			dto = asm.AssembleFrom(_user);
 
 			Assert.AreEqual(dto.Gender, Gender.Female);
 			Assert.AreEqual(dto.GenderCode, "W");
@@ -196,7 +196,7 @@ namespace Otis.Tests
 			cfg.GenerationOptions.Namespace = "OtisTest";
 
 			cfg.AddType(typeof(AttributedUserDTO));
-			IAssembler<AttributedUserDTO, User> asm = cfg.GetAssembler<AttributedUserDTO, User>();
+			IAssembler<AttributedUserDTO, User> asm = cfg.GetAssembler<IAssembler<AttributedUserDTO,User>>();
 		}
 
 		[Test]
@@ -208,19 +208,19 @@ namespace Otis.Tests
 			cfg.GenerationOptions.SupressInstanceCreation = true;
 
 			cfg.AddType(typeof(AttributedUserDTO));
-			IAssembler<AttributedUserDTO, User> asm = cfg.GetAssembler<AttributedUserDTO, User>();
+			IAssembler<AttributedUserDTO, User> asm = cfg.GetAssembler<IAssembler<AttributedUserDTO,User>>();
 		}
 
 		private void TestXmlConfiguration(Configuration cfg)
 		{
-			IAssembler<XmlUserDTO, User> asm = cfg.GetAssembler<XmlUserDTO, User>();
-			XmlUserDTO dto = asm.AssembleFrom(m_user);
+			IAssembler<XmlUserDTO, User> asm = cfg.GetAssembler<IAssembler<XmlUserDTO,User>>();
+			XmlUserDTO dto = asm.AssembleFrom(_user);
 
-			Assert.AreEqual(dto.Id, m_user.Id);
-			Assert.AreEqual(dto.Age, m_user.Age);
-			Assert.AreEqual(dto.UserName, m_user.UserName.ToUpper());
-			Assert.AreEqual(dto.ProjectCount, m_user.Projects.Count);
-			Assert.AreEqual(dto.FullName, m_user.FirstName + " " + m_user.LastName);
+			Assert.AreEqual(dto.Id, _user.Id);
+			Assert.AreEqual(dto.Age, _user.Age);
+			Assert.AreEqual(dto.UserName, _user.UserName.ToUpper());
+			Assert.AreEqual(dto.ProjectCount, _user.Projects.Count);
+			Assert.AreEqual(dto.FullName, _user.FirstName + " " + _user.LastName);
 		}
 	}
 }

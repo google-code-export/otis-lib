@@ -10,11 +10,11 @@ namespace Otis.Functions
 	// todo: clean up, move stuff from Default, remove context from GetFormatForExecutedExpression param list, ... 
 	abstract public class SimpleFunctionBase : IAggregateFunctionCodeGenerator 
 	{
-		private AggregateFunctionContext m_context;
+		private AggregateFunctionContext _context;
 
 		virtual public IEnumerable<CodeStatement> GetInitializationStatements(AggregateFunctionContext context)
 		{
-			m_context = context;
+			_context = context;
 
 			if(!IsTypeSupportedAsTarget(context.Member.Type))
 				throw new OtisException(GetUnsupportedTargetTypeErrorMessage());
@@ -26,12 +26,12 @@ namespace Otis.Functions
 				context.FunctionObjectName,
 				new CodeSnippetExpression(GetFunctionObjectInitialValue()));
 
-			return new CodeStatement[] {st};
+			return new CodeStatement[] { st };
 		}
 
 		virtual public IEnumerable<string> GetIterationStatements(AggregateFunctionContext context, IList<AggregateExpressionPathItem> pathItems)
 		{
-			m_context = context;
+			_context = context;
 			AggregateExpressionPathItem lastPathItem = pathItems[pathItems.Count - 1];
 
 			string finalTarget = "";
@@ -56,7 +56,7 @@ namespace Otis.Functions
 
 		virtual public CodeStatement GetAssignmentStatement(AggregateFunctionContext context)
 		{
-			m_context = context;
+			_context = context;
 
 			string expression = GetResultExpression();
 			if (context.Member.HasFormatting)
@@ -156,7 +156,7 @@ namespace Otis.Functions
 
 		protected AggregateFunctionContext Context
 		{
-			get { return m_context; }
+			get { return _context; }
 		}
 
 		private string GetUnsupportedTargetTypeErrorMessage()

@@ -25,7 +25,7 @@ namespace Otis.Sample
 			Artist[] artists = svc.GetAllArtists();
 
 			// get the assembler for User->UserInfo transformation
-			IAssembler<ArtistInfo, Artist> asm = m_cfg.GetAssembler<ArtistInfo, Artist>();
+			IAssembler<ArtistInfo, Artist> asm = m_cfg.GetAssembler<IAssembler<ArtistInfo,Artist>>();
 
 			// transform array of User instances to a list of UserInfo instances
 			// and initialize BindingList with it

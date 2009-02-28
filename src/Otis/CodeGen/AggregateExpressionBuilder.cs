@@ -9,43 +9,43 @@ namespace Otis.CodeGen
 {
 	class AggregateExpressionBuilder
 	{
-		private List<CodeStatement> m_statements = null;
-		private List<AggregateFunctionContext> m_contexts = null;
+		private List<CodeStatement> _statements = null;
+		private List<AggregateFunctionContext> _contexts = null;
 
 		public AggregateExpressionBuilder(ClassMappingDescriptor descriptor, ICollection<MemberMappingDescriptor> members, FunctionMap functionMap)
 		{
-			m_contexts = new List<AggregateFunctionContext>(members.Count);
+			_contexts = new List<AggregateFunctionContext>(members.Count);
 
 			foreach (MemberMappingDescriptor member in members)
 			{
-				m_contexts.Add(CreateMemberContext(descriptor, member, functionMap));
+				_contexts.Add(CreateMemberContext(descriptor, member, functionMap));
 			}
 		}
 
 		public CodeStatement[] GetStatements()
 		{
-			if (m_statements == null)
+			if (_statements == null)
 				Generate();
 			
-			return m_statements.ToArray();
+			return _statements.ToArray();
 		}
 
 		private void Generate()
 		{
-			m_statements = new List<CodeStatement>(50);
-			if(m_contexts.Count < 1)
+			_statements = new List<CodeStatement>(50);
+			if(_contexts.Count < 1)
 				return;
 
-			foreach (AggregateFunctionContext context in m_contexts)
+			foreach (AggregateFunctionContext context in _contexts)
 			{
-				m_statements.AddRange(context.Generator.GetInitializationStatements(context));		
+				_statements.AddRange(context.Generator.GetInitializationStatements(context));		
 			}
 
-			m_statements.AddRange(GetPathTraversalStatements());
+			_statements.AddRange(GetPathTraversalStatements());
 
-			foreach (AggregateFunctionContext context in m_contexts)
+			foreach (AggregateFunctionContext context in _contexts)
 			{
-				m_statements.Add(context.Generator.GetAssignmentStatement(context));
+				_statements.Add(context.Generator.GetAssignmentStatement(context));
 			}
 		}
 
@@ -53,7 +53,7 @@ namespace Otis.CodeGen
 		{
 			string exp = "";
 			IList<AggregateExpressionPathItem> pathItems
-				= ExpressionParser.BuildAggregatePathItem(m_contexts[0].Descriptor, m_contexts[0].Member);
+				= ExpressionParser.BuildAggregatePathItem(_contexts[0].Descriptor, _contexts[0].Member);
 
 			foreach (AggregateExpressionPathItem pathItem in pathItems)
 			{
@@ -68,7 +68,7 @@ namespace Otis.CodeGen
 			}
 
 			exp += Environment.NewLine + "\t\t\t\t{" + Environment.NewLine;
-			foreach (AggregateFunctionContext context in m_contexts)
+			foreach (AggregateFunctionContext context in _contexts)
 			{
 				IEnumerable<string> itemExpressions = context.Generator.GetIterationStatements(context, context.PathItems);
 				foreach (string itemExpression in itemExpressions)
@@ -129,9 +129,11 @@ namespace Otis.CodeGen
 		private AggregateFunctionContext CreateMemberContext(ClassMappingDescriptor descriptor, MemberMappingDescriptor member, FunctionMap functionMap)
 		{
 			Type implementationType = functionMap.GetTypeForFunction(member.AggregateMappingDescription.FunctionName);
+
 			string functionObjectName = string.Format("_{0}_to_{1}_Fn_",
 				member.AggregateMappingDescription.FunctionObject,
 				member.Member);
+
 			if (implementationType.IsGenericType)
 			{
 				if (member.IsArray || member.IsList)

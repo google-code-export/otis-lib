@@ -13,7 +13,7 @@ namespace Otis.Providers
 		protected const string errHelperIsPrivate = "Non public method '{0}' on type '{1}'is marked with [MappingHelper]. Only public methods can be used as helpers";
 		protected const string errDuplicatePreparer = "Method '{0}' on type '{1}' is marked with [MappingPreparer], but mapping preparer is already set to '{2}'";
 		protected const string errPreparerIsPrivate = "Non public method '{0}' on type '{1}'is marked with [MappingPreparer]. Only public methods can be used as preparers";
-		private IList<ClassMappingDescriptor> m_classDescriptors = new List<ClassMappingDescriptor>(10);
+		private IList<ClassMappingDescriptor> _classDescriptors = new List<ClassMappingDescriptor>(10);
 
 		protected SingleTypeMappingDescriptorProvider() {}
 
@@ -24,15 +24,20 @@ namespace Otis.Providers
 
 		protected void ProcessType(Type type)
 		{
+			if (type.BaseType != null && type.BaseType.IsDefined(typeof(MapClassAttribute), false))
+			{
+				ProcessType(type.BaseType);
+			}
+
 			if (type.IsDefined(typeof(MapClassAttribute), false))
 			{
-				m_classDescriptors.Add(CreateMapping(type));
+				_classDescriptors.Add(CreateMapping(type));
 			}
 		}
 
 		public IList<ClassMappingDescriptor> ClassDescriptors
 		{
-			get { return m_classDescriptors; }
+			get { return _classDescriptors; }
 		}
 
 		private static ClassMappingDescriptor CreateMapping(Type type)
@@ -44,6 +49,15 @@ namespace Otis.Providers
 			MapClassAttribute attr = (MapClassAttribute) attrs[0];   // todo: assert (should be exactly 1)
 
 			desc.SourceType = attr.SourceType;
+
+			desc.AssemblerBaseName = attr.AssemblerBaseName;
+			desc.AssemblerName = attr.AssemblerName;
+
+			if(string.IsNullOrEmpty(desc.AssemblerName))
+			{
+				desc.AssemblerName = CodeGen.Util.GetAssemblerName(desc.TargetType, desc.SourceType);
+			}
+
 			desc.MappingHelper = attr.Helper;
 			if (desc.HasHelper) desc.IsHelperStatic = desc.MappingHelper.Contains("."); // todo: smarter assumption
 			desc.MappingPreparer = attr.Preparer;
@@ -131,17 +145,15 @@ namespace Otis.Providers
 				desc.NullValue = null;
 			desc.Format = attr.Format;
 			desc.OwnerType = classDesc.TargetType;
+			desc.SourceOwnerType = classDesc.SourceType;
 
-			if(member.MemberType == MemberTypes.Property)
-			{
-				PropertyInfo p = (PropertyInfo)member;
-				desc.Type = p.PropertyType;
-			}
-			else
-			{
-				FieldInfo f = (FieldInfo)member;
-				desc.Type = f.FieldType;
-			}
+			desc.Type = TypeHelper.GetMemberType(member);
+
+			//TODO: make this more robust
+			MemberInfo sourceMember = TypeHelper.FindMember(classDesc.SourceType, desc.Expression.Replace("$", ""));
+
+			if (sourceMember != null)
+				desc.SourceType = TypeHelper.GetMemberType(sourceMember);
 
 			if(desc.HasFormatting && desc.Type != typeof(string))
 			{
@@ -150,16 +162,6 @@ namespace Otis.Providers
 										   desc.Member,
 				                     TypeHelper.GetTypeDefinition(desc.Type));
 				throw new OtisException(msg);
-			}
-
-			if(desc.Type.IsArray)
-			{
-				desc.IsArray = true;
-			}
-			else if (typeof(ICollection).IsAssignableFrom(desc.Type)
-				|| desc.Type.GetInterface(typeof(ICollection<>).FullName) != null)
-			{
-				desc.IsList = true;
 			}
 
 			if(attr.HasProjection)

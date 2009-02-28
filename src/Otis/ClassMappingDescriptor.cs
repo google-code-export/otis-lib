@@ -8,28 +8,44 @@ namespace Otis
 	/// </summary>
 	public class ClassMappingDescriptor
 	{
-		List<MemberMappingDescriptor> m_memberDescriptors = new List<MemberMappingDescriptor>();
-		private Type m_targetType;
-		private Type m_sourceType;
+		List<MemberMappingDescriptor> _memberDescriptors = new List<MemberMappingDescriptor>();
+		private string _assemblerBaseName;
+		private Type _targetType;
+		private Type _sourceType;
+		private string _assemblerName;
+		private string _mappingHelper;
+		private bool _isHelperStatic;
+		private string _mappingPreparer;
+		private bool _isPreparerStatic;
 
-		private string m_mappingHelper;
-		private bool m_isHelperStatic = true;
-		private string m_mappingPreparer;
-		private bool m_isPreparerStatic = true;
-		
+		public ClassMappingDescriptor()
+		{
+			_isPreparerStatic = true;
+			_isHelperStatic = true;
+		}
+
+		/// <summary>
+		/// Gets/sets the Base Assembler for this Class
+		/// </summary>
+		public string AssemblerBaseName
+		{
+			get { return _assemblerBaseName; }
+			set { _assemblerBaseName = value; }
+		}
+
 		/// <summary>
 		/// Returns the list of member transformations. For each transformation from a source field/property
 		/// to a target field/property, there is an <c>MemberMappingDescriptor</c> instance in the list.
 		/// </summary>
-		public IList<MemberMappingDescriptor> MemberDescriptors { get { return m_memberDescriptors; } }
+		public IList<MemberMappingDescriptor> MemberDescriptors { get { return _memberDescriptors; } }
 
 		/// <summary>
 		/// Gets/sets target type for transformation
 		/// </summary>
 		public Type TargetType
 		{
-			get { return m_targetType; }
-			set { m_targetType = value; }
+			get { return _targetType; }
+			set { _targetType = value; }
 		}
 
 		/// <summary>
@@ -37,8 +53,17 @@ namespace Otis
 		/// </summary>
 		public Type SourceType
 		{
-			get { return m_sourceType; }
-			set { m_sourceType = value; }
+			get { return _sourceType; }
+			set { _sourceType = value; }
+		}
+
+		/// <summary>
+		/// Gets/sets the name of the assembler in the Generated Assembly
+		/// </summary>
+		public string AssemblerName
+		{
+			get { return _assemblerName; }
+			set { _assemblerName = value; }
 		}
 
 		/// <summary>
@@ -46,8 +71,8 @@ namespace Otis
 		/// </summary>
 		public string MappingHelper
 		{
-			get { return m_mappingHelper; }
-			set { m_mappingHelper = value; }
+			get { return _mappingHelper; }
+			set { _mappingHelper = value; }
 		}
 
 		/// <summary>
@@ -55,7 +80,7 @@ namespace Otis
 		/// </summary>
 		public bool HasHelper
 		{
-			get { return !string.IsNullOrEmpty(m_mappingHelper); }
+			get { return !string.IsNullOrEmpty(MappingHelper); }
 		}
 
 		/// <summary>
@@ -63,16 +88,17 @@ namespace Otis
 		/// </summary>
 		public bool IsHelperStatic
 		{
-			get { return m_isHelperStatic; }
-			set { m_isHelperStatic = value; }
+			get { return _isHelperStatic; }
+			set { _isHelperStatic = value; }
 		}
+
 		/// <summary>
 		/// Gets/sets name of the mapping preparer function. For details, see <see cref="MapClassAttribute"/>.
 		/// </summary>
 		public string MappingPreparer
 		{
-			get { return m_mappingPreparer; }
-			set { m_mappingPreparer = value; }
+			get { return _mappingPreparer; }
+			set { _mappingPreparer = value; }
 		}
 
 		/// <summary>
@@ -80,7 +106,7 @@ namespace Otis
 		/// </summary>
 		public bool HasPreparer
 		{
-			get { return !string.IsNullOrEmpty(m_mappingPreparer); }
+			get { return !string.IsNullOrEmpty(MappingPreparer); }
 		}
 
 		/// <summary>
@@ -88,9 +114,8 @@ namespace Otis
 		/// </summary>
 		public bool IsPreparerStatic
 		{
-			get { return m_isPreparerStatic; }
-			set { m_isPreparerStatic = value; }
+			get { return _isPreparerStatic; }
+			set { _isPreparerStatic = value; }
 		}
-
 	}
 }

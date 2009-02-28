@@ -7,37 +7,37 @@ namespace Otis
 	/// </summary>
 	public class AggregateMappingDescription
 	{
-		private string[] m_parts;
-		private string m_finalExpression;
-		private string m_functionName;
-		private string m_functionObject;
-		private Type m_targetType;
+		private string[] _parts;
+		private string _finalExpression;
+		private string _functionName;
+		private string _functionObject;
+		private Type _targetType;
 
 		public AggregateMappingDescription(string expression, Type targetType)
 		{
-			m_targetType = targetType;
+			_targetType = targetType;
 			int pos = expression.IndexOf(':');
-			m_functionName = expression.Substring(0, pos);
+			_functionName = expression.Substring(0, pos);
 			expression = expression.Substring(pos + 1);
-			m_functionObject = expression.Replace("$", "");
-			m_functionObject = m_functionObject.Replace("/", "_");
-			m_functionObject = m_functionObject.Replace(".", "");
-			m_functionObject = m_functionObject.Replace("(", "");
-			m_functionObject = m_functionObject.Replace(")", ""); // todo: use regex
-			m_functionObject = m_functionName + "_" + m_functionObject;
+			_functionObject = expression.Replace("$", "");
+			_functionObject = _functionObject.Replace("/", "_");
+			_functionObject = _functionObject.Replace(".", "");
+			_functionObject = _functionObject.Replace("(", "");
+			_functionObject = _functionObject.Replace(")", ""); // todo: use regex
+			_functionObject = _functionName + "_" + _functionObject;
 							   
 			string[] parts = expression.Split('/');
 			if (parts.Length > 1) // complex expression like 'avg:$Projects/Tasks/Duration'
 			{
-				m_parts = new string[parts.Length];
-				Array.Copy(parts, m_parts, m_parts.Length);
-				m_finalExpression = parts[parts.Length - 1];
+				_parts = new string[parts.Length];
+				Array.Copy(parts, _parts, _parts.Length);
+				_finalExpression = parts[parts.Length - 1];
 			}
 			else				  // simple expression like 'count:$Documents'
 			{
-				m_parts = new string[1];
-				m_parts[0] = parts[0];
-				m_finalExpression = "";
+				_parts = new string[1];
+				_parts[0] = parts[0];
+				_finalExpression = "";
 			}
 		}
 
@@ -49,7 +49,7 @@ namespace Otis
 		/// </remarks>
 		public string[] PathParts
 		{
-			get { return m_parts; }
+			get { return _parts; }
 		}
 
 		/// <summary>
@@ -60,8 +60,8 @@ namespace Otis
 		/// </remarks>
 		public string FinalExpression
 		{
-			get { return m_finalExpression; }
-			internal set { m_finalExpression = value; }
+			get { return _finalExpression; }
+			internal set { _finalExpression = value; }
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace Otis
 		/// </summary>
 		public Type TargetType
 		{
-			get { return m_targetType; }
+			get { return _targetType; }
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace Otis
 		/// </summary>
 		public string FunctionName
 		{
-			get { return m_functionName; }
+			get { return _functionName; }
 		}
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace Otis
 		/// </summary>
 		public string FunctionObject
 		{
-			get { return m_functionObject; }
+			get { return _functionObject; }
 		}
 	}
 }

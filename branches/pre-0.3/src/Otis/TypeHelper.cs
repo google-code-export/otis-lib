@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace Otis
@@ -43,6 +46,72 @@ namespace Otis
 			}
 			builder.Append('>');
 			return builder.ToString();
+		}
+
+		/// <summary>
+		/// Returns the Member Info for a Type and the Name of the Member
+		/// </summary>
+		/// <param name="type">the Type to search</param>
+		/// <param name="member">the Name of the Member</param>
+		/// <returns>MemberInfo for the type.member</returns>
+		internal static MemberInfo FindMember(Type type, string member)
+		{
+			MemberInfo target;
+			FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+			target = Array.Find(fields, delegate(FieldInfo fi) { return member == fi.Name; });
+			if (target != null)
+				return target;
+
+			PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			target = Array.Find(properties, delegate(PropertyInfo pi) { return member == pi.Name; });
+			return target;
+		}
+
+		/// <summary>
+		/// If a MemberInfo is a Property or Field, will return the type
+		/// </summary>
+		/// <param name="member">The Object Member to Test</param>
+		/// <returns>The underlying Type of the MemberInfo</returns>
+		internal static Type GetMemberType(MemberInfo member)
+		{
+			if (member.MemberType == MemberTypes.Property)
+			{
+				PropertyInfo p = (PropertyInfo) member;
+				return p.PropertyType;
+			}
+			
+			FieldInfo f = (FieldInfo) member;
+			return f.FieldType;
+		}
+
+		internal static bool IsList(Type type)
+		{
+			return (typeof(ICollection).IsAssignableFrom(type)) || IsGenericList(type);
+		}
+
+		internal static bool IsGenericList(Type type)
+		{
+			return type.GetInterface(typeof(ICollection<>).FullName) != null;
+		}
+
+		public static Type GetSingularType(Type type)
+		{
+			if (type.IsArray)
+			{
+				return type.GetElementType();
+			}
+
+			if (IsGenericList(type))
+			{
+				Type[] genericTypes = type.GetGenericArguments();
+
+				if(genericTypes.Length != 1)
+					throw new OtisException("Unable to Guess Singlar type for: " + type);
+
+				return genericTypes[0];
+			}
+
+			return type;
 		}
 	}
 }

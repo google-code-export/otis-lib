@@ -6,13 +6,13 @@ namespace Otis.CodeGen
 {
 	public class AggregateFunctionContext
 	{
-		private readonly MemberMappingDescriptor m_member;
-		private readonly ClassMappingDescriptor m_descriptor;
-		private readonly Type m_implementationType;
-		private readonly string m_functionObjectName;
-		private readonly AggregateExpressionPathItem m_sourceItem;
-		private readonly IAggregateFunctionCodeGenerator m_generator;
-		private readonly IList<AggregateExpressionPathItem> m_pathItems;
+		private readonly MemberMappingDescriptor _member;
+		private readonly ClassMappingDescriptor _descriptor;
+		private readonly Type _implementationType;
+		private readonly string _functionObjectName;
+		private readonly AggregateExpressionPathItem _sourceItem;
+		private readonly IAggregateFunctionCodeGenerator _generator;
+		private readonly IList<AggregateExpressionPathItem> _pathItems;
 
 		public AggregateFunctionContext(MemberMappingDescriptor member, 
 										ClassMappingDescriptor descriptor, 
@@ -20,54 +20,54 @@ namespace Otis.CodeGen
 										string functionObjectName, 
 										IAggregateFunctionCodeGenerator generator)
 		{
-			m_member = member;
-			m_generator = generator;
-			m_functionObjectName = functionObjectName;
-			m_implementationType = implementationType;
-			m_descriptor = descriptor;
+			_member = member;
+			_generator = generator;
+			_functionObjectName = functionObjectName;
+			_implementationType = implementationType;
+			_descriptor = descriptor;
 
-			m_pathItems = ExpressionParser.BuildAggregatePathItem(descriptor, member);
-			m_sourceItem = m_pathItems[m_pathItems.Count - 1];
+			_pathItems = ExpressionParser.BuildAggregatePathItem(descriptor, member);
+			_sourceItem = _pathItems[_pathItems.Count - 1];
 		}
 
 		public MemberMappingDescriptor Member
 		{
-			get { return m_member; }
+			get { return _member; }
 		}
 
 		public ClassMappingDescriptor Descriptor
 		{
-			get { return m_descriptor; }
+			get { return _descriptor; }
 		}
 
 		public Type SourceItemType
 		{
-			get { return m_sourceItem.Type; }
+			get { return _sourceItem.Type; }
 		}
 
 		public Type ImplementationType
 		{
-			get { return m_implementationType; }
+			get { return _implementationType; }
 		}
 
 		public string FunctionObjectName
 		{
-			get { return m_functionObjectName; }
+			get { return _functionObjectName; }
 		}
 
 		public AggregateExpressionPathItem SourceItem
 		{
-			get { return m_sourceItem; }
+			get { return _sourceItem; }
 		}
 
 		public IAggregateFunctionCodeGenerator Generator
 		{
-			get { return m_generator; }
+			get { return _generator; }
 		}
 
 		public IList<AggregateExpressionPathItem> PathItems
 		{
-			get { return m_pathItems; }
+			get { return _pathItems; }
 		}
 	}
 }

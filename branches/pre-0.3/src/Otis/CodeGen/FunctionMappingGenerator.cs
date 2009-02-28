@@ -105,47 +105,68 @@ namespace Otis.CodeGen
 		{
 			string expression = UnwindExpression(member.Expression);
 
+			CodeVariableReferenceExpression targetVariableReference =
+				new CodeVariableReferenceExpression("target." + member.Member);
+
+			CodeArgumentReferenceExpression expressionArgumentReference = new CodeArgumentReferenceExpression(expression);
+
 			if(member.Type.IsPrimitive)
 			{
-				return new CodeStatement[]
-					{
-						new CodeAssignStatement(
-							new CodeVariableReferenceExpression("target." + member.Member),
-							new CodeSnippetExpression(expression))
-					};
+				return new CodeStatement[] { new CodeAssignStatement(targetVariableReference, expressionArgumentReference) };
 			}
 
-			CodeMethodInvokeExpression transform = new CodeMethodInvokeExpression(new CodeThisReferenceExpression(),
-			                                           "Transform",
-			                                           new CodeVariableReferenceExpression("target." + member.Member),
-			                                           new CodeArgumentReferenceExpression(expression)
-				);
+			//else we want to call another assembler
+			//TODO: check for named assembler
+			string assemblerName = Util.GetAssemblerName(member.Type, member.SourceType);
+
+			CodeMethodInvokeExpression transform =
+				new CodeMethodInvokeExpression(
+					new CodeObjectCreateExpression(assemblerName),
+					"AssembleFrom",
+					expressionArgumentReference);
+
 			if(member.HasNullValue)
 			{
-				transform.Parameters.Add(new CodeSnippetExpression(member.NullValue.ToString()));
+				CodeStatement nullValueStatement = new CodeConditionStatement(
+					new CodeBinaryOperatorExpression(
+						expressionArgumentReference,
+						CodeBinaryOperatorType.ValueEquality,
+						new CodePrimitiveExpression(null)),
+					new CodeStatement[]
+						{
+							new CodeAssignStatement(
+								targetVariableReference,
+								new CodeSnippetExpression(member.NullValue))
+						},
+					new CodeStatement[]
+						{
+							new CodeAssignStatement(
+								targetVariableReference,
+								transform)
+						});
+
+				return new CodeStatement[] { nullValueStatement };
 			}
 
-			CodeStatement st = new CodeAssignStatement(
-				new CodeVariableReferenceExpression("target." + member.Member),
-				transform);
-			return new CodeStatement[] { st };
+			return new CodeStatement[] { new CodeAssignStatement( targetVariableReference, transform) };
 		}
 
 		private static CodeStatement[] CreateSimpleMapping(MemberMappingDescriptor member)
 		{
 			string expression = UnwindExpression(member.Expression);
+
 			if(member.Type == typeof(string))
 			{
-				if (member.HasFormatting)
-					expression = string.Format("string.Format(\"{0}\", {1})", member.Format, expression);
-				else
-					expression = string.Format("({0}).ToString()", expression);				
+				expression = member.HasFormatting 
+					? string.Format("string.Format(\"{0}\", {1})", member.Format, expression) 
+					: string.Format("({0}).ToString()", expression);				
 			}
 
 			CodeSnippetExpression exp = new CodeSnippetExpression(expression);
 			CodeStatement st = new CodeAssignStatement(
 				new CodeVariableReferenceExpression("target." + member.Member),
 				exp);
+
 			return new CodeStatement[] { st };
 		}
 
@@ -153,33 +174,37 @@ namespace Otis.CodeGen
 		{
 			string expression = member.Expression.Replace("$", "source.");
 
-			CodeStatement[] statements = new CodeStatement[1];
+			//TODO: check for named assembler
+			string assemblerName = Util.GetAssemblerName(member.SingularType, member.SourceSingluarType);
 
-			statements[0] = new CodeAssignStatement(
-								new CodeVariableReferenceExpression("target." + member.Member),
-								new CodeMethodInvokeExpression(
-									new CodeThisReferenceExpression(),
-									"TransformToArray",
-									new CodeVariableReferenceExpression("target." + member.Member),
-									new CodeArgumentReferenceExpression(expression)
-								));
-			return statements;
+			CodeAssignStatement transform =
+				new CodeAssignStatement(
+					new CodeVariableReferenceExpression("target." + member.Member),
+					new CodeMethodInvokeExpression(
+						new CodeObjectCreateExpression(assemblerName),
+						"ToArray",
+						new CodeArgumentReferenceExpression(expression)));
+
+			return new CodeStatement[] { transform };
 		}
 
 		private static CodeStatement[] CreateListMappingStatements(MemberMappingDescriptor member)
 		{
 			string expression = member.Expression.Replace("$", "source.");
 
-			CodeStatement[] statements = new CodeStatement[1];
+			//else we want to call another assembler
+			//TODO: check for named assembler
+			string assemblerName = Util.GetAssemblerName(member.SingularType, member.SourceSingluarType);
 
-			CodeMethodInvokeExpression transform = new CodeMethodInvokeExpression(new CodeThisReferenceExpression(),
-												"TransformToList",
-												new CodeVariableReferenceExpression("target." + member.Member),
-												new CodeArgumentReferenceExpression(expression)
-												);
+			CodeAssignStatement transform =
+				new CodeAssignStatement(
+					new CodeVariableReferenceExpression("target." + member.Member),
+					new CodeMethodInvokeExpression(
+						new CodeObjectCreateExpression(assemblerName),
+						"ToList",
+						new CodeArgumentReferenceExpression(expression)));
 
-			statements[0] = new CodeExpressionStatement(transform);
-			return statements;
+			return new CodeStatement[] { transform };
 		}
 
 		private static CodeStatement[] CreateProjectionMapping(MemberMappingDescriptor member)

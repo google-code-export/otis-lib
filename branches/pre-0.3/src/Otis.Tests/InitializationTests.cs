@@ -153,6 +153,6 @@ namespace Otis.Tests
 	class InvalidDTO2
 	{
 		[Map(Format = "{0}")]
-		public int Age = 0;
+		public int Age;
 	}
 }

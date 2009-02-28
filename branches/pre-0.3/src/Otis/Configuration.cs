@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
+using Otis.CodeGen;
 using Otis.Functions;
+using Otis.Utils;
 
 namespace Otis
 {
@@ -30,26 +31,39 @@ namespace Otis
 	/// </remarks>
 	public class Configuration
 	{
-		private const string errNotConfigured = "Assembler for transformation [{0} -> {1}] is not configured";
-		private const string errSourceCodeGeneration = "It is not possible to retrieve assembler because source code generation is chosen.";
-		private const string errInstanceSuppressed = "It is not possible to retrieve assembler because SupressInstanceCreation option is turned on.";
+		private const string ErrNotConfigured = "Assembler for transformation [{0} -> {1}] is not configured";
+		private const string ErrSourceCodeGeneration = "It is not possible to retrieve assembler because source code generation is chosen.";
+		private const string ErrInstanceSuppressed = "It is not possible to retrieve assembler because SupressInstanceCreation option is turned on.";
+		private const string ErrNoDefaultAssemblerBaseTypeSpecified = "It is not possible to retrieve assembler because no Default Assembler Base Type was Configured";
+		private const string DefaultXmlExtension = "otis.xml";
 
 
-		private List<IMappingDescriptorProvider> m_providers = new List<IMappingDescriptorProvider>(1);
-		private List<string> m_referencedAssemblies = new List<string>(1);
-		private object m_assembler;
-		private AssemblerGenerationOptions m_generationOptions = new AssemblerGenerationOptions();
-		private FunctionMap m_functionMap = new FunctionMap();
+		private readonly List<IMappingDescriptorProvider> _providers = new List<IMappingDescriptorProvider>(1);
+		private readonly List<string> _referencedAssemblies = new List<string>(1);
+		private readonly AssemblerGenerationOptions _generationOptions;
+		private readonly FunctionMap _functionMap = new FunctionMap();
+
+		private Type[] _assemblerTypes = new Type[0];
+		private Assembly _assemblerAssembly;
+
 		// todo:
 		// AddDirectory
 		// AddAssemblyResources
 		// AddStream
 
 		/// <summary>
+		/// Creates a new <c>Configuration</c> instance using the Default Otis Supplied <see cref="AssemblerBase" />
+		/// </summary>
+		public Configuration() : this(true) {}
+
+		/// <summary>
 		/// Creates a new <c>Configuration</c> instance
 		/// </summary>
-		public Configuration()
+		/// <param name="useProvidedAssemblerBaseType">If true, uses the Default Otis Supplied <see cref="AssemblerBase" /></param>
+		public Configuration(bool useProvidedAssemblerBaseType)
 		{
+			_generationOptions = new AssemblerGenerationOptions(useProvidedAssemblerBaseType);
+
 			RegisterFunction<SumFunction>("sum");
 			RegisterFunction<MinFunction>("min");
 			RegisterFunction<MaxFunction>("max");
@@ -65,7 +79,7 @@ namespace Otis
 		/// </summary>
 		public AssemblerGenerationOptions GenerationOptions
 		{
-			get { return m_generationOptions; }
+			get { return _generationOptions; }
 		}
 
 		/// <summary>
@@ -73,7 +87,7 @@ namespace Otis
 		/// </summary>
 		protected List<string> ReferencedAssemblies
 		{
-			get { return m_referencedAssemblies; }
+			get { return _referencedAssemblies; }
 		}
 
 		/// <summary>
@@ -84,6 +98,15 @@ namespace Otis
 		{
 			IMappingDescriptorProvider provider = ProviderFactory.FromAssembly(asm);
 			AddProvider(provider);
+		}
+
+		/// <summary>
+		/// Configures the assembler using resource XML files ending in ".pass.xml" in the specified assembly
+		/// </summary>
+		/// <param name="asm">Assembly containing mapping xml files as resuorces</param>
+		public void AddAssemblyResources(Assembly asm)
+		{
+			AddAssemblyResources(asm, DefaultXmlExtension);
 		}
 
 		/// <summary>
@@ -145,7 +168,7 @@ namespace Otis
 		/// <param name="provider">an instanc of provider implementation</param>
 		public void AddProvider(IMappingDescriptorProvider provider)
 		{
-			m_providers.Add(provider);
+			_providers.Add(provider);
 		}
 
 		/// <summary>
@@ -153,9 +176,9 @@ namespace Otis
 		/// </summary>
 		/// <remarks>
 		/// It is NOT necessary to call this function, beacuse it will be automatically
-		/// called first time when <see cref="GetAssembler"/> function is called. however, sometimes
+		/// called first time when <see cref="GetAssembler&lt;AssemblerType&gt;()"/> function is called. however, sometimes
 		/// it is desirable to do the assembly generation at controlled time, before the first call to
-		/// <see cref="GetAssembler"/>. In that case, the first call to <see cref="GetAssembler"/> 
+		/// <see cref="GetAssembler&lt;AssemblerType&gt;()"/>. In that case, the first call to <see cref="GetAssembler&lt;AssemblerType&gt;()"/> 
 		/// will NOT regenerate the assembly, it is always done just once.
 		/// </remarks>
 		/// <exception cref="OtisException">Thrown if there is an error while compiling the assembly</exception>
@@ -167,34 +190,52 @@ namespace Otis
 		/// <summary>
 		/// Returns the assembler object for specified transformation
 		/// </summary>
-		/// <typeparam name="Target">Target type for conversion</typeparam>
-		/// <typeparam name="Source">Source type for conversion</typeparam>
+		/// <typeparam name="AssemblerType">The Type of Assembler to get</typeparam>
 		/// <returns>Specific assembler</returns>
 		/// <exception cref="OtisException">Thrown if transformation is not configured</exception>
-		public IAssembler<Target, Source> GetAssembler<Target, Source>()
+		public AssemblerType GetAssembler<AssemblerType>()
+			where AssemblerType : class
 		{
-			if (m_generationOptions.OutputType == OutputType.SourceCode) // if still null
+			if (_generationOptions.OutputType == OutputType.SourceCode) // if still null
 			{
-				throw new OtisException(errSourceCodeGeneration);
+				throw new OtisException(ErrSourceCodeGeneration);
 			}
-			if (m_generationOptions.SupressInstanceCreation) // if still null
+			if (_generationOptions.SupressInstanceCreation) // if still null
 			{
-				throw new OtisException(errInstanceSuppressed);
+				throw new OtisException(ErrInstanceSuppressed);
 			}
 
-			if(m_assembler == null)
+			if (_assemblerAssembly == null)
 			{
 				Build();
 			}
 
-			IAssembler<Target, Source> asm = m_assembler as IAssembler<Target, Source>;
- 			if (asm == null)
+			return ResolveAssembler<AssemblerType>();
+		}
+
+		private AssemblerType ResolveAssembler<AssemblerType>()
+			where AssemblerType : class
+		{
+			Type[] typeParams = typeof (AssemblerType).GetGenericArguments();
+
+			string assemblerName = Util.GetAssemblerName(typeParams[0], typeParams[1]);
+
+			try
 			{
-				string msg = string.Format(errNotConfigured, typeof(Source).FullName, typeof(Target).FullName);
+				Type assemblerType = Array.Find(_assemblerTypes, delegate(Type type) { return type.Name == assemblerName; });
+
+				AssemblerType assembler = Activator.CreateInstance(assemblerType) as AssemblerType;
+
+				if (assembler == null)
+					throw new Exception();
+
+				return assembler;
+			}
+			catch (Exception)
+			{
+				string msg = string.Format(ErrNotConfigured, typeParams[1].FullName, typeParams[0].FullName);
 				throw new OtisException(msg);
 			}
-
-			return asm;
 		}
 
 		/// <summary>
@@ -205,7 +246,7 @@ namespace Otis
 		/// <exception cref="OtisException">Thrown if type doesn't implement IAggregateFunction</exception>
 		public void RegisterFunction(string name, Type type)
 		{
-			m_functionMap.Register(name, type);
+			_functionMap.Register(name, type);
 		}
 
 		/// <summary>
@@ -215,7 +256,7 @@ namespace Otis
 		/// <param name="name">name of the function (e.g. 'stddev')</param>
 		public void RegisterFunction<T>(string name)
 		{
-			m_functionMap.Register(name, typeof(T));
+			_functionMap.Register(name, typeof(T));
 		}
 
 		/// <summary>
@@ -263,14 +304,22 @@ namespace Otis
 			if (asm == null)
 				throw new ArgumentNullException("asm");
 
-			m_referencedAssemblies.Add(asm.CodeBase.Substring(8).ToLower());
+			_referencedAssemblies.Add(asm.CodeBase.Substring(8).ToLower());
 		}
 
 		void Build()
 		{
-			CodeGeneratorContext context = new CodeGeneratorContext(m_providers, m_functionMap, GenerationOptions);
-			AssemblerBuilder builder = new AssemblerBuilder(context, m_referencedAssemblies);
-			m_assembler = builder.Build();
+			CodeGeneratorContext context = new CodeGeneratorContext(_providers, _functionMap, GenerationOptions);
+			AssemblerBuilder builder = new AssemblerBuilder(context, _referencedAssemblies);
+			_assemblerAssembly = builder.Build();
+			CacheAssemblerTypes();
+		}
+
+		private void CacheAssemblerTypes()
+		{
+			//may have chosen source code option
+			if (_assemblerAssembly != null)
+				_assemblerTypes = _assemblerAssembly.GetTypes();
 		}
 	}
 }

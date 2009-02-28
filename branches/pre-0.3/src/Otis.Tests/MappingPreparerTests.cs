@@ -11,15 +11,15 @@ namespace Otis.Tests
 	{
 		const string errDuplicatePreparer = "Method 'Preparer' on type 'Otis.Tests.MappingPreparerDTO_Duplicate' is marked with [MappingPreparer], but mapping preparer is already set to 'Otis.Tests.Util.Convert'";
 		const string errPreparerIsPrivate = "Non public method 'Preparer' on type 'Otis.Tests.MappingPreparerDTO_NonPublic'is marked with [MappingPreparer]. Only public methods can be used as preparers";
-		private User m_user;
+		private User _user;
 
 		[SetUp]
 		public void SetUp()
 		{
-			m_user = new User();
-			m_user.Id = 77;
-			m_user.FirstName = "aaa";
-			m_user.LastName = "bbb";
+			_user = new User();
+			_user.Id = 77;
+			_user.FirstName = "aaa";
+			_user.LastName = "bbb";
 		}
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Otis.Tests
 		public void Non_Static_Preparer()
 		{
 			IAssembler<MappingPreparerDTO_InstancePreparer, User> asm = ConfigureType<MappingPreparerDTO_InstancePreparer>();
-			MappingPreparerDTO_InstancePreparer dto = asm.AssembleFrom(m_user);
+			MappingPreparerDTO_InstancePreparer dto = asm.AssembleFrom(_user);
 			Assert.AreEqual(77, dto.Id);
 			Assert.AreEqual("custom_mapping_InstancePreparer", dto.FullName);
 		}
@@ -49,7 +49,7 @@ namespace Otis.Tests
 		public void Preparer_Is_Called_Before_Transformation()
 		{
 			IAssembler<MappingPreparerDTO_CheckOrder, User> asm = ConfigureType<MappingPreparerDTO_CheckOrder>();
-			MappingPreparerDTO_CheckOrder dto = asm.AssembleFrom(m_user);
+			MappingPreparerDTO_CheckOrder dto = asm.AssembleFrom(_user);
 			Assert.AreEqual(77, dto.Id);  // check it is not -1
 		}
 
@@ -57,7 +57,7 @@ namespace Otis.Tests
 		public void Static_Preparer()
 		{
 			IAssembler<MappingPreparerDTO_StaticPreparer, User> asm = ConfigureType<MappingPreparerDTO_StaticPreparer>();
-			MappingPreparerDTO_StaticPreparer dto = asm.AssembleFrom(m_user);
+			MappingPreparerDTO_StaticPreparer dto = asm.AssembleFrom(_user);
 			Assert.AreEqual(77, dto.Id);
 			Assert.AreEqual("custom_mapping_StaticPreparer", dto.FullName);
 		}
@@ -66,7 +66,7 @@ namespace Otis.Tests
 		{
 			Configuration cfg = new Configuration();
 			cfg.AddType(typeof(T));
-			return cfg.GetAssembler<T, User>();
+			return cfg.GetAssembler<IAssembler<T,User>>();
 		}
 	}
 }

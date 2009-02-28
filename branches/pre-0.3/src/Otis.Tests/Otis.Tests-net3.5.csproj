@@ -1,0 +1,117 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B4F4C787-2E9A-40E0-8D37-B112627CB2F0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Otis.Tests</RootNamespace>
+    <AssemblyName>Otis.Tests</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.core, Version=2.4.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ref\nunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ref\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AggregateFunctionTargetConstraintsTest.cs" />
+    <Compile Include="AggregateFunctionTests.cs" />
+    <Compile Include="AggregateMappingTest.cs" />
+    <Compile Include="AssemblyGenerationTests.cs" />
+    <Compile Include="AttributedUserDTO.cs" />
+    <Compile Include="CollectionMappingTest.cs" />
+    <Compile Include="ComponentMappingTests.cs" />
+    <Compile Include="DerivedUserDTO.cs" />
+    <Compile Include="DerivedXmlUserDTO.cs" />
+    <Compile Include="Entities.cs" />
+    <Compile Include="EntityMappingTest.cs" />
+    <Compile Include="ExpressionFormattingTests.cs" />
+    <Compile Include="ExternalAssemblyTest.cs" />
+    <Compile Include="FunctionMapTest.cs" />
+    <Compile Include="GenericEntityDTO.cs" />
+    <Compile Include="GenericsMappingTests.cs" />
+    <Compile Include="InheritanceMappingTests.cs" />
+    <Compile Include="InitializationTests.cs" />
+    <Compile Include="IntegrationTests.cs" />
+    <Compile Include="MappingHelperDTO.cs" />
+    <Compile Include="MappingHelperTests.cs" />
+    <Compile Include="MappingPatternsTests.cs" />
+    <Compile Include="MappingPreparerDTO.cs" />
+    <Compile Include="MappingPreparerTests.cs" />
+    <Compile Include="NullValueHandlingTests.cs" />
+    <Compile Include="PerformanceTest.cs" />
+    <Compile Include="ProjectionParsingTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleFunctionBaseTest.cs" />
+    <Compile Include="UserDTO.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="XmlProviderTest.cs" />
+    <Compile Include="XmlUserDTO.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XmlMappings\mappings.otis.xml" />
+    <EmbeddedResource Include="XmlMappings\derived-mappings.otis.xml" />
+    <EmbeddedResource Include="XmlMappings\generics-mappings.otis.xml" />
+    <Content Include="XmlMappings\mappings2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XmlMappings\mappings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XmlMappings\mapping_bad_form.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XmlMappings\mapping_non_compliant.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Otis\Otis-net3.5.csproj">
+      <Project>{B81906CB-F063-4D3F-AE7F-23C4475EE158}</Project>
+      <Name>Otis-net3.5</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

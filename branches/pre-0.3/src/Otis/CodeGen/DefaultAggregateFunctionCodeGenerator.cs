@@ -14,7 +14,7 @@ namespace Otis.CodeGen
 			CodeStatement st = new CodeVariableDeclarationStatement(context.ImplementationType, context.FunctionObjectName,
 							new CodeObjectCreateExpression(context.ImplementationType, parameters));
 
-			return new CodeStatement[] {st};
+			return new CodeStatement[] { st };
 		}
 
 		virtual public IEnumerable<string> GetIterationStatements(AggregateFunctionContext context, IList<AggregateExpressionPathItem> pathItems)

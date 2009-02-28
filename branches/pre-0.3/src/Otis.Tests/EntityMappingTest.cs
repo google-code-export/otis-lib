@@ -11,14 +11,13 @@ namespace Otis.Tests
 	[TestFixture]
 	public class EntityMappingTest
 	{
-		private IAssembler<UserDTO, User> m_assembler;
-		private User m_user;
+		private IAssembler<UserDTO, User> _assembler;
+		private User _user;
 
 		[SetUp]
 		public void Setup()
 		{
-			Configuration cfg;
-			cfg = new Configuration();
+			Configuration cfg = new Configuration();
 			cfg.AddType<UserDTO>();
 			cfg.AddType<ProjectDTO>(); // todo: should this be automatically detected
 			cfg.AddType<DocumentDTO>(); // todo: should this be automatically detected
@@ -26,20 +25,20 @@ namespace Otis.Tests
 
 			cfg.BuildAssemblers();
 
-			m_assembler = cfg.GetAssembler<UserDTO, User>();
+			_assembler = cfg.GetAssembler<IAssembler<UserDTO,User>>();
 
-			m_user = Helpers.CreateComplexUser();  
+			_user = Helpers.CreateComplexUser();  
 		}
 
 		[Test]
 		public void Formatting_Is_Applied_To_String_Members()
 		{
-			m_user.BirthDay = new DateTime(1973, 10, 22);
+			_user.BirthDay = new DateTime(1973, 10, 22);
 
 			CultureInfo culture = Thread.CurrentThread.CurrentCulture;
 			Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 
-			UserDTO dto = m_assembler.AssembleFrom(m_user);
+			UserDTO dto = _assembler.AssembleFrom(_user);
 
 			Assert.AreEqual("Monday, October 22, 1973", dto.BirthDay);
 
@@ -49,7 +48,7 @@ namespace Otis.Tests
 		[Test]
 		public void Complex_Members_Are_Transformed()
 		{
-			UserDTO dto = m_assembler.AssembleFrom(m_user);
+			UserDTO dto = _assembler.AssembleFrom(_user);
 
 			Assert.IsNotNull(dto.Boss);
 			Assert.AreEqual("X Y", dto.Boss.FullName);
@@ -68,7 +67,7 @@ namespace Otis.Tests
 		[Test]
 		public void Conversion_To_Array()
 		{
-			UserDTO dto = m_assembler.AssembleFrom(m_user);
+			UserDTO dto = _assembler.AssembleFrom(_user);
 
 			Assert.IsNotNull(dto.Projects);
 			Assert.AreEqual(3, dto.Projects.Length);
@@ -86,7 +85,7 @@ namespace Otis.Tests
 		[Test]
 		public void Conversion_To_List()
 		{
-			UserDTO dto = m_assembler.AssembleFrom(m_user);
+			UserDTO dto = _assembler.AssembleFrom(_user);
 
 			Assert.IsNotNull(dto.Documents);
 			Assert.AreEqual(2, dto.Documents.Count);

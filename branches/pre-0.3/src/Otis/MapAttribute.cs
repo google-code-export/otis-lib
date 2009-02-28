@@ -44,10 +44,10 @@ namespace Otis
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public sealed class MapAttribute : Attribute
 	{
-		private string m_expression;
-		private object m_nullValue;
-		private string m_format;
-		private string m_projection;
+		private string _expression;
+		private object _nullValue;
+		private string _format;
+		private string _projection;
 
 		/// <summary>
 		/// Instantiates new MapAttribute. Target member will be assigned the value of the source object member with 
@@ -71,7 +71,7 @@ namespace Otis
 		/// <param name="expression">Expression to be applied on source object and assigned to the target member</param>
 		public MapAttribute(string expression)
 		{
-			m_expression = expression;
+			_expression = expression;
 		}
 
 		/// <summary>
@@ -79,7 +79,7 @@ namespace Otis
 		/// </summary>
 		public string Expression
 		{
-			get { return m_expression; }
+			get { return _expression; }
 		}
 
 		/// <summary>
@@ -88,8 +88,8 @@ namespace Otis
 		/// </summary>
 		public object NullValue
 		{
-			get { return m_nullValue; }
-			set { m_nullValue = value; }
+			get { return _nullValue; }
+			set { _nullValue = value; }
 		}
 
 		/// <summary>
@@ -120,8 +120,8 @@ namespace Otis
 		/// </exception>
 		public string Format
 		{
-			get { return m_format; }
-			set { m_format = value; }
+			get { return _format; }
+			set { _format = value; }
 		}
 
 		/// <summary>
@@ -150,7 +150,7 @@ namespace Otis
 		///		User u = ... // get user from somewhere
 		///		u.GenderCode = "W";
 		/// 	u.SecurityLevel = 2;
-		///		UserDTO dto = m_assembler.AssembleFrom(u);
+		///		UserDTO dto = _assembler.AssembleFrom(u);
 		///		Assert.AreEqual(Gender.Female, dto.Gender);
 		/// 	Assert.AreEqual("Normal", dto.Security);
 		/// } 
@@ -162,8 +162,8 @@ namespace Otis
 		/// </exception>
 		public string Projection
 		{
-			get { return m_projection; }
-			set { m_projection = value; }
+			get { return _projection; }
+			set { _projection = value; }
 		}
 
 		internal bool HasProjection

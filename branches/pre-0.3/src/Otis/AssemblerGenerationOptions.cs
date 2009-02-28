@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using Otis.CodeGen;
+
 namespace Otis
 {
 	/// <summary>
@@ -6,11 +10,42 @@ namespace Otis
 	/// </summary>
 	public class AssemblerGenerationOptions
 	{
-		private OutputType m_outputType = OutputType.InMemoryAssembly;
-		private string m_namespace = string.Empty;
-		private string m_outputFile = string.Empty;
-		private bool m_includeDebugInformation = false;
-		private bool m_supressInstanceCreation = false;
+		private const string ErrAssemblerBaseAlreadyExists = "An AssemblerBase with this Name: {0}, already exists.";
+		private const string ErrDefaultAssemblerBaseAlreadyExists = "A Default Assembler Base already Exists";
+		private const string DefaultAssemblerBaseName = "Default";
+
+		private string _namespace;
+		private OutputType _outputType;
+		private string _outputFile;
+		private bool _includeDebugInformationInAssembly;
+		private bool _supressInstanceCreation;
+		private readonly Dictionary<string, AssemblerBase> _assemblerBases;
+
+		public AssemblerGenerationOptions() : this(true) {}
+
+		public AssemblerGenerationOptions(bool useProvidedAssemblerBaseType)
+		{
+			_outputType = OutputType.InMemoryAssembly;
+			_outputFile = string.Empty;
+
+			_assemblerBases = new Dictionary<string, AssemblerBase>();
+
+			if(useProvidedAssemblerBaseType)
+				_assemblerBases.Add(DefaultAssemblerBaseName, CreateDefaultAssemblerBaseType());
+
+			_namespace = string.Empty;
+		}
+
+		private static AssemblerBase CreateDefaultAssemblerBaseType()
+		{
+			AssemblerBase assemblerBase = new AssemblerBase();
+			assemblerBase.AssemblerBaseType = typeof (IAssembler<,>).AssemblyQualifiedName;
+			assemblerBase.Name = DefaultAssemblerBaseName;
+			assemblerBase.IsDefaultAssembler = true;
+			assemblerBase.AssemblerGenerator = typeof (AssemblerGenerator).AssemblyQualifiedName;
+
+			return assemblerBase;
+		}
 
 		/// <summary>
 		/// Gets/sets the type of the output for the generator.
@@ -32,8 +67,8 @@ namespace Otis
 		/// </remarks>
 		public OutputType OutputType
 		{
-			get { return m_outputType; }
-			set { m_outputType = value; }
+			get { return _outputType; }
+			set { _outputType = value; }
 		}
 
 		/// <summary>
@@ -42,8 +77,15 @@ namespace Otis
 		/// </summary>
 		public string Namespace
 		{
-			get { return m_namespace; }
-			set { m_namespace = value; }
+			get
+			{
+				//TODO: allow customization for dynamically generated namespace names
+				if(string.IsNullOrEmpty(_namespace))
+					_namespace = "NS" + Guid.NewGuid().ToString("N");
+
+				return _namespace;
+			}
+			set { _namespace = value; }
 		}
 
 		/// <summary>
@@ -52,8 +94,8 @@ namespace Otis
 		/// </summary>
 		public string OutputFile
 		{
-			get { return m_outputFile; }
-			set { m_outputFile = value; }
+			get { return _outputFile; }
+			set { _outputFile = value; }
 		}
 
 		/// <summary>
@@ -62,8 +104,8 @@ namespace Otis
 		/// </summary>
 		public bool IncludeDebugInformationInAssembly
 		{
-			get { return m_includeDebugInformation; }
-			set { m_includeDebugInformation = value; }
+			get { return _includeDebugInformationInAssembly; }
+			set { _includeDebugInformationInAssembly = value; }
 		}
 
 		/// <summary>
@@ -73,8 +115,77 @@ namespace Otis
 		/// </summary>
 		public bool SupressInstanceCreation
 		{
-			get { return m_supressInstanceCreation; }
-			set { m_supressInstanceCreation = value; }
+			get { return _supressInstanceCreation; }
+			set { _supressInstanceCreation = value; }
+		}
+
+		/// <summary>
+		/// The Interface or Base Class that Assemblers Implement
+		/// </summary>
+		public IEnumerable<AssemblerBase> AssemblerBases
+		{
+			get { return _assemblerBases.Values; }
+		}
+
+		/// <summary>
+		/// Gets the Default <see cref="AssemblerBase" />
+		/// </summary>
+		public AssemblerBase DefaultAssemblerBase
+		{
+			get
+			{
+				foreach (AssemblerBase assemblerBaseType in _assemblerBases.Values)
+				{
+					if (assemblerBaseType.IsDefaultAssembler)
+						return assemblerBaseType;
+				}
+
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets an <see cref="AssemblerBase" /> by its <see cref="AssemblerBase.Name" />
+		/// </summary>
+		/// <param name="name">The <see cref="AssemblerBase.Name" /> of the AssembleBase</param>
+		public AssemblerBase GetAssemblerBase(string name)
+		{
+			AssemblerBase assemblerBase;
+			_assemblerBases.TryGetValue(name, out assemblerBase);
+			return assemblerBase;
+		}
+
+		/// <summary>
+		/// Adds an <see cref="AssemblerBase" />
+		/// </summary>
+		/// <param name="assemblerBase">The <see cref="AssemblerBase" /> to Add</param>
+		public void AddAssemblerBase(AssemblerBase assemblerBase)
+		{
+			if (assemblerBase.IsDefaultAssembler && DefaultAssemblerBase != null)
+				throw new OtisException(ErrDefaultAssemblerBaseAlreadyExists);
+
+			if (GetAssemblerBase(assemblerBase.Name) != null)
+				throw new OtisException(String.Format(ErrAssemblerBaseAlreadyExists, assemblerBase.Name));
+
+			_assemblerBases.Add(assemblerBase.Name, assemblerBase);
+		}
+
+		/// <summary>
+		/// Removes an <see cref="AssemblerBase" /> by its <see cref="AssemblerBase.Name" />
+		/// </summary>
+		/// <param name="assemblerBase"></param>
+		public void RemoveAssemblerBase(AssemblerBase assemblerBase)
+		{
+			_assemblerBases.Remove(assemblerBase.Name);
+		}
+
+		/// <summary>
+		/// Removes an <see cref="AssemblerBase" /> with the specified <see cref="AssemblerBase.Name" />
+		/// </summary>
+		/// <param name="name">The <see cref="AssemblerBase.Name" /></param>
+		public void RemoveAssemblerBase(string name)
+		{
+			_assemblerBases.Remove(name);
 		}
 	}
 }

@@ -16,8 +16,8 @@ namespace Otis.Tests
 	[TestFixture]
 	public class AggregateMappingTest
 	{
-		private IAssembler<UserDTO, User> m_assembler;
-		private User m_user;
+		private IAssembler<UserDTO, User> _assembler;
+		private User _user;
 
 		[SetUp]
 		public void Setup()
@@ -31,8 +31,8 @@ namespace Otis.Tests
 
 			cfg.BuildAssemblers();
 
-			m_assembler = cfg.GetAssembler<UserDTO, User>();
-			m_user = Helpers.CreateComplexUser();
+			_assembler = cfg.GetAssembler<IAssembler<UserDTO,User>>();
+			_user = Helpers.CreateComplexUser();
 		}
 
 		[TearDown]
@@ -41,7 +41,7 @@ namespace Otis.Tests
 		[Test]
 		public void Builtin_Cummulative_Functions_Min_Max_Test()
 		{
-			UserDTO dto = m_assembler.AssembleFrom(m_user);
+			UserDTO dto = _assembler.AssembleFrom(_user);
 			Assert.AreEqual(1, dto.MinTaskDuration);
 			Assert.AreEqual(6, dto.MaxTaskDuration);
 		}
@@ -49,7 +49,7 @@ namespace Otis.Tests
 		[Test]
 		public void Builtin_Cummulative_Functions_Count_Sum_Test()
 		{
-			UserDTO dto = m_assembler.AssembleFrom(m_user);
+			UserDTO dto = _assembler.AssembleFrom(_user);
 			Assert.AreEqual(2, dto.DocumentCount);
 			Assert.AreEqual(17, dto.TotalTaskDuration);
 			Assert.AreEqual(5, dto.AllTasksCount);
@@ -59,14 +59,14 @@ namespace Otis.Tests
 		[Test]
 		public void Builtin_Cummulative_Functions_Avg_Test()
 		{
-			UserDTO dto = m_assembler.AssembleFrom(m_user);
+			UserDTO dto = _assembler.AssembleFrom(_user);
 			Assert.AreEqual(17 / 5.0, dto.AverageTaskDuration, 0.00001);
 		}
 
 		[Test]
 		public void Builtin_Aggregate_Functions_Collect_Test()
 		{
-			UserDTO dto = m_assembler.AssembleFrom(m_user);
+			UserDTO dto = _assembler.AssembleFrom(_user);
 
 			Assert.AreEqual(5, dto.AllTaskDurations.Length);
 			Assert.AreEqual(5, dto.AllTaskDurationsList.Count);
@@ -91,8 +91,8 @@ namespace Otis.Tests
 			cfg.AddType<ComplexUserDTO>();
 			cfg.BuildAssemblers();
 
-			IAssembler<ComplexUserDTO, User> assembler = cfg.GetAssembler<ComplexUserDTO, User>();
-			ComplexUserDTO dto = assembler.AssembleFrom(m_user);
+			IAssembler<ComplexUserDTO, User> assembler = cfg.GetAssembler<IAssembler<ComplexUserDTO,User>>();
+			ComplexUserDTO dto = assembler.AssembleFrom(_user);
 			Assert.AreEqual(4, dto.AvgDocumentNameLength);
 		}
 
@@ -105,8 +105,8 @@ namespace Otis.Tests
 			cfg.RegisterFunction("median", typeof(MedianFn));
 			cfg.BuildAssemblers();
 
-			IAssembler<SimpleUserDTO, User> assembler = cfg.GetAssembler<SimpleUserDTO, User>();
-			SimpleUserDTO dto = assembler.AssembleFrom(m_user);
+			IAssembler<SimpleUserDTO, User> assembler = cfg.GetAssembler<IAssembler<SimpleUserDTO,User>>();
+			SimpleUserDTO dto = assembler.AssembleFrom(_user);
 			Assert.AreEqual(4, dto.MedianTaskDuration);
 			Assert.AreEqual(4, dto.MedianDocumentNameLength);
 		}
@@ -129,8 +129,6 @@ namespace Otis.Tests
 			member.OwnerType = typeof(AttributedUserDTO);
 			member.Type = typeof(string);
 			member.Member = "FullName";
-			member.IsArray = false;
-			member.IsList = false;
 			member.Expression = "sum:$Projects/Tasks";
 			ClassMappingDescriptor desc = new ClassMappingDescriptor();
 			desc.SourceType = typeof (User);
@@ -181,19 +179,19 @@ namespace Otis.Tests
 				 
 	public class MedianFn : IAggregateFunction<int> 
 	{
-		List<int> m_values = new List<int>();
+		List<int> _values = new List<int>();
 
 		public void Initialize(int initialValue) {} // ignore the initial value
-		public void ProcessValue(int value) { m_values.Add(value); }
-		public int ProcessedItemCount { get { return m_values.Count; } }
+		public void ProcessValue(int value) { _values.Add(value); }
+		public int ProcessedItemCount { get { return _values.Count; } }
 		public string ExpressionFormat { get { return null; } }
 
 		public int Result
 		{
 			get
 			{
-				m_values.Sort();
-				return m_values[ProcessedItemCount / 2];
+				_values.Sort();
+				return _values[ProcessedItemCount / 2];
 			}
 		}
 	}	 

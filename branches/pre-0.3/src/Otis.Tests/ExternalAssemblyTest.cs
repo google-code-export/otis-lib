@@ -94,7 +94,7 @@ namespace Otis.Tests
 		{
 			foreach (string referencedAssembly in ReferencedAssemblies)
 			{
-				if (referencedAssembly.Contains(name))
+				if (referencedAssembly.ToLower().Contains(name.ToLower()))
 					return true;
 			}
 

@@ -26,18 +26,21 @@ namespace Otis
 	[AttributeUsage(AttributeTargets.Class)]
 	public sealed class MapClassAttribute : Attribute
 	{
-		private readonly Type m_sourceType;
-		private string m_helper;
-		private string m_preparer;
-
+		private string _preparer;
+		private Type _sourceType;
+		private string _assemblerBaseName;
+		private string _assemblerName;
+		
 		/// <summary>
 		/// Instantiates new instance. 
 		/// </summary>
 		/// <param name="sourceType">Defines the source type for the transformation.</param>
 		public MapClassAttribute(Type sourceType)
 		{
-			m_sourceType = sourceType;
+			SourceType = sourceType;
 		}
+
+		private string _helper;
 
 		/// <summary>
 		/// Sets the helper function for the mapping.
@@ -57,8 +60,8 @@ namespace Otis
 		/// </remarks> 
 		public string Helper
 		{
-			get { return m_helper; }
-			set { m_helper = value; }
+			get { return _helper; }
+			set { _helper = value; }
 		}
 
 		/// <summary>
@@ -80,13 +83,32 @@ namespace Otis
 		/// </remarks> 
 		public string Preparer
 		{
-			get { return m_preparer; }
-			set { m_preparer = value; }
+			get { return _preparer; }
+			set { _preparer = value; }
 		}
 
 		public Type SourceType
 		{
-			get { return m_sourceType; }
+			get { return _sourceType; }
+			private set { _sourceType = value; }
+		}
+
+		/// <summary>
+		/// Gets/sets the AssemblerBaseName of this Assembler, and will use the associated AssemblerBaseType for generation
+		/// </summary>
+		public string AssemblerBaseName
+		{
+			get { return _assemblerBaseName; }
+			set { _assemblerBaseName = value;}
+		}
+
+		/// <summary>
+		/// Gets/sets the AssemblerName for this Assembler, must be valid Class Name when specifying
+		/// </summary>
+		public string AssemblerName
+		{
+			get { return _assemblerName; }
+			set { _assemblerName = value; }
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace Otis.Functions
 {
 	public class ConcatFunction : SimpleFunctionBase
 	{
-		private string m_separator = ", ";
+		private string _separator = ", ";
 
 		override protected Type GetFunctionObjectType()
 		{
@@ -44,7 +44,7 @@ namespace Otis.Functions
 
 		public string Separator
 		{
-			get { return m_separator; }
+			get { return _separator; }
 		}
 	}
 }

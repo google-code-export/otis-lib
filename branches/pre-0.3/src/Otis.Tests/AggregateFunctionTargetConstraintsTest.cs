@@ -17,23 +17,23 @@ namespace Otis.Tests
 		private const string errUnsupportedTarget2 = "Value of type 'System.Int32' can't be assigned to member of type 'System.String'";
 		private const string errUnsupportedSource = 
 			"Type 'Otis.Tests.Entity.NamedEntity' can't be used with aggregate functions 'min' and 'max' because it doesn't implement IComparable or IComparable<T> interfaces";
-		private User m_user;
-		private Configuration m_cfg;
+		private User _user;
+		private Configuration _cfg;
 
 		[SetUp]
 		public void SetUp()
 		{
-			m_cfg = new Configuration();
-			m_user = Helpers.CreateComplexUser();
+			_cfg = new Configuration();
+			_user = Helpers.CreateComplexUser();
 		}
 
 		private void CheckType<T>(string msg)
 		{	
-			m_cfg.AddType(typeof(T));
+			_cfg.AddType(typeof(T));
 
 			try
 			{
-				IAssembler<T, User> asm = m_cfg.GetAssembler<T, User>();	
+				IAssembler<T, User> asm = _cfg.GetAssembler<IAssembler<T,User>>();	
 			}
 			catch(OtisException e)
 			{

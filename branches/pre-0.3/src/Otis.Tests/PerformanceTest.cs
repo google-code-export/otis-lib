@@ -59,7 +59,7 @@ namespace Otis.Tests
 			cfg.AddType(typeof(TaskDTO)); // todo: should this be automatically detected
 
 			cfg.BuildAssemblers();
-			IAssembler<UserDTO, User> assembler = cfg.GetAssembler<UserDTO, User>();
+			IAssembler<UserDTO, User> assembler = cfg.GetAssembler<IAssembler<UserDTO,User>>();
 
 			assembler.Assemble(ref dto, ref user); // run it once
 
@@ -182,7 +182,7 @@ namespace Otis.Tests
 		private DocumentDTO AssembleFrom(NamedEntity document)
 		{
 			DocumentDTO dto = new DocumentDTO();
-			dto.Description = document.Id.ToString() + " - " + document.Name;
+			dto.Description = document.Id + " - " + document.Name;
 			return dto;
 		}
 

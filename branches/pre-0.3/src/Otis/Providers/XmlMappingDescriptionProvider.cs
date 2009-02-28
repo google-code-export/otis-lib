@@ -7,15 +7,16 @@ using System.Resources;
 using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
+using Otis.CodeGen;
 using Otis.Parsing;
 
 namespace Otis.Providers
 {
 	internal class XmlMappingDescriptionProvider : IMappingDescriptorProvider
 	{
-		private IList<ClassMappingDescriptor> m_classDescriptors = new List<ClassMappingDescriptor>(10);
-		private XmlDocument m_xmlDoc;
-		private XmlNamespaceManager m_nsMgr;
+		private IList<ClassMappingDescriptor> _classDescriptors = new List<ClassMappingDescriptor>(10);
+		private XmlDocument _xmlDoc;
+		private XmlNamespaceManager _nsMgr;
 
 		private static XmlSchema s_schema = GetSchema();
 
@@ -30,29 +31,29 @@ namespace Otis.Providers
 		{
 			try
 			{	 
-				m_xmlDoc = new XmlDocument();
-				m_xmlDoc.Schemas.Add(s_schema);
-				m_xmlDoc.LoadXml(data);
-				m_xmlDoc.Validate(OnValidation);
+				_xmlDoc = new XmlDocument();
+				_xmlDoc.Schemas.Add(s_schema);
+				_xmlDoc.LoadXml(data);
+				_xmlDoc.Validate(OnValidation);
 			}
 			catch(XmlException e)
 			{
 				throw new OtisException("Error loading XML configuration", e);
 			}
 
-			m_nsMgr = new XmlNamespaceManager(m_xmlDoc.NameTable);
-			m_nsMgr.AddNamespace("default", "urn:otis-mapping-1.0");
+			_nsMgr = new XmlNamespaceManager(_xmlDoc.NameTable);
+			_nsMgr.AddNamespace("default", "urn:otis-mapping-1.0");
 
-			XmlNodeList classes = m_xmlDoc.SelectNodes("//default:class", m_nsMgr);
+			XmlNodeList classes = _xmlDoc.SelectNodes("//default:class", _nsMgr);
 			foreach (XmlNode xmlClass in classes)
 			{
-				m_classDescriptors.Add(CreateClassDescriptor(xmlClass));	
+				_classDescriptors.Add(CreateClassDescriptor(xmlClass));	
 			}
 		}
 
 		public IList<ClassMappingDescriptor> ClassDescriptors
 		{
-			get { return m_classDescriptors; }
+			get { return _classDescriptors; }
 		}
 
 		private static XmlSchema GetSchema()
@@ -81,6 +82,15 @@ namespace Otis.Providers
 			{
 				throw new OtisException(String.Format("Source Type \"{0}\" cannot be found", node.Attributes["source"].Value));
 			}
+
+			desc.AssemblerBaseName = GetAttributeValue(node.Attributes["assemblerBaseName"]); //optional
+			desc.AssemblerName = GetAttributeValue(node.Attributes["assemblerName"]); //optional
+
+			if(string.IsNullOrEmpty(desc.AssemblerName))
+			{
+				desc.AssemblerName = CodeGen.Util.GetAssemblerName(desc.TargetType, desc.SourceType);
+			}
+
 			desc.MappingHelper = GetAttributeValue(node.Attributes["helper"]); // optional
 			if (desc.HasHelper) desc.IsHelperStatic = desc.MappingHelper.Contains(".");
 			desc.MappingPreparer = GetAttributeValue(node.Attributes["preparer"]); // optional
@@ -92,7 +102,7 @@ namespace Otis.Providers
 
 		private void AddMemberDescriptors(ClassMappingDescriptor desc, XmlNode classNode)
 		{
-			XmlNodeList members = classNode.SelectNodes("default:member", m_nsMgr);
+			XmlNodeList members = classNode.SelectNodes("default:member", _nsMgr);
 			foreach (XmlNode memberNode in members)
 			{
 				desc.MemberDescriptors.Add(CreateMemberDescriptor(desc, memberNode));
@@ -102,7 +112,7 @@ namespace Otis.Providers
 
 		private void AddInheritanceMemberDescriptors(ClassMappingDescriptor currentClassDescriptor)
 		{
-			foreach(ClassMappingDescriptor desc in m_classDescriptors)
+			foreach(ClassMappingDescriptor desc in _classDescriptors)
 			{
 				if (desc.TargetType.Equals(currentClassDescriptor.TargetType)) continue;
 
@@ -136,7 +146,7 @@ namespace Otis.Providers
 				toMember.OwnerType = to.TargetType;
 
 				// check if the member is visible in the derived type
-				MemberInfo member = FindMember(to.TargetType, toMember.Member);
+				MemberInfo member = TypeHelper.FindMember(to.TargetType, toMember.Member);
 				if (member != null)
 				{
 					to.MemberDescriptors.Add(toMember);
@@ -152,15 +162,23 @@ namespace Otis.Providers
 			desc.NullValue = GetAttributeValue(node.Attributes["nullValue"]);
 			desc.Format = GetAttributeValue(node.Attributes["format"]);
 			desc.OwnerType = classDesc.TargetType;
+			desc.SourceOwnerType = classDesc.SourceType;
 
-			MemberInfo member = FindMember(classDesc.TargetType, desc.Member);
-			if(member == null)
+			MemberInfo targetMember = TypeHelper.FindMember(classDesc.TargetType, desc.Member);
+
+			if(targetMember == null)
 			{
 				string msg = string.Format(Errors.MemberNotFound, desc.Member, TypeHelper.GetTypeDefinition(classDesc.TargetType));
 				throw new OtisException(msg);
 			}
 
-			desc.Type = GetTargetType(member);
+			desc.Type = TypeHelper.GetMemberType(targetMember);
+
+			//TODO: make this more robust
+			MemberInfo sourceMember = TypeHelper.FindMember(classDesc.SourceType, desc.Expression.Replace("$", ""));
+
+			if (sourceMember != null)
+				desc.SourceType = TypeHelper.GetMemberType(sourceMember);
 			
 			if(desc.HasFormatting && desc.Type != typeof(string))
 			{
@@ -171,39 +189,9 @@ namespace Otis.Providers
 				throw new OtisException(msg);
 			}
 
-			desc.IsArray = desc.Type.IsArray;
-			desc.IsList = (typeof (ICollection).IsAssignableFrom(desc.Type)) || desc.Type.GetInterface(typeof(ICollection<>).FullName) != null;
-
-			XmlNodeList projections = node.SelectNodes("default:map", m_nsMgr);
+			XmlNodeList projections = node.SelectNodes("default:map", _nsMgr);
 			desc.Projections = BuildProjections(desc, projections);
 			return desc;
-		}
-
-		private static Type GetTargetType(MemberInfo member)
-		{
-			if (member.MemberType == MemberTypes.Property)
-			{
-				PropertyInfo p = (PropertyInfo) member;
-				return p.PropertyType;
-			}
-			else
-			{
-				FieldInfo f = (FieldInfo) member;
-				return f.FieldType;
-			}
-		}
-
-		private static MemberInfo FindMember(Type targetType, string member)
-		{
-			MemberInfo target;
-			FieldInfo[] fields = targetType.GetFields(BindingFlags.Public | BindingFlags.Instance);
-			target = Array.Find(fields, delegate(FieldInfo fi) { return member == fi.Name; });
-			if (target != null)
-				return target;
-
-			PropertyInfo[] properties = targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-			target = Array.Find(properties, delegate(PropertyInfo pi) { return member == pi.Name; });
-			return target;
 		}
 
 

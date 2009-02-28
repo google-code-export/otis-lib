@@ -13,15 +13,15 @@ namespace Otis.Tests
 	[TestFixture]
 	public class NullValueHandlingTests
 	{
-		private IAssembler<AttributedUserDTO, User> m_asm;
-		private User m_user;
+		private IAssembler<AttributedUserDTO, User> _asm;
+		private User _user;
 
 		public void SetUpDefaults()
 		{
 			Configuration cfg = new Configuration();
 			cfg.AddType<AttributedUserDTO>();
-			m_asm = cfg.GetAssembler<AttributedUserDTO, User>();
-			m_user = Helpers.CreateComplexUser();
+			_asm = cfg.GetAssembler<IAssembler<AttributedUserDTO,User>>();
+			_user = Helpers.CreateComplexUser();
 		}
 
 		[TearDown]
@@ -77,8 +77,8 @@ namespace Otis.Tests
 		public void Null_value_replacement()
 		{
 			SetUpDefaults();
-			m_user.UserName = null;
-			AttributedUserDTO dto = m_asm.AssembleFrom(m_user);
+			_user.UserName = null;
+			AttributedUserDTO dto = _asm.AssembleFrom(_user);
 			Assert.AreEqual("[unknown]", dto.UserName);
 		}
 
@@ -86,14 +86,14 @@ namespace Otis.Tests
 		public void Null_value_replacement_for_compound_expressions()
 		{
 			SetUpDefaults();
-			m_user.FirstName = "AAA";
-			m_user.LastName = null;
-			AttributedUserDTO dto = m_asm.AssembleFrom(m_user);
+			_user.FirstName = "AAA";
+			_user.LastName = null;
+			AttributedUserDTO dto = _asm.AssembleFrom(_user);
 			Assert.AreEqual("MISSING_NAME_PART", dto.FullName);
 
-			m_user.FirstName = null;
-			m_user.LastName = "BBB";
-			dto = m_asm.AssembleFrom(m_user);
+			_user.FirstName = null;
+			_user.LastName = "BBB";
+			dto = _asm.AssembleFrom(_user);
 			Assert.AreEqual("MISSING_NAME_PART", dto.FullName);
 
 		}

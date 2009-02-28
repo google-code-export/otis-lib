@@ -15,6 +15,7 @@
 		<xs:attribute name="expression" type="xs:string" use="optional" />
 		<xs:attribute name="nullValue" type="xs:string" use="optional" />
 		<xs:attribute name="format" type="xs:string" use="optional" />
+		<xs:attribute name="assemblerName" type="xs:string" use="optional" />
 	</xs:complexType>
 
 	<!-- component element definition -->
@@ -38,6 +39,8 @@
 						</xs:sequence>
 						<xs:attribute name="name" type="xs:string" use="required" />
 						<xs:attribute name="source" type="xs:string" use="required" />
+						<xs:attribute name="assemblerBaseName" type="xs:string" use="optional" />
+						<xs:attribute name="assemblerName" type="xs:string" use="optional" />
 						<xs:attribute name="helper" type="xs:string" use="optional" />
 						<xs:attribute name="preparer" type="xs:string" use="optional" />
 					</xs:complexType>

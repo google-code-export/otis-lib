@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Otis
 {
@@ -9,13 +7,27 @@ namespace Otis
 	public class OtisException : Exception
 	{
 		public OtisException() { }
-		public OtisException(string msg) : this(msg, null)
+
+		public OtisException(string msg)
+			: base(msg, null)
+		{
+			if (msg == null) throw new ArgumentNullException("msg");
+		}
+
+		public OtisException(string msg, params string[] args)
+			: base(String.Format(msg, args))
 		{
 			if (msg == null) throw new ArgumentNullException("msg");
 		}
 
 		public OtisException(String msg, Exception inner)
 			: base(msg, inner)
+		{
+			if (msg == null) throw new ArgumentNullException("msg");
+		}
+
+		public OtisException(String msg, Exception inner, params string[] args)
+			: base(String.Format(msg, args), inner)
 		{
 			if (msg == null) throw new ArgumentNullException("msg");
 		}

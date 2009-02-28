@@ -7,7 +7,7 @@ namespace Otis.Tests
 	[MapClass(typeof(User), Helper = "Otis.Tests.Util.Convert")]
 	public class AttributedUserDTO
 	{
-		private string m_fullName;
+		private string _fullName;
 
 		[Map("$Id")]         // simple mapping
 		public int Id;
@@ -21,8 +21,8 @@ namespace Otis.Tests
 		[Map("$FirstName + \" \" + $LastName", NullValue = "MISSING_NAME_PART")] 
 		public string FullName
 		{
-			get { return m_fullName; }
-			set { m_fullName = value; }
+			get { return _fullName; }
+			set { _fullName = value; }
 		}
 
 		[Map("['Mr.' + $FirstName + ' ' + $LastName]")]

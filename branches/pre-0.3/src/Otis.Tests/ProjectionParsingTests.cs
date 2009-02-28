@@ -8,15 +8,15 @@ namespace Otis.Tests
 	[TestFixture]
 	public class ProjectionParsingTests
 	{
-		MemberMappingDescriptor m_desc;
+		MemberMappingDescriptor _desc;
 
 		[SetUp]
 		public void Setup()
 		{		 
-			m_desc = new MemberMappingDescriptor();
-			m_desc.Member = "Gender";
-			m_desc.OwnerType = typeof(XmlUserDTO);
-			m_desc.Type = typeof(Gender);
+			_desc = new MemberMappingDescriptor();
+			_desc.Member = "Gender";
+			_desc.OwnerType = typeof(XmlUserDTO);
+			_desc.Type = typeof(Gender);
 		}
 		[Test]
 		public void Parse_Valid_Xml_Mapping()
@@ -38,17 +38,17 @@ namespace Otis.Tests
 			XmlNodeList members = xmlDoc.SelectNodes("//member");
 
 			XmlNodeList xmlGender = members[0].SelectNodes("map");
-			ProjectionInfo projections = XmlMappingDescriptionProvider.BuildProjections(m_desc, xmlGender);
+			ProjectionInfo projections = XmlMappingDescriptionProvider.BuildProjections(_desc, xmlGender);
 			Assert.AreEqual(2, projections.Count);
 			Assert.AreEqual("Otis.Tests.Gender.Male", projections["\"M\""]);
 			Assert.AreEqual("Otis.Tests.Gender.Female", projections["\"W\""]);
 
-			m_desc.Type = typeof(string);
-			m_desc.OwnerType = typeof (XmlUserDTO);
-			m_desc.Member = "GenderCode";
+			_desc.Type = typeof(string);
+			_desc.OwnerType = typeof (XmlUserDTO);
+			_desc.Member = "GenderCode";
 
 			XmlNodeList xmlGenderCode = members[1].SelectNodes("map");	 
-			projections = XmlMappingDescriptionProvider.BuildProjections(m_desc, xmlGenderCode);
+			projections = XmlMappingDescriptionProvider.BuildProjections(_desc, xmlGenderCode);
 			Assert.AreEqual(2, projections.Count);
 			Assert.AreEqual("\"M\"", projections["\"M\""]);
 			Assert.AreEqual("\"W\"", projections["\"W\""]);
@@ -73,16 +73,16 @@ namespace Otis.Tests
 		public void Parse_Attributes()
 		{
 			string basicExpression = "\"M\" => Male; \"W\" => Female";
-			ProjectionInfo projections = SingleTypeMappingDescriptorProvider.GetProjections(m_desc, basicExpression);
+			ProjectionInfo projections = SingleTypeMappingDescriptorProvider.GetProjections(_desc, basicExpression);
 			Check(projections);
 
-			projections = SingleTypeMappingDescriptorProvider.GetProjections(m_desc, "['M' => Male; 'W' => Female]");
+			projections = SingleTypeMappingDescriptorProvider.GetProjections(_desc, "['M' => Male; 'W' => Female]");
 			Check(projections);
 
-			projections = SingleTypeMappingDescriptorProvider.GetProjections(m_desc, basicExpression + ";");
+			projections = SingleTypeMappingDescriptorProvider.GetProjections(_desc, basicExpression + ";");
 			Check(projections);
 
-			projections = SingleTypeMappingDescriptorProvider.GetProjections(m_desc, basicExpression + "; ");
+			projections = SingleTypeMappingDescriptorProvider.GetProjections(_desc, basicExpression + "; ");
 			Check(projections);
 		}
 
@@ -93,8 +93,7 @@ namespace Otis.Tests
 			desc.OwnerType = typeof(AttributedUserDTO);
 			desc.Type = typeof(string);
 			desc.Member = "FullName";
-			desc.IsArray = false;
-			desc.IsList = false;
+			
 			try
 			{
 				List<ProjectionItem> items = new List<ProjectionItem>();
@@ -117,8 +116,7 @@ namespace Otis.Tests
 			desc.OwnerType = typeof(AttributedUserDTO);
 			desc.Type = typeof(Gender);
 			desc.Member = "Gender";
-			desc.IsArray = false;
-			desc.IsList = false;
+			
 			try
 			{
 				List<ProjectionItem> items = new List<ProjectionItem>();
@@ -173,7 +171,7 @@ namespace Otis.Tests
 			XmlDocument xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(xmlCfg);
 			XmlNodeList xmlGender = xmlDoc.SelectNodes("//member")[0].SelectNodes("map");
-			ProjectionInfo projections = XmlMappingDescriptionProvider.BuildProjections(m_desc, xmlGender);
+			ProjectionInfo projections = XmlMappingDescriptionProvider.BuildProjections(_desc, xmlGender);
 		}
 	}
 }

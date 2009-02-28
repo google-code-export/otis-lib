@@ -112,7 +112,7 @@ We want to describe this mapping via XML mapping file. A possible solution would
 </otis-mapping>
 }}}
 
-== Metadat mapping ==
+== Metadata mapping ==
 
 Attributes can also be used to define such mappings.
 

@@ -131,7 +131,7 @@ we define how !SourceRoot is mapped to !TargetRoot. Line `<member name="SubA" ex
 
 This means that when assemble comes to mapping !TargetRoot.SubA to a !SourceRoot instance, it will look for another mapping definition: !SourceRoot -> TargetSubA, so we have to define that one also. 
 
-Now, in mapping !SourceRoot to TargetSubA, we define that field TargetSubA.SubB retrieves the value from field !SourceRoot.Sub1, and field TargetSubA.SubC retrieves the value from field !SourceRoot.Sub2. Mappings between these classes are then defined in separate <class> elements (the last two in the xml sample). 
+Now, in mapping !SourceRoot to TargetSubA, we define that field TargetSubA.SubB retrieves the value from field !SourceRoot.Sub1, and field TargetSubA.SubC retrieves the value from field !SourceRoot.Sub2. Mappings between these classes are then defined in separate `<class>` elements (the last two in the xml sample). 
 
 Finally, we need to map TargetSubA.SubD: this one gets some values from !SourceRoot and others from !SourceSub1. Therefore, it is easiest to map it to topmost object, and reference subelements as needed:
 
@@ -143,5 +143,5 @@ Finally, we need to map TargetSubA.SubD: this one gets some values from !SourceR
 }}}
 
 === Next steps ===
-One of the planned features for version 0.3 is easier mapping of subcomponents. The idea is to provide something similar to <component> mapping in NHibernate. A possible syntax 
+One of the planned features for version 0.3 is easier mapping of subcomponents. The idea is to provide something similar to `<component>` mapping in NHibernate. A possible syntax 
 is described in ComponentMapping.

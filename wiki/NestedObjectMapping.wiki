@@ -1,4 +1,4 @@
-#summary Discusses possible ways to map nested objects in friendly way.
+#summary Proposal: Discusses possible ways to map nested objects in friendly way.
 
 = Introduction =
 

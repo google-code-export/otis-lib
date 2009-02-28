@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<otis-mapping xmlns="urn:otis-mapping-1.0">
+	<class name="Otis.Tests.DerivedXmlUserDTO, Otis.Tests" source="Otis.Tests.Entity.DerivedUser, Otis.Tests" >
+		<member name="DerivedProperty" />
+	</class>
+</otis-mapping>

@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="System.Collections.Generic.List&lt;T&gt;" Collapsed="true">
+    <Position X="8.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.ArrayList" Collapsed="true">
+    <Position X="11.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Array" Collapsed="true">
+    <Position X="8.5" Y="5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.Hashtable" Collapsed="true">
+    <Position X="11.5" Y="8" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.Generic.Dictionary&lt;TKey, TValue&gt;" Collapsed="true">
+    <Position X="8.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.SortedList" Collapsed="true">
+    <Position X="11.5" Y="1" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.Stack" Collapsed="true">
+    <Position X="11.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.Queue" Collapsed="true">
+    <Position X="11.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.BitArray" Collapsed="true">
+    <Position X="11.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NHibernate.Collection.SortedSet" Collapsed="true">
+    <Position X="1.25" Y="16" Width="1.5" />
+    <TypeIdentifier />
+    <InheritanceLine Type="NHibernate.Collection.Set" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.375" Y="17.5" />
+        <Point X="2.375" Y="16.63" />
+      </Path>
+    </InheritanceLine>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NHibernate.Collection.SortedMap" Collapsed="true">
+    <Position X="3.25" Y="16" Width="1.5" />
+    <TypeIdentifier />
+    <InheritanceLine Type="NHibernate.Collection.Map" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.438" Y="17.5" />
+        <Point X="4.438" Y="16.63" />
+      </Path>
+    </InheritanceLine>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NHibernate.Collection.Set" Collapsed="true">
+    <Position X="1.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier />
+    <InheritanceLine Type="NHibernate.Collection.PersistentCollection" FixedFromPoint="true">
+      <Path>
+        <Point X="7.75" Y="19.5" />
+        <Point X="7.75" Y="18.505" />
+        <Point X="2" Y="18.505" />
+        <Point X="2" Y="18.13" />
+      </Path>
+    </InheritanceLine>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NHibernate.Collection.Map" Collapsed="true">
+    <Position X="3.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier />
+    <InheritanceLine Type="NHibernate.Collection.PersistentCollection" FixedFromPoint="true">
+      <Path>
+        <Point X="7.75" Y="19.5" />
+        <Point X="7.75" Y="18.505" />
+        <Point X="4" Y="18.505" />
+        <Point X="4" Y="18.13" />
+      </Path>
+    </InheritanceLine>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NHibernate.Collection.List" Collapsed="true">
+    <Position X="5" Y="17.5" Width="1.5" />
+    <TypeIdentifier />
+    <InheritanceLine Type="NHibernate.Collection.PersistentCollection" FixedFromPoint="true">
+      <Path>
+        <Point X="7.75" Y="19.5" />
+        <Point X="7.75" Y="18.505" />
+        <Point X="5.75" Y="18.505" />
+        <Point X="5.75" Y="18.13" />
+      </Path>
+    </InheritanceLine>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NHibernate.Collection.IdentifierBag" Collapsed="true">
+    <Position X="7" Y="17.5" Width="1.5" />
+    <TypeIdentifier />
+    <InheritanceLine Type="NHibernate.Collection.PersistentCollection" FixedFromPoint="true">
+      <Path>
+        <Point X="7.75" Y="19.5" />
+        <Point X="7.75" Y="18.13" />
+      </Path>
+    </InheritanceLine>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NHibernate.Collection.Bag" Collapsed="true">
+    <Position X="9" Y="17.5" Width="1.5" />
+    <TypeIdentifier />
+    <InheritanceLine Type="NHibernate.Collection.PersistentCollection" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.75" Y="19.5" />
+        <Point X="7.75" Y="18.505" />
+        <Point X="9.625" Y="18.505" />
+        <Point X="9.625" Y="18.13" />
+      </Path>
+    </InheritanceLine>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NHibernate.Collection.PersistentCollection" Collapsed="true">
+    <Position X="6.5" Y="19.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Iesi.Collections.SynchronizedSet">
+    <Position X="10" Y="12.25" Width="1.5" />
+    <TypeIdentifier />
+    <Members>
+      <Method Name="GetEnumerator" Hidden="true" />
+      <Method Name="RetainAll" Hidden="true" />
+      <Method Name="SynchronizedSet" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="Iesi.Collections.SortedSet">
+    <Position X="0.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Iesi.Collections.Set">
+    <Position X="7.75" Y="11" Width="1.5" />
+    <TypeIdentifier />
+    <Members>
+      <Method Name="ExclusiveOr" Hidden="true" />
+      <Method Name="GetEnumerator" Hidden="true" />
+      <Method Name="Intersect" Hidden="true" />
+      <Method Name="Minus" Hidden="true" />
+      <Method Name="op_Subtraction" Hidden="true" />
+      <Method Name="op_BitwiseAnd" Hidden="true" />
+      <Method Name="op_ExclusiveOr" Hidden="true" />
+      <Method Name="op_BitwiseOr" Hidden="true" />
+      <Method Name="RetainAll" Hidden="true" />
+      <Method Name="Set" Hidden="true" />
+      <Method Name="Union" Hidden="true" />
+    </Members>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Iesi.Collections.ListSet">
+    <Position X="2.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Iesi.Collections.ImmutableSet">
+    <Position X="11.75" Y="11" Width="1.5" />
+    <TypeIdentifier />
+    <Members>
+      <Method Name="Contains" Hidden="true" />
+      <Method Name="ContainsAll" Hidden="true" />
+      <Method Name="ExclusiveOr" Hidden="true" />
+      <Method Name="GetEnumerator" Hidden="true" />
+      <Method Name="ImmutableSet" Hidden="true" />
+      <Method Name="Intersect" Hidden="true" />
+      <Method Name="Minus" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="Iesi.Collections.Set" FixedFromPoint="true">
+      <Path>
+        <Point X="9.25" Y="11.625" />
+        <Point X="11.75" Y="11.625" />
+      </Path>
+    </InheritanceLine>
+  </Class>
+  <Class Name="Iesi.Collections.HybridSet">
+    <Position X="4" Y="12.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Iesi.Collections.HashedSet">
+    <Position X="5.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Iesi.Collections.DictionarySet" Collapsed="true">
+    <Position X="3.25" Y="11" Width="1.5" />
+    <TypeIdentifier />
+    <InheritanceLine Type="Iesi.Collections.Set" FixedFromPoint="true">
+      <Path>
+        <Point X="7.75" Y="11.312" />
+        <Point X="4.75" Y="11.312" />
+      </Path>
+    </InheritanceLine>
+  </Class>
+  <Class Name="System.Collections.Generic.Queue&lt;T&gt;" Collapsed="true">
+    <Position X="8.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.Generic.LinkedList&lt;T&gt;" Collapsed="true">
+    <Position X="8.5" Y="8" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Collections.Generic.Stack&lt;T&gt;" Collapsed="true">
+    <Position X="8.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="System.Collections.Generic.ICollection&lt;T&gt;">
+    <Position X="5.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="System.Collections.Generic.IList&lt;T&gt;">
+    <Position X="6.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="System.Collections.ICollection">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="System.Collections.IList">
+    <Position X="2.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="System.Collections.IDictionary">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="System.Collections.Generic.IDictionary&lt;TKey, TValue&gt;">
+    <Position X="4.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Iesi.Collections.ISet" Collapsed="true">
+    <Position X="5.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+</ClassDiagram>

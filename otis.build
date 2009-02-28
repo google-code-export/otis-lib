@@ -1,0 +1,253 @@
+<?xml version="1.0" ?>
+<!--EXTERNAL_PROPERTIES: CCNetLabel-->
+<project name="Otis" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+	<property name="build.dir" value="build" overwrite="true" />
+	<property name="project.name" value="Otis library" />
+	<property name="project.shortname" value="Otis" overwrite="false"/>
+	<property name="project.solution" value="src\otis.sln" overwrite="false"/>
+    <property name="project.config" value="Debug" overwrite="true"/>
+	<property name="fail.onerror" value="true" />
+	<property name="fail.message" value="something failed" />
+    <property name="project.assemblies" value="otis.dll" />
+	<property name="fxcop.assemblies" value="/file:otis.dll" />
+	<property name="ndoc.assemblies" value="otis.dll,otis.xml" />
+	<property name="nunit.assemblies" value="otis.tests.dll" />
+	<property name="nunit.exclude.categories" value="" />
+	
+	<!-- User targets -->
+
+	<target name="clean" depends="delete_build_dir" 
+		description="Delete Automated Build artifacts"/>
+
+	<target name="build" depends="msg, compile, copy_deployment, exclude_category, tests" 
+		description="Clean, Compile and Run Tests" />
+
+	<!-- doc target is removed because it runs for minutes on server -->
+	<!-- target name="full" depends="msg, clean, setver, compile, coverage, distro, build_install, publish"  -->
+  <target name="full" depends="msg, clean, setver, compile, coverage, distro, build_install, publish" 
+		description="Compiles, tests, and produces distributions" />
+
+	<target name="test" depends="compile, tests" 
+		description="Compile and Run Tests" />
+		
+	<target name="coverage" depends="ncoverexplorer"
+		 description="Runs coverage analysis" />
+		 
+	<target name="cov" depends="ncoverexplorer, showcoverage"
+		 description="Runs coverage analysis"/>
+
+
+	<!-- Internal targets -->
+	<target name="ncoverexplorer" depends="tests" >
+		<echo message="Starting NCoverExplorer report generation..."/>
+
+		<!-- Other attributes that can be used on ncoverexplorer element:               -->
+		<!--   failMinimum="True" would fail the build if minimum coverage not met.     -->
+		<!-- Remove the xmlReportName and/or htmlReportName attributes to not generate. -->
+		<!-- Report types are 1=Module, 2=Namespace, 3=Namespace/Module, 4=Module/Class.-->
+		<!-- Valid exclusion 'type' attributes are 'Assembly', 'Namespace' and 'Class'. -->
+		<!-- See command line for which attributes are optional to alter behaviour.		-->
+		<ncoverexplorer program="tools\ncover\NCoverExplorer.Console.exe"
+						projectName="${project.name}"
+						reportType="4"
+						outputDir="." 
+						xmlReportName="CoverageReport.xml"
+						htmlReportName="CoverageReport.html"
+						mergeFileName="CoverageMerge.xml"
+						showExcluded="True"
+						satisfactoryCoverage="85" >
+			<fileset>
+				<include name="${build.dir}\results\coverage-results.xml"/>
+			</fileset>
+			<exclusions>
+				<exclusion type="Assembly" pattern="*.Tests" />
+			</exclusions>
+			<!--
+			<moduleThresholds>
+				<moduleThreshold moduleName="MyAssembly.dll" satisfactoryCoverage="30" />
+			</moduleThresholds>-->
+		</ncoverexplorer>
+	</target>
+
+
+	<target name="delete_build_dir">
+		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
+	</target>
+	
+	<target name="showcoverage">
+		<exec program="d:\Program Files\Mozilla Firefox\firefox.exe" commandline="${build.dir}\results\coveragereport.html"/>
+	</target>
+	
+	<target name="msg">
+		<echo message="***************************************************************************"/>
+		<if test="${property::exists('CCNetLabel')}">			
+			<echo message="*        building ${project.name} - version ${CCNetLabel}"/>	
+		</if>
+		<if test="${not property::exists('CCNetLabel')}">
+			<echo message="*        building ${project.name} - local version" />
+		</if>
+		<echo message="***************************************************************************"/>
+	</target>
+
+	<target name="compile" description="Compiles using the Debug Configuration">
+		<msbuild project="${project.solution}" timeout="600000" verbosity="Normal">
+			<property name="Configuration" value="${project.config}" />
+			<property name="Platform" value="Any CPU" />
+		</msbuild>
+	</target>
+
+	<target name="tests">
+		<mkdir dir="${build.dir}\results" />
+		<exec program="regsvr32" workingdir="tools\NCover" commandline="/s CoverLib.dll" />
+		<!-- This runs NUnit through NCover.org version 1.5, giving coverage results. 
+			If you don't want to use NCover, delete this 'exec' instance, and use the plain NUnit one below -->
+		<exec 
+			program="tools\NCover\NCover.Console.exe" 
+			workingdir="${build.dir}\bin\${project.config}">
+			<arg value="//w" />
+			<arg value="." />
+			<arg value="//x" />
+			<arg value="..\..\results\coverage-results.xml" />
+			<arg value="&quot;..\..\..\tools\nunit\nunit-console.exe&quot;" />
+			<arg value="${nunit.assemblies} /xml:..\..\results\nunit-results.xml ${nunit.exclude.categories} /nologo" />			
+		</exec>
+	</target>	
+
+	<target name="distro">
+		<copy todir="${build.dir}\distro\">
+			<fileset basedir="${build.dir}\bin\${project.config}">
+				<include name="*.dll" />
+				<include name="*.exe" />
+				<include name="*.config" />
+				<include name="*.lang" />
+				<exclude name="*.tests.dll" />
+				<exclude name="nunit*" />
+			</fileset>
+		</copy>   
+	</target>
+	
+	<target name="copy_deployment">
+	</target>	
+	
+	<target name="build_install">
+	</target>		
+	<target name="fxcop">
+		<exec program="tools\fxcop\fxcopcmd.exe" workingdir="${build.dir}\bin\${project.config}" 
+			commandline="${fxcop.assemblies} /c /s /fo /out:..\..\results\fxcop-results.xml">	
+			<arg value="/rid:-Microsoft.Performance#CA1805"/>
+			<arg value="/rid:-Microsoft.Performance#CA1822"/>
+			<arg value="/rid:-Microsoft.Design#CA1014"/>
+			<arg value="/rid:-Microsoft.Design#CA1040"/>
+			<arg value="/rid:-Microsoft.Naming#CA1704"/>
+			<arg value="/rid:-Microsoft.Naming#CA1706"/>
+			<arg value="/rid:-Microsoft.Naming#CA1724"/>
+			<arg value="/rid:-Microsoft.Naming#CA1711"/>
+			<arg value="/rid:-Microsoft.Usage#CA2209"/>
+			<arg value="/rid:-Microsoft.Usage#CA1801"/>
+			<arg value="/rid:-Microsoft.Design#CA2210"/>
+			<arg value="/rid:-Microsoft.Design#CA1004"/>
+			<arg value="/rid:-Microsoft.Globalization#CA1305"/>			    		
+		</exec>
+	</target>	
+
+	<target name="doc">
+		<exec program="tools\ndoc\ndocconsole.exe" workingdir="${build.dir}\bin\${project.config}"
+		commandline="${ndoc.assemblies} -documenter=MSDN">
+					<arg value="-OutputDirectory=..\..\doc\MSDN" />
+					<arg value="-HtmlHelpName=${project.shortname}" />
+					<arg value="-HtmlHelpCompilerFilename=hhc.exe" />
+					<arg value="-IncludeFavorites=False" />
+					<arg value="-Title=${project.shortname} Documentation" />
+					<arg value="-SdkDocVersion=SDK_v2_0" />
+					<arg value="-ShowMissingSummaries=False" />
+					<arg value="-ShowMissingRemarks=False" />
+					<arg value="-ShowMissingParams=False" />
+					<arg value="-ShowMissingReturns=False" />
+					<arg value="-ShowMissingValues=False" />
+					<arg value="-DocumentInternals=True" />
+					<arg value="-DocumentProtected=True" />
+					<arg value="-DocumentPrivates=False" />
+					<arg value="-DocumentEmptyNamespaces=False" />
+					<arg value="-RootPageContainsNamespaces=True" />
+					<arg value="-CleanIntermediates=True" />
+					<arg value="-DocumentAttributes=True" />
+					<arg value="-Preliminary=True" />
+					<arg value="-OutputTarget=HtmlHelp" />
+					<arg value="-AssemblyVersionInfo=AssemblyVersion" />
+					<arg value="-CopyrightText=copyright (c) 2006.-2007. Plural d.o.o." />
+					<arg value="-CopyrightHref=http://www.plural.hr" />
+		</exec>
+	</target>
+
+	<target name="common_doc">
+		<exec program="tools\ndoc\ndocconsole.exe" workingdir="${build.dir}\bin\${project.config}"
+		commandline="${ndoc.common.assemblies} -documenter=MSDN">
+					<arg value="-OutputDirectory=..\..\doc\MSDN" />
+					<arg value="-HtmlHelpName=plural.common" />
+					<arg value="-HtmlHelpCompilerFilename=hhc.exe" />
+					<arg value="-IncludeFavorites=False" />
+					<arg value="-Title=Plural Common Documentation" />
+					<arg value="-SdkDocVersion=SDK_v2_0" />
+					<arg value="-ShowMissingSummaries=False" />
+					<arg value="-ShowMissingRemarks=False" />
+					<arg value="-ShowMissingParams=False" />
+					<arg value="-ShowMissingReturns=False" />
+					<arg value="-ShowMissingValues=False" />
+					<arg value="-DocumentInternals=True" />
+					<arg value="-DocumentProtected=True" />
+					<arg value="-DocumentPrivates=False" />
+					<arg value="-DocumentEmptyNamespaces=False" />
+					<arg value="-RootPageContainsNamespaces=True" />
+					<arg value="-CleanIntermediates=True" />
+					<arg value="-DocumentAttributes=True" />
+					<arg value="-Preliminary=True" />
+					<arg value="-OutputTarget=HtmlHelp" />
+					<arg value="-AssemblyVersionInfo=AssemblyVersion" />
+					<arg value="-CopyrightText=copyright (c) 2006.-2007. Plural d.o.o." />
+					<arg value="-CopyrightHref=http://www.plural.hr" />
+		</exec>
+	</target>
+	
+	<target name="publish" if="${property::exists('CCNetLabel')}" >
+		<mkdir dir="${build.dir}\..\publish" />
+		<zip zipfile="${build.dir}\..\publish\${project.shortname}-${CCNetLabel}.zip">
+			<fileset basedir="${build.dir}\distro">
+				<include name="**\*" />
+				<exclude name="**\*.zip" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="exclude_category">
+		<property name="nunit.exclude.categories" value="/exclude:Integration,Long,Database" />	
+	</target>
+	
+	<target name="simian_cc">
+		<exec program="tools\simian\simian.exe" >
+			<arg value="-failOnDuplication-"/>
+			<arg value="-formatter=xml:${build.dir}\results\simian-results.xml"/>
+			<arg value="-language=csharp"/>
+			<arg value="-recurse=*.cs"/>
+			<arg value="src\*.cs"/>
+		</exec>
+	</target>	
+	
+	<target name="setver" if="${property::exists('CCNetLabel')}">
+		<copy todir="src\_tmp" overwrite="true" failonerror="false" >
+			<fileset basedir="src">
+				<include name="**\assemblyinfo.cs" />
+			</fileset>
+			<filterchain>
+				<replacestring from="AssemblyFileVersion(&quot;1.0.0.0&quot;)" to="AssemblyFileVersion(&quot;${CCNetLabel}&quot;)" ignorecase="true"/>
+				<replacestring from="AssemblyVersion(&quot;1.0.0.0&quot;)" to="AssemblyVersion(&quot;${CCNetLabel}&quot;)" ignorecase="true"/>
+			</filterchain>			
+		</copy>
+		<copy todir="src\" overwrite="true">
+			<fileset basedir="src\_tmp">
+				<include name="**\assemblyinfo.cs" />
+			</fileset>
+		</copy>
+		<delete dir="src\_tmp"/>
+	</target>
+		
+</project>

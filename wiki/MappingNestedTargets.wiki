@@ -144,4 +144,4 @@ Finally, we need to map TargetSubA.SubD: this one gets some values from !SourceR
 
 === Next steps ===
 One of the planned features for version 0.3 is easier mapping of subcomponents. The idea is to provide something similar to `<component>` mapping in NHibernate. A possible syntax 
-is described in ComponentMapping.
+is described in NestedObjectMapping.

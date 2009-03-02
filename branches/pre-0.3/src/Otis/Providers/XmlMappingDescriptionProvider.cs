@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Schema;
 using Otis.CodeGen;
 using Otis.Parsing;
+using Otis.Utils;
 
 namespace Otis.Providers
 {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Otis.Functions;
 using Otis.Parsing;
+using Otis.Utils;
 
 namespace Otis.CodeGen
 {

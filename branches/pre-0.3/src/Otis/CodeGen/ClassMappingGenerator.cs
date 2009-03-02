@@ -2,6 +2,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Text;
+using Otis.Utils;
 
 namespace Otis.CodeGen
 {

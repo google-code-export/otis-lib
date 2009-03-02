@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Otis.CodeGen;
 
-namespace Otis
+namespace Otis.Cfg
 {
 	/// <summary>
 	/// Represents options for generation of the assembler. Assembler can be generated as
@@ -16,6 +16,7 @@ namespace Otis
 
 		private string _namespace;
 		private OutputType _outputType;
+		private TargetFramework _targetFramework;
 		private string _outputFile;
 		private bool _includeDebugInformationInAssembly;
 		private bool _supressInstanceCreation;
@@ -26,6 +27,7 @@ namespace Otis
 		public AssemblerGenerationOptions(bool useProvidedAssemblerBaseType)
 		{
 			_outputType = OutputType.InMemoryAssembly;
+			_targetFramework = TargetFramework.Net20;
 			_outputFile = string.Empty;
 
 			_assemblerBases = new Dictionary<string, AssemblerBase>();
@@ -69,6 +71,15 @@ namespace Otis
 		{
 			get { return _outputType; }
 			set { _outputType = value; }
+		}
+
+		/// <summary>
+		/// Gets/sets the Target Framework for Compiled Assembly
+		/// </summary>
+		public TargetFramework TargetFramework
+		{
+			get { return _targetFramework; }
+			set { _targetFramework = value; }
 		}
 
 		/// <summary>

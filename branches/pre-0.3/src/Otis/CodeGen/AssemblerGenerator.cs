@@ -2,6 +2,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Reflection;
+using Otis.Cfg;
 using Otis.Utils;
 
 namespace Otis.CodeGen
@@ -107,7 +108,6 @@ namespace Otis.CodeGen
 		public static IAssemblerGenerator CreateAssemblerGenerator(
 			string assemblerGenerator, CodeNamespace @namepsace, CodeGeneratorContext context, AssemblerBase assemblerBase)
 		{
-
 			try
 			{
 				IAssemblerGenerator generator = (IAssemblerGenerator) Activator.CreateInstance(

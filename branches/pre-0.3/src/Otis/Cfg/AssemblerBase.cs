@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace Otis
+namespace Otis.Cfg
 {
 	public class AssemblerBase
 	{

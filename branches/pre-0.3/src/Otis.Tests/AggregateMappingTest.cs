@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Otis.CodeGen;
 using Otis.Functions;
+using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests

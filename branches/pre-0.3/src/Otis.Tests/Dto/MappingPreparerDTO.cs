@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Otis.Tests.Entity;
 
-namespace Otis.Tests
+namespace Otis.Tests.Dto
 {
-	[MapClass(typeof(User), Preparer = "Otis.Tests.Util.Convert")]
+	[MapClass(typeof(User), Preparer = "Otis.Tests.Dto.Util.Convert")]
 	public class MappingPreparerDTO_Duplicate
 	{
 		[Map("$Id")]
@@ -39,7 +36,7 @@ namespace Otis.Tests
 		}
 	}
 
-	[MapClass(typeof(User), Preparer = "Otis.Tests.MappingPreparerTestConverter.Convert")]
+	[MapClass(typeof(User), Preparer = "Otis.Tests.Dto.MappingPreparerTestConverter.Convert")]
 	public class MappingPreparerDTO_StaticPreparer
 	{
 		[Map("$Id")]

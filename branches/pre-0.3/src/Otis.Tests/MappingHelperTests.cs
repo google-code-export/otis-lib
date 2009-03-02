@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests
@@ -9,8 +10,8 @@ namespace Otis.Tests
 	[TestFixture]
 	public class MappingHelperTests
 	{
-		const string errDuplicateHelper = "Method 'Helper' on type 'Otis.Tests.MappingHelperDTO_Duplicate' is marked with [MappingHelper], but mapping helper is already set to 'Otis.Tests.Util.Convert'";
-		const string errHelperIsPrivate = "Non public method 'Helper' on type 'Otis.Tests.MappingHelperDTO_NonPublic'is marked with [MappingHelper]. Only public methods can be used as helpers";
+		const string errDuplicateHelper = "Method 'Helper' on type 'Otis.Tests.Dto.MappingHelperDTO_Duplicate' is marked with [MappingHelper], but mapping helper is already set to 'Otis.Tests.Dto.Util.Convert'";
+		const string errHelperIsPrivate = "Non public method 'Helper' on type 'Otis.Tests.Dto.MappingHelperDTO_NonPublic'is marked with [MappingHelper]. Only public methods can be used as helpers";
 		private User _user;
 
 		[SetUp]

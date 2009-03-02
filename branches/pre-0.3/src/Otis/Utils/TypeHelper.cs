@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Otis
+namespace Otis.Utils
 {
 	public static class TypeHelper
 	{

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests
@@ -9,8 +10,8 @@ namespace Otis.Tests
 	[TestFixture]
 	public class MappingPreparerTests
 	{
-		const string errDuplicatePreparer = "Method 'Preparer' on type 'Otis.Tests.MappingPreparerDTO_Duplicate' is marked with [MappingPreparer], but mapping preparer is already set to 'Otis.Tests.Util.Convert'";
-		const string errPreparerIsPrivate = "Non public method 'Preparer' on type 'Otis.Tests.MappingPreparerDTO_NonPublic'is marked with [MappingPreparer]. Only public methods can be used as preparers";
+		const string errDuplicatePreparer = "Method 'Preparer' on type 'Otis.Tests.Dto.MappingPreparerDTO_Duplicate' is marked with [MappingPreparer], but mapping preparer is already set to 'Otis.Tests.Dto.Util.Convert'";
+		const string errPreparerIsPrivate = "Non public method 'Preparer' on type 'Otis.Tests.Dto.MappingPreparerDTO_NonPublic'is marked with [MappingPreparer]. Only public methods can be used as preparers";
 		private User _user;
 
 		[SetUp]

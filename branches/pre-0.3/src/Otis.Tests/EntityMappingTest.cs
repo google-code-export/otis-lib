@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 using NUnit.Framework;
+using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests

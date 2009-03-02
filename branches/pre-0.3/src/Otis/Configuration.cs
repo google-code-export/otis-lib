@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Otis.Cfg;
 using Otis.CodeGen;
 using Otis.Functions;
 using Otis.Utils;

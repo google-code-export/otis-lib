@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 using System.Reflection;
 

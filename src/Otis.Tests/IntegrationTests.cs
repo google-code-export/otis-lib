@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using NUnit.Framework;
+using Otis.Cfg;
+using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests
@@ -127,12 +129,12 @@ namespace Otis.Tests
 			string content = File.ReadAllText("src.cs");
 			Assert.IsTrue(content.Length > 100);
 			Assert.IsTrue(content.Contains("namespace OtisTest"));
-			Assert.IsTrue(content.Contains("public class UserToAttributedUserDTOAssembler : IAssembler<Otis.Tests.AttributedUserDTO, Otis.Tests.Entity.User>"));
+			Assert.IsTrue(content.Contains("public class UserToAttributedUserDTOAssembler : IAssembler<Otis.Tests.Dto.AttributedUserDTO, Otis.Tests.Entity.User>"));
 			Assert.IsTrue(content.Contains("AssembleFrom(Otis.Tests.Entity.User source)"));
 			Assert.IsTrue(content.Contains("return target;"));
-			Assert.IsTrue(content.Contains("Assemble(Otis.Tests.AttributedUserDTO target, Otis.Tests.Entity.User source)"));
-			Assert.IsTrue(content.Contains("Assemble(ref Otis.Tests.AttributedUserDTO target, ref Otis.Tests.Entity.User source)"));
-			Assert.IsTrue(content.Contains("Otis.Tests.AttributedUserDTO target = new Otis.Tests.AttributedUserDTO();"));
+			Assert.IsTrue(content.Contains("Assemble(Otis.Tests.Dto.AttributedUserDTO target, Otis.Tests.Entity.User source)"));
+			Assert.IsTrue(content.Contains("Assemble(ref Otis.Tests.Dto.AttributedUserDTO target, ref Otis.Tests.Entity.User source)"));
+			Assert.IsTrue(content.Contains("Otis.Tests.Dto.AttributedUserDTO target = new Otis.Tests.Dto.AttributedUserDTO();"));
 			File.Delete("src.cs");
 		}
 

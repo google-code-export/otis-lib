@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Xml;
 using NUnit.Framework;
 using Otis.Providers;
+using Otis.Tests.Dto;
 
 namespace Otis.Tests
 {
@@ -22,7 +23,7 @@ namespace Otis.Tests
 		public void Parse_Valid_Xml_Mapping()
 		{
 			string xmlCfg = "<otis-mapping>"
-							+ "<class name=\"Otis.Tests.XmlUserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" >"
+							+ "<class name=\"Otis.Tests.Dto.XmlUserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" >"
 							+ "  <member name=\"Gender\" expression=\"$UserGender\">"
 							+ "    <map from=\"['M']\" to=\"Male\" />"
 							+ "    <map from=\"['W']\" to=\"Female\" />"
@@ -40,8 +41,8 @@ namespace Otis.Tests
 			XmlNodeList xmlGender = members[0].SelectNodes("map");
 			ProjectionInfo projections = XmlMappingDescriptionProvider.BuildProjections(_desc, xmlGender);
 			Assert.AreEqual(2, projections.Count);
-			Assert.AreEqual("Otis.Tests.Gender.Male", projections["\"M\""]);
-			Assert.AreEqual("Otis.Tests.Gender.Female", projections["\"W\""]);
+			Assert.AreEqual("Otis.Tests.Dto.Gender.Male", projections["\"M\""]);
+			Assert.AreEqual("Otis.Tests.Dto.Gender.Female", projections["\"W\""]);
 
 			_desc.Type = typeof(string);
 			_desc.OwnerType = typeof (XmlUserDTO);
@@ -59,7 +60,7 @@ namespace Otis.Tests
 		public void Parse_Xml_Mapping_With_Empty_To_Attribute()
 		{
 			string xmlCfg = "<otis-mapping>"
-							+ "<class name=\"Otis.Tests.XmlUserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" >"
+							+ "<class name=\"Otis.Tests.Dto.XmlUserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" >"
 							+ "  <member name=\"Gender\" expression=\"$UserGender\">"
 							+ "    <map from=\"['M']\" to=\"\" />"
 							+ "    <map from=\"['W']\" to=\"\" />"
@@ -125,7 +126,7 @@ namespace Otis.Tests
 			}
 			catch (OtisException e)
 			{
-				if (e.Message.Contains("Invalid projection 'X => Undefined'. Value 'Undefined' is not defined in 'Otis.Tests.Gender' enumeration"))
+				if (e.Message.Contains("Invalid projection 'X => Undefined'. Value 'Undefined' is not defined in 'Otis.Tests.Dto.Gender' enumeration"))
 					return; // success
 			}
 			Assert.Fail("Tested method didn't throw an exception!");  
@@ -162,8 +163,8 @@ namespace Otis.Tests
 		private static void Check(ProjectionInfo projections)
 		{
 			Assert.AreEqual(2, projections.Count);
-			Assert.AreEqual("Otis.Tests.Gender.Male", projections["\"M\""]);
-			Assert.AreEqual("Otis.Tests.Gender.Female", projections["\"W\""]);
+			Assert.AreEqual("Otis.Tests.Dto.Gender.Male", projections["\"M\""]);
+			Assert.AreEqual("Otis.Tests.Dto.Gender.Female", projections["\"W\""]);
 		}
 
 		private void BuildXmlProjections(string xmlCfg)

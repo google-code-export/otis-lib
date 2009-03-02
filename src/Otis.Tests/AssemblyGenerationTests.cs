@@ -8,8 +8,10 @@ using System.CodeDom;
 using System.Collections.Generic;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Otis.Cfg;
 using Otis.CodeGen;
 using Otis.Tests.Entity;
+using Otis.Utils;
 
 namespace Otis.Tests
 {

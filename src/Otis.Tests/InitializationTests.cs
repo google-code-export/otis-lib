@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using NUnit.Framework;
+using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests
@@ -33,7 +34,7 @@ namespace Otis.Tests
 		{
 			Assert.AreEqual(typeof(Target), desc.TargetType);
 			Assert.AreEqual(typeof(Source), desc.SourceType);
-			Assert.AreEqual("Otis.Tests.Util.Convert", desc.MappingHelper);
+			Assert.AreEqual("Otis.Tests.Dto.Util.Convert", desc.MappingHelper);
 
 			Assert.AreEqual(8, desc.MemberDescriptors.Count);
 			MemberMappingDescriptor member = null;
@@ -76,10 +77,10 @@ namespace Otis.Tests
 
 			member = Helpers.FindMember(desc.MemberDescriptors, "Gender");
 			Assert.AreEqual(2, member.Projections.Count);
-			Assert.AreEqual("Otis.Tests.Gender.Male", member.Projections["\"M\""]);
-			Assert.AreEqual("Otis.Tests.Gender.Female", member.Projections["\"W\""]);
+			Assert.AreEqual("Otis.Tests.Dto.Gender.Male", member.Projections["\"M\""]);
+			Assert.AreEqual("Otis.Tests.Dto.Gender.Female", member.Projections["\"W\""]);
 			Assert.AreEqual(typeof(Target), member.OwnerType);
-			Assert.AreEqual(typeof(Otis.Tests.Gender), member.Type);
+			Assert.AreEqual(typeof(Gender), member.Type);
 
 
 			member = Helpers.FindMember(desc.MemberDescriptors, "GenderCode");
@@ -113,12 +114,12 @@ namespace Otis.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(OtisException), 
-			ExpectedMessage = "Xml configuration error: member 'Missing' does not exist in class 'Otis.Tests.UserDTO'")]
+		[ExpectedException(typeof(OtisException),
+			ExpectedMessage = "Xml configuration error: member 'Missing' does not exist in class 'Otis.Tests.Dto.UserDTO'")]
 		public void Xml_Config_Fails_For_Non_Existing_Member()
 		{
 			string xmlCfg = "<otis-mapping xmlns=\"urn:otis-mapping-1.0\" >"
-							+ "<class name=\"Otis.Tests.UserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" >"
+							+ "<class name=\"Otis.Tests.Dto.UserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" >"
 			                + "<member name=\"Id\" />"
 							+ "<member name=\"Age\" />"
 							+ "<member name=\"Missing\" />"
@@ -129,11 +130,11 @@ namespace Otis.Tests
 
 		[Test]
 		[ExpectedException(typeof(OtisException),
-		   ExpectedMessage = "Xml configuration error: formatting is applied to member 'Otis.Tests.UserDTO.Id' which is not a string but 'System.Int32'")]
+		   ExpectedMessage = "Xml configuration error: formatting is applied to member 'Otis.Tests.Dto.UserDTO.Id' which is not a string but 'System.Int32'")]
 		public void Xml_Config_Fails_When_Non_String_Member_Has_Formatting()
 		{
 			string xmlCfg = "<otis-mapping xmlns=\"urn:otis-mapping-1.0\" >"
-							+ "<class name=\"Otis.Tests.UserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" >"
+							+ "<class name=\"Otis.Tests.Dto.UserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" >"
 							+ "<member name=\"Id\" format=\"{0}\" />"
 							+ "</class>"
 							+ "</otis-mapping>";

@@ -1,4 +1,4 @@
-namespace Otis
+namespace Otis.Cfg
 {
 	/// <summary>
 	/// Types of the output for the assembler generator
@@ -8,5 +8,5 @@ namespace Otis
 		InMemoryAssembly,
 		Assembly,
 		SourceCode
-	}	
+	}
 }

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.CSharp;
+using Otis.Cfg;
 using Otis.CodeGen;
+using Otis.Utils;
 
 namespace Otis
 {
@@ -112,12 +114,7 @@ namespace Otis
 
 		private Assembly GenerateAssemblerAssembly(bool inMemory, string outputFile)
 		{
-			//TODO: Make Injectible 
-			
-			IDictionary<string, string> compilerOptions = new Dictionary<string, string>();
-			compilerOptions.Add("CompilerVersion", "v3.5");
-
-			CSharpCodeProvider csp = new CSharpCodeProvider(compilerOptions);
+			CSharpCodeProvider csp = new CSharpCodeProvider(GetCompilerOptions());
 
 			CodeCompileUnit compileUnit = new CodeCompileUnit();
 			compileUnit.Namespaces.Add(_namespace);
@@ -141,6 +138,16 @@ namespace Otis
 			}
 
 			return results.CompiledAssembly;
+		}
+
+		private IDictionary<string, string> GetCompilerOptions()
+		{
+			string compilerVersion = EnumHelper.GetText(_context.AssemblerGenerationOptions.TargetFramework);
+
+			IDictionary<string, string> compilerOptions = new Dictionary<string, string>();
+			compilerOptions.Add("CompilerVersion", compilerVersion);
+
+			return compilerOptions;
 		}
 
 		private void GenerateAssemblerSource()

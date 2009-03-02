@@ -23,8 +23,8 @@ namespace Otis.Tests
 
 			AssertAssignable<NamedEntity, Project>();
 			AssertNotAssignable<Project, NamedEntity>();
-			AssertAssignable<Entity.Entity, Project>();
-			AssertNotAssignable<Project, Entity.Entity>();
+			AssertAssignable<Entity.EntityBase, Project>();
+			AssertNotAssignable<Project, Entity.EntityBase>();
 
 			AssertAssignable<double, float>();
 			AssertAssignable<double, long>();

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <otis-mapping xmlns="urn:otis-mapping-1.0">
-	<class name="Otis.Tests.XmlGenericEntityDTO, Otis.Tests" source="Otis.Tests.Entity.GenericEntity`1[[System.Int32, mscorlib]], Otis.Tests" >
+	<class name="Otis.Tests.Dto.XmlGenericEntityDTO, Otis.Tests" source="Otis.Tests.Entity.GenericEntity`1[[System.Int32, mscorlib]], Otis.Tests" >
 		<member name="Id" />
 		<member name="NullableProperty" />
 	</class>

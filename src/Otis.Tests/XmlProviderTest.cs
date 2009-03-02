@@ -39,26 +39,26 @@ namespace Otis.Tests
 		public void Helper_Is_Recognized()
 		{
 			string xmlCfg = "<otis-mapping xmlns=\"urn:otis-mapping-1.0\" >"
-							+ "<class name=\"Otis.Tests.UserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" helper=\"Otis.Tests.Util.Convert\" >"
+							+ "<class name=\"Otis.Tests.Dto.UserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" helper=\"Otis.Tests.Dto.Util.Convert\" >"
 							+ "<member name=\"Id\" /></class></otis-mapping>";
 			IMappingDescriptorProvider provider = ProviderFactory.FromXmlString(xmlCfg);
 			Assert.IsFalse(provider.ClassDescriptors[0].HasPreparer);
 			Assert.IsTrue(provider.ClassDescriptors[0].HasHelper);
 			Assert.IsTrue(provider.ClassDescriptors[0].IsHelperStatic);
-			Assert.AreEqual("Otis.Tests.Util.Convert", provider.ClassDescriptors[0].MappingHelper);
+			Assert.AreEqual("Otis.Tests.Dto.Util.Convert", provider.ClassDescriptors[0].MappingHelper);
 		}
 
 		[Test]
 		public void Preparer_Is_Recognized()
 		{
 			string xmlCfg = "<otis-mapping xmlns=\"urn:otis-mapping-1.0\" >"
-							+ "<class name=\"Otis.Tests.UserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" preparer=\"Otis.Tests.Util.Convert\" >"
+							+ "<class name=\"Otis.Tests.Dto.UserDTO, Otis.Tests\" source=\"Otis.Tests.Entity.User, Otis.Tests\" preparer=\"Otis.Tests.Dto.Util.Convert\" >"
 							+ "<member name=\"Id\" /></class></otis-mapping>";
 			IMappingDescriptorProvider provider = ProviderFactory.FromXmlString(xmlCfg);
 			Assert.IsFalse(provider.ClassDescriptors[0].HasHelper);
 			Assert.IsTrue(provider.ClassDescriptors[0].HasPreparer);
 			Assert.IsTrue(provider.ClassDescriptors[0].IsPreparerStatic);
-			Assert.AreEqual("Otis.Tests.Util.Convert", provider.ClassDescriptors[0].MappingPreparer);
+			Assert.AreEqual("Otis.Tests.Dto.Util.Convert", provider.ClassDescriptors[0].MappingPreparer);
 		}
 	}
 }

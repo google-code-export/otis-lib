@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Otis.Tests.Entity;
 
-namespace Otis.Tests
+namespace Otis.Tests.Dto
 {
 	[MapClass(typeof(User))]
 	public class UserDTO
@@ -90,32 +88,5 @@ namespace Otis.Tests
 
 		[Map("concat:$Documents/Name")]
 		public string DocumentInfo;
-	}
-
-	[MapClass(typeof(Project))]
-	public class ProjectDTO
-	{
-		[Map]
-		public int Id;
-
-		[Map]
-		public string Name;
-
-		[Map("$Tasks.Count")]
-		public int TaskCount;
-	}
-
-	[MapClass(typeof(NamedEntity))]
-	public class DocumentDTO
-	{
-		[Map("$Id.ToString() + \" - \" + $Name")]
-		public string Description;
-	}
-
-	[MapClass(typeof(Task))]
-	public class TaskDTO
-	{
-		[Map("$Duration * 60")]
-		public int DurationInMinutes;
 	}
 }

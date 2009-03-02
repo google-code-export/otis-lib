@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Otis.Tests
+namespace Otis.Tests.Dto
 {
 	public class XmlUserDTO
 	{
@@ -15,11 +11,5 @@ namespace Otis.Tests
 		public int AllTasksCount;
 		public Gender Gender;
 		public string GenderCode;
-	}
-
-	public enum Gender
-	{
-		Male,
-		Female
 	}
 }

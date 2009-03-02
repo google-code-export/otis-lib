@@ -48,9 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateMappingDescription.cs" />
-    <Compile Include="AssemblerBase.cs" />
     <Compile Include="AssemblerBuilder.cs" />
-    <Compile Include="AssemblerGenerationOptions.cs" />
+    <Compile Include="Cfg\AssemblerBase.cs" />
+    <Compile Include="Cfg\AssemblerGenerationOptions.cs" />
+    <Compile Include="Cfg\INamespaceNameProvider.cs" />
+    <Compile Include="Cfg\OutputType.cs" />
+    <Compile Include="Cfg\TargetFramework.cs" />
     <Compile Include="CodeGen\AssemblerGeneratorResult.cs" />
     <Compile Include="CodeGeneratorContext.cs" />
     <Compile Include="CodeGen\AggregateExpressionBuilder.cs" />
@@ -78,7 +81,6 @@
     <Compile Include="IExpressionFormatProvider.cs" />
     <Compile Include="MappingHelperAttribute.cs" />
     <Compile Include="MappingPreparerAttribute.cs" />
-    <Compile Include="OutputType.cs" />
     <Compile Include="Parsing\ExpressionParser.cs" />
     <Compile Include="ProjectionInfo.cs" />
     <Compile Include="ProjectionItem.cs" />
@@ -98,9 +100,11 @@
     <Compile Include="Providers\SingleTypeMappingDescriptorProvider.cs" />
     <Compile Include="Providers\XmlMappingDescriptionProvider.cs" />
     <Compile Include="OtisException.cs" />
-    <Compile Include="TypeHelper.cs" />
     <Compile Include="Utils\AssemblyQualifiedTypeName.cs" />
+    <Compile Include="Utils\EnumHelper.cs" />
     <Compile Include="Utils\ReflectHelper.cs" />
+    <Compile Include="Utils\TextAttribute.cs" />
+    <Compile Include="Utils\TypeHelper.cs" />
     <Compile Include="Utils\TypeNameParser.cs" />
   </ItemGroup>
   <ItemGroup>

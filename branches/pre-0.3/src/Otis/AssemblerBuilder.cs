@@ -40,14 +40,17 @@ namespace Otis
 			IAssemblerGenerator defaultAssemblerGenerator = null;
 			Dictionary<string, IAssemblerGenerator> assemblerGenerators = new Dictionary<string, IAssemblerGenerator>();
 
-			foreach (AssemblerBase assemblerBaseType in _context.AssemblerGenerationOptions.AssemblerBases)
+			foreach (AssemblerBase assemblerBase in _context.AssemblerGenerationOptions.AssemblerBases)
 			{
+				if(!assemblerBase.IsInstantiated)
+					assemblerBase.PostInstantiate();
+
 				IAssemblerGenerator assemblerGenerator = AssemblerGenerator.CreateAssemblerGenerator(
-					assemblerBaseType.AssemblerGenerator, _namespace, _context, assemblerBaseType);
+					assemblerBase.AssemblerGenerator, _namespace, _context, assemblerBase);
 
-				assemblerGenerators.Add(assemblerBaseType.Name, assemblerGenerator);
+				assemblerGenerators.Add(assemblerBase.Name, assemblerGenerator);
 
-				if(assemblerBaseType.IsDefaultAssembler)
+				if(assemblerBase.IsDefaultAssembler)
 					defaultAssemblerGenerator = assemblerGenerator;
 			}
 

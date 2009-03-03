@@ -41,9 +41,14 @@
   <ItemGroup>
     <Compile Include="AggregateMappingDescription.cs" />
     <Compile Include="AssemblerBuilder.cs" />
+    <Compile Include="AssemblerManager.cs" />
     <Compile Include="Cfg\AssemblerBase.cs" />
     <Compile Include="Cfg\AssemblerGenerationOptions.cs" />
+    <Compile Include="Cfg\AssemblerNameProvider.cs" />
+    <Compile Include="Cfg\DefaultNamespaceNameProvider.cs" />
+    <Compile Include="Cfg\IAssemblerNameProvider.cs" />
     <Compile Include="Cfg\INamespaceNameProvider.cs" />
+    <Compile Include="Cfg\NamespaceNameProvider.cs" />
     <Compile Include="Cfg\OutputType.cs" />
     <Compile Include="Cfg\TargetFramework.cs" />
     <Compile Include="CodeGeneratorContext.cs" />
@@ -70,9 +75,11 @@
     <Compile Include="Functions\SimpleFunctionBase.cs" />
     <Compile Include="Functions\SumFunction.cs" />
     <Compile Include="IAggregateFunction.cs" />
+    <Compile Include="IAssemblerManager.cs" />
     <Compile Include="IExpressionFormatProvider.cs" />
     <Compile Include="MappingHelperAttribute.cs" />
     <Compile Include="MappingPreparerAttribute.cs" />
+    <Compile Include="NamedAssembler.cs" />
     <Compile Include="Parsing\ExpressionParser.cs" />
     <Compile Include="ProjectionInfo.cs" />
     <Compile Include="ProjectionItem.cs" />

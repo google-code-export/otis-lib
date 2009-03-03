@@ -52,11 +52,14 @@
     <Compile Include="AggregateFunctionTargetConstraintsTest.cs" />
     <Compile Include="AggregateFunctionTests.cs" />
     <Compile Include="AggregateMappingTest.cs" />
+    <Compile Include="AssemblerBaseTests.cs" />
+    <Compile Include="AssemblerNameProviderTests.cs" />
     <Compile Include="AssemblyGenerationTests.cs" />
     <Compile Include="CollectionMappingTest.cs" />
     <Compile Include="ComponentMappingTests.cs" />
     <Compile Include="Dto\AttributedGenericEntityDTO.cs" />
     <Compile Include="Dto\AttributedUserDTO.cs" />
+    <Compile Include="Dto\NamedAssemblerUserDTO.cs" />
     <Compile Include="Dto\DerivedUserDTO.cs" />
     <Compile Include="Dto\DerivedXmlUserDTO.cs" />
     <Compile Include="Dto\DocumentDTO.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="MappingHelperTests.cs" />
     <Compile Include="MappingPatternsTests.cs" />
     <Compile Include="MappingPreparerTests.cs" />
+    <Compile Include="NamespaceNameProviderTests.cs" />
     <Compile Include="NullValueHandlingTests.cs" />
     <Compile Include="PerformanceTest.cs" />
     <Compile Include="ProjectionParsingTests.cs" />
@@ -101,6 +105,9 @@
     <EmbeddedResource Include="XmlMappings\mappings.otis.xml" />
     <EmbeddedResource Include="XmlMappings\derived-mappings.otis.xml" />
     <EmbeddedResource Include="XmlMappings\generics-mappings.otis.xml" />
+    <Content Include="XmlMappings\named_assembler_mappings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="XmlMappings\mappings2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

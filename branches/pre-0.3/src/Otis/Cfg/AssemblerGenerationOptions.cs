@@ -20,22 +20,24 @@ namespace Otis.Cfg
 		private string _outputFile;
 		private bool _includeDebugInformationInAssembly;
 		private bool _supressInstanceCreation;
-		private readonly Dictionary<string, AssemblerBase> _assemblerBases;
+		private string _namespaceNameProviderName;
+		private INamespaceNameProvider _namespaceNameProvider;
 
-		public AssemblerGenerationOptions() : this(true) {}
+		private readonly Dictionary<string, AssemblerBase> _assemblerBases;
 
 		public AssemblerGenerationOptions(bool useProvidedAssemblerBaseType)
 		{
 			_outputType = OutputType.InMemoryAssembly;
 			_targetFramework = TargetFramework.Net20;
 			_outputFile = string.Empty;
-
 			_assemblerBases = new Dictionary<string, AssemblerBase>();
 
-			if(useProvidedAssemblerBaseType)
-				_assemblerBases.Add(DefaultAssemblerBaseName, CreateDefaultAssemblerBaseType());
+			_namespaceNameProviderName = typeof(DefaultNamespaceNameProvider).AssemblyQualifiedName;
+			_namespaceNameProvider = new DefaultNamespaceNameProvider();
+			Namespace = string.Empty;
 
-			_namespace = string.Empty;
+			if (useProvidedAssemblerBaseType)
+				_assemblerBases.Add(DefaultAssemblerBaseName, CreateDefaultAssemblerBaseType());
 		}
 
 		private static AssemblerBase CreateDefaultAssemblerBaseType()
@@ -83,20 +85,37 @@ namespace Otis.Cfg
 		}
 
 		/// <summary>
-		/// gets sets the namespace for generated assembler class. If omit0ted, a unique
-		/// namespace name will be automatically generated
+		/// Gets/sets the namespace for generated assembler class.
+		/// Which is then passed to the NamespaceNameProvider
 		/// </summary>
 		public string Namespace
 		{
 			get
 			{
-				//TODO: allow customization for dynamically generated namespace names
-				if(string.IsNullOrEmpty(_namespace))
-					_namespace = "NS" + Guid.NewGuid().ToString("N");
-
-				return _namespace;
+				return _namespaceNameProvider != null ? _namespaceNameProvider.GetNamespaceName() : _namespace;
 			}
-			set { _namespace = value; }
+			set
+			{
+				_namespace = value;
+
+				if(_namespaceNameProvider != null)
+					_namespaceNameProvider.SetNamespaceName(_namespace);
+			}
+		}
+
+		/// <summary>
+		/// Gets/sets the Assembly Qualified Name of the <see cref="INamespaceNameProvider" /> 
+		/// to use when generating the Namespace Name for the Generated Assembly
+		/// </summary>
+		public string NamespaceNameProvider
+		{
+			get { return _namespaceNameProviderName; }
+			set
+			{
+				_namespaceNameProviderName = value;
+				_namespaceNameProvider = Cfg.NamespaceNameProvider.CreateNamespaceNameProvider(_namespaceNameProviderName);
+				_namespaceNameProvider.SetNamespaceName(_namespace);
+			}
 		}
 
 		/// <summary>

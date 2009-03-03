@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>		  <!-- for testing resource reading-->
+<otis-mapping xmlns="urn:otis-mapping-1.0">
+	<class name="Otis.Tests.Dto.NamedAssemblerUserDTO, Otis.Tests" source="Otis.Tests.Entity.User, Otis.Tests" assemblerName="NamedAssemblerFromUserDtoToUser">
+		<member name="Id" />
+		<!-- if expression is ommited it is assumed to be equal to name -->
+		<member name="Age" />
+		<member name="UserName" expression="$UserName.ToUpper()" nullValue="&quot;[unknown]&quot;" />
+		<member name="FullName" expression="$FirstName + &quot; &quot; + $LastName" />
+		<member name="ProjectCount" expression="$Projects.Count" />
+	</class>
+</otis-mapping>

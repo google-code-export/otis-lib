@@ -3,96 +3,60 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Reflection;
 using Otis.Cfg;
-using Otis.Utils;
 
 namespace Otis.CodeGen
 {
-	public class AssemblerGenerator : IAssemblerGenerator
+	public abstract class AssemblerGenerator : IAssemblerGenerator
 	{
+		protected const string SystemDll = "System.Dll";
+
 		protected readonly CodeGeneratorContext _context;
 		protected readonly CodeNamespace _namespace;
-		protected readonly ClassMappingGenerator _generator;
 		protected readonly AssemblerBase _assemblerBase;
 		protected readonly List<string> _explicitAssemblies = new List<string>(3);
 		protected readonly IDictionary<int, bool> _typeCache = new Dictionary<int, bool>();
 
-		public AssemblerGenerator(CodeNamespace @namespace, CodeGeneratorContext context, AssemblerBase assemblerBase)
+		protected AssemblerGenerator(CodeNamespace @namespace, CodeGeneratorContext context, AssemblerBase assemblerBase)
 		{
 			_context = context;
 			_assemblerBase = assemblerBase;
 			_namespace = @namespace;
 
-			_generator = new ClassMappingGenerator(_context);
-
-			AddAdditonalNamespaceImports();
-
-			_explicitAssemblies.Add("System.Dll");
-			_explicitAssemblies.Add(Assembly.GetExecutingAssembly().CodeBase.Substring(8));
+			AddNamespaceImports();
+			AddExplicitAssemblies();
 		}
 
 		#region Implementation of IAssemblerGenerator
 
 		public virtual void AddMapping(ClassMappingDescriptor descriptor)
 		{
-			CodeTypeDeclaration assemblerClass = new CodeTypeDeclaration(GetAssemblerName(descriptor));
-			assemblerClass.IsClass = true;
-			assemblerClass.Attributes = MemberAttributes.Public;
-			
-			CodeMemberMethod methodAssembleFrom = _generator.CreateTypeTransformationMethod(descriptor);
-			assemblerClass.Members.Add(methodAssembleFrom);
+			CodeTypeDeclaration typeDeclaration = Generate(descriptor);
 
-			CodeMemberMethod methodAssemble = _generator.CreateInPlaceTransformationMethod(descriptor);
-			assemblerClass.Members.Add(methodAssemble);
-
-			CodeMemberMethod methodAssembleValueType = _generator.CreateInPlaceTransformationMethodForValueTypes(descriptor);
-			assemblerClass.Members.Add(methodAssembleValueType);
-
-			CodeMemberMethod methodToList = _generator.CreateToListMethod(descriptor);
-			assemblerClass.Members.Add(methodToList);
-
-			CodeMemberMethod methodToArray = _generator.CreateToArrayMethod(descriptor);
-			assemblerClass.Members.Add(methodToArray);
-
-
-			string interfaceType = string.Format(	"IAssembler<{0}, {1}>", 
-			                                     	TypeHelper.GetTypeDefinition(descriptor.TargetType),
-			                                     	TypeHelper.GetTypeDefinition(descriptor.SourceType));
-
-			assemblerClass.BaseTypes.Add(interfaceType);
 			AddReferencedAssemblies(descriptor);
-
-			_namespace.Types.Add(assemblerClass);
+			AddType(typeDeclaration);
 		}
 
-		public virtual AssemblerGeneratorResult GetAssemblers()
+		public virtual AssemblerGeneratorResult GenerateAssemblers()
 		{
 			return new AssemblerGeneratorResult(_explicitAssemblies);
 		}
 
 		#endregion
 
-		protected string GetAssemblerName(ClassMappingDescriptor descriptor)
+		#region Handlers
+
+		/// <summary>
+		/// Generates a <see cref="CodeTypeDeclaration" /> from the provided <see cref="ClassMappingDescriptor" />
+		/// </summary>
+		/// <param name="descriptor">The Assembler Meta Data</param>
+		/// <returns>A Configured <see cref="CodeTypeDeclaration" /></returns>
+		protected abstract CodeTypeDeclaration Generate(ClassMappingDescriptor descriptor);
+
+		#endregion
+
+		protected void AddType(CodeTypeDeclaration typeDeclaration)
 		{
-			if (descriptor.HasNamedAssembler)
-			{
-				_context.AssemblerManager.AddAssembler(descriptor.AssemblerName);
-				return descriptor.AssemblerName.Name;
-			}
-
-			_context.AssemblerManager.AddAssembler(
-					descriptor.TargetType,
-					descriptor.SourceType,
-					_assemblerBase.AssemblerNameProvider);
-
-			return _assemblerBase.AssemblerNameProvider.GenerateName(descriptor.TargetType, descriptor.SourceType);
-		}
-
-		protected void AddAdditonalNamespaceImports()
-		{
-			foreach (string namespaceImport in _assemblerBase.NamespaceImports)
-			{
-				_namespace.Imports.Add(new CodeNamespaceImport(namespaceImport));
-			}
+			_namespace.Types.Add(typeDeclaration);
 		}
 
 		protected void AddReferencedAssemblies(ClassMappingDescriptor descriptor)
@@ -106,7 +70,7 @@ namespace Otis.CodeGen
 			if (_typeCache.ContainsKey(type.GetHashCode())) // already processed
 				return;
 
-			if(type.BaseType != null)
+			if (type.BaseType != null)
 				AddAssembliesForType(type.BaseType);
 
 			foreach (Type itf in type.GetInterfaces())
@@ -115,10 +79,45 @@ namespace Otis.CodeGen
 			}
 
 			_typeCache[type.GetHashCode()] = true;
-			
+
 			string assembly = type.Assembly.GetName().CodeBase.Substring(8);
 			if (!_explicitAssemblies.Contains(assembly))
 				_explicitAssemblies.Add(assembly);
+		}
+
+		protected void AddNamespaceImports()
+		{
+			foreach (string namespaceImport in _assemblerBase.NamespaceImports)
+			{
+				_namespace.Imports.Add(new CodeNamespaceImport(namespaceImport));
+			}
+		}
+
+		protected void AddExplicitAssemblies()
+		{
+			AddExplicitAssembly(SystemDll);
+			AddExplicitAssembly(Assembly.GetExecutingAssembly().CodeBase.Substring(8));
+		}
+
+		protected void AddExplicitAssembly(string assembly)
+		{
+			_explicitAssemblies.Add(assembly);
+		}
+
+		protected string GetAssemblerName(ClassMappingDescriptor descriptor)
+		{
+			if (descriptor.HasNamedAssembler)
+			{
+				_context.AssemblerManager.AddAssembler(descriptor.AssemblerName);
+				return descriptor.AssemblerName.Name;
+			}
+
+			_context.AssemblerManager.AddAssembler(
+				descriptor.TargetType,
+				descriptor.SourceType,
+				_assemblerBase.AssemblerNameProvider);
+
+			return _assemblerBase.AssemblerNameProvider.GenerateName(descriptor.TargetType, descriptor.SourceType);
 		}
 	}
 }

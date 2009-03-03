@@ -36,7 +36,7 @@ namespace Otis.Cfg
 		{
 			_isInstantiated = false;
 			_namespaceImports = new List<string>();
-			_assemblerGeneratorName = typeof (AssemblerGenerator).AssemblyQualifiedName;
+			_assemblerGeneratorName = typeof (IAssemblerAssemblerGenerator).AssemblyQualifiedName;
 			_assemblerNameProviderName = typeof (AssemblerNameProvider).AssemblyQualifiedName;
 		}
 
@@ -84,8 +84,8 @@ namespace Otis.Cfg
 				throw new OtisException(ErrNoAssemblerGeneratorProvided);
 
 			//avoid reflection if we can
-			if(_assemblerGeneratorName == typeof(AssemblerGenerator).AssemblyQualifiedName)
-				return new AssemblerGenerator(@namespace, context, this);
+			if(_assemblerGeneratorName == typeof(IAssemblerAssemblerGenerator).AssemblyQualifiedName)
+				return new IAssemblerAssemblerGenerator(@namespace, context, this);
 
 			try
 			{

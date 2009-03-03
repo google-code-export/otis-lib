@@ -48,7 +48,7 @@ namespace Otis.Tests
 			AssemblerBase assemblerBase = new AssemblerBase();
 			assemblerBase.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBase.Name = "IAssembler";
-			assemblerBase.AssemblerGeneratorName = typeof(AssemblerGenerator).AssemblyQualifiedName;
+			assemblerBase.AssemblerGeneratorName = typeof(IAssemblerAssemblerGenerator).AssemblyQualifiedName;
 			assemblerBase.IsDefaultAssembler = true;
 
 			cfg.GenerationOptions.AddAssemblerBase(assemblerBase);
@@ -69,7 +69,7 @@ namespace Otis.Tests
 			AssemblerBase assemblerBase = new AssemblerBase();
 			assemblerBase.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBase.Name = "IAssembler";
-			assemblerBase.AssemblerGeneratorName = typeof(AssemblerGenerator).AssemblyQualifiedName;
+			assemblerBase.AssemblerGeneratorName = typeof(IAssemblerAssemblerGenerator).AssemblyQualifiedName;
 			assemblerBase.IsDefaultAssembler = false;
 
 			cfg.GenerationOptions.AddAssemblerBase(assemblerBase);
@@ -88,7 +88,7 @@ namespace Otis.Tests
 			AssemblerBase assemblerBaseType1 = new AssemblerBase();
 			assemblerBaseType1.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBaseType1.Name = "IAssembler";
-			assemblerBaseType1.AssemblerGeneratorName = typeof(AssemblerGenerator).AssemblyQualifiedName;
+			assemblerBaseType1.AssemblerGeneratorName = typeof(IAssemblerAssemblerGenerator).AssemblyQualifiedName;
 			assemblerBaseType1.IsDefaultAssembler = true;
 
 			AssemblerBase assemblerBaseType2 = new AssemblerBase();
@@ -144,29 +144,33 @@ namespace Otis.Tests
 			_namespace.Imports.Add(new CodeNamespaceImport("Otis.Tests"));
 		}
 
-		public override void AddMapping(ClassMappingDescriptor descriptor)
+		#region Overrides of AssemblerGenerator
+
+		protected override CodeTypeDeclaration Generate(ClassMappingDescriptor descriptor)
 		{
+			ClassMappingGenerator generator = new ClassMappingGenerator(_context);
+
 			CodeTypeDeclaration assemblerClass = new CodeTypeDeclaration(GetAssemblerName(descriptor));
 			assemblerClass.IsClass = true;
 			assemblerClass.Attributes = MemberAttributes.Public;
 
-			CodeMemberMethod methodAssembleFrom = _generator.CreateTypeTransformationMethod(descriptor);
+			CodeMemberMethod methodAssembleFrom = generator.CreateTypeTransformationMethod(descriptor);
 			methodAssembleFrom.Attributes = MemberAttributes.Public | MemberAttributes.Override;
 			assemblerClass.Members.Add(methodAssembleFrom);
 
-			CodeMemberMethod methodAssemble = _generator.CreateInPlaceTransformationMethod(descriptor);
+			CodeMemberMethod methodAssemble = generator.CreateInPlaceTransformationMethod(descriptor);
 			methodAssemble.Attributes = MemberAttributes.Public | MemberAttributes.Override;
 			assemblerClass.Members.Add(methodAssemble);
 
-			CodeMemberMethod methodAssembleValueType = _generator.CreateInPlaceTransformationMethodForValueTypes(descriptor);
+			CodeMemberMethod methodAssembleValueType = generator.CreateInPlaceTransformationMethodForValueTypes(descriptor);
 			methodAssembleValueType.Attributes = MemberAttributes.Public | MemberAttributes.Override;
 			assemblerClass.Members.Add(methodAssembleValueType);
 
-			CodeMemberMethod methodToList = _generator.CreateToListMethod(descriptor);
+			CodeMemberMethod methodToList = generator.CreateToListMethod(descriptor);
 			methodToList.Attributes = MemberAttributes.Public | MemberAttributes.Override;
 			assemblerClass.Members.Add(methodToList);
 
-			CodeMemberMethod methodToArray = _generator.CreateToArrayMethod(descriptor);
+			CodeMemberMethod methodToArray = generator.CreateToArrayMethod(descriptor);
 			methodToArray.Attributes = MemberAttributes.Public | MemberAttributes.Override;
 			assemblerClass.Members.Add(methodToArray);
 
@@ -176,9 +180,10 @@ namespace Otis.Tests
 													TypeHelper.GetTypeDefinition(descriptor.SourceType));
 
 			assemblerClass.BaseTypes.Add(interfaceType);
-			AddReferencedAssemblies(descriptor);
 
-			_namespace.Types.Add(assemblerClass);
+			return assemblerClass;
 		}
+
+		#endregion
 	}
 }

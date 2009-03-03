@@ -54,7 +54,7 @@ namespace Otis.Cfg
 			assemblerBase.AssemblerBaseType = typeof (IAssembler<,>).AssemblyQualifiedName;
 			assemblerBase.Name = DefaultAssemblerBaseName;
 			assemblerBase.IsDefaultAssembler = true;
-			assemblerBase.AssemblerGeneratorName = typeof (AssemblerGenerator).AssemblyQualifiedName;
+			assemblerBase.AssemblerGeneratorName = typeof (IAssemblerAssemblerGenerator).AssemblyQualifiedName;
 
 			return assemblerBase;
 		}

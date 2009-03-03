@@ -60,6 +60,7 @@
     <Compile Include="CodeGen\DefaultAggregateFunctionCodeGenerator.cs" />
     <Compile Include="CodeGen\FunctionMappingGenerator.cs" />
     <Compile Include="CodeGen\IAggregateFunctionCodeGenerator.cs" />
+    <Compile Include="CodeGen\IAssemblerAssemblerGenerator.cs" />
     <Compile Include="CodeGen\IAssemblerGenerator.cs" />
     <Compile Include="CodeGen\Util.cs" />
     <Compile Include="ErrorBuilder.cs" />

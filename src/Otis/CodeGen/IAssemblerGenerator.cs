@@ -9,9 +9,9 @@ namespace Otis.CodeGen
 		void AddMapping(ClassMappingDescriptor descriptor);
 
 		/// <summary>
-		/// Gets all the Code Generated for this AssemblerGenerator
+		/// Generates all the Assemblers for this AssemblerGenerator
 		/// </summary>
 		/// <returns></returns>
-		AssemblerGeneratorResult GetAssemblers();
+		AssemblerGeneratorResult GenerateAssemblers();
 	}
 }

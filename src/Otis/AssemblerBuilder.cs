@@ -84,7 +84,7 @@ namespace Otis
 
 			foreach (IAssemblerGenerator assemblerGenerator in assemblerGenerators.Values)
 			{
-				AssemblerGeneratorResult result = assemblerGenerator.GetAssemblers();
+				AssemblerGeneratorResult result = assemblerGenerator.GenerateAssemblers();
 				AddExplicitAssemblies(result.ExplicitAssemblies);
 			}
 

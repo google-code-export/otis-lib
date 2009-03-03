@@ -58,12 +58,13 @@
     <Compile Include="Cfg\NamespaceNameProvider.cs" />
     <Compile Include="Cfg\OutputType.cs" />
     <Compile Include="Cfg\TargetFramework.cs" />
+    <Compile Include="CodeGen\AssemblerGenerator.cs" />
     <Compile Include="CodeGen\AssemblerGeneratorResult.cs" />
     <Compile Include="CodeGeneratorContext.cs" />
     <Compile Include="CodeGen\AggregateExpressionBuilder.cs" />
     <Compile Include="CodeGen\AggregateExpressionPathItem.cs" />
     <Compile Include="CodeGen\AggregateFunctionContext.cs" />
-    <Compile Include="CodeGen\AssemblerGenerator.cs" />
+    <Compile Include="CodeGen\IAssemblerAssemblerGenerator.cs" />
     <Compile Include="CodeGen\ClassMappingGenerator.cs" />
     <Compile Include="CodeGen\DefaultAggregateFunctionCodeGenerator.cs" />
     <Compile Include="CodeGen\FunctionMappingGenerator.cs" />

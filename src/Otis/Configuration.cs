@@ -321,6 +321,9 @@ namespace Otis
 			CacheAssemblerTypes();
 		}
 
+		//TODO:
+		//public IAssemblerFactory GetAssemblerFactory()
+
 		private void CacheAssemblerTypes()
 		{
 			//may have chosen source code option

@@ -28,8 +28,7 @@ namespace Otis
 		/// Adds a Named Assembler
 		/// </summary>
 		/// <param name="namedAssembler">the NamedAssembler</param>
-		/// <param name="provider">The <see cref="IAssemblerNameProvider"> for generating the Assembler Name</see></param>
-		void AddAssembler(NamedAssembler namedAssembler, IAssemblerNameProvider provider);
+		void AddAssembler(NamedAssembler namedAssembler);
 
 		/// <summary>
 		/// True, if the AssemblerName exists in either Auto or Manual Assembler Names

@@ -5,15 +5,16 @@ namespace Otis
 {
 	public class CodeGeneratorContext
 	{
-		private IList<IMappingDescriptorProvider> _providers;
-		private FunctionMap _functionMap;
-		private readonly AssemblerGenerationOptions _options;
+		private readonly IList<IMappingDescriptorProvider> _providers;
+		private readonly FunctionMap _functionMap;
+		private readonly Configuration _configuration;
 
-		public CodeGeneratorContext(IList<IMappingDescriptorProvider> providers, FunctionMap functionMap, AssemblerGenerationOptions options)
+		public CodeGeneratorContext(
+			IList<IMappingDescriptorProvider> providers, FunctionMap functionMap, Configuration configuration)
 		{
 			_providers = providers;
 			_functionMap = functionMap;
-			_options = options;
+			_configuration = configuration;
 		}
 
 		public IList<IMappingDescriptorProvider> Providers
@@ -26,9 +27,19 @@ namespace Otis
 			get { return _functionMap; }
 		}
 
+		public Configuration Configuration
+		{
+			get { return _configuration; }
+		}
+
+		public IAssemblerManager AssemblerManager
+		{
+			get { return _configuration.AssemblerManager;  }
+		}
+
 		public AssemblerGenerationOptions AssemblerGenerationOptions
 		{
-			get { return _options; }
+			get { return _configuration.GenerationOptions; }
 		}
 	}
 }

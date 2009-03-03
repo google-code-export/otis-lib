@@ -43,15 +43,12 @@ namespace Otis
 			foreach (AssemblerBase assemblerBase in _context.AssemblerGenerationOptions.AssemblerBases)
 			{
 				if(!assemblerBase.IsInstantiated)
-					assemblerBase.PostInstantiate();
+					assemblerBase.PostInstantiate(_namespace, _context);
 
-				IAssemblerGenerator assemblerGenerator = AssemblerGenerator.CreateAssemblerGenerator(
-					assemblerBase.AssemblerGenerator, _namespace, _context, assemblerBase);
-
-				assemblerGenerators.Add(assemblerBase.Name, assemblerGenerator);
+				assemblerGenerators.Add(assemblerBase.Name, assemblerBase.AssemblerGenerator);
 
 				if(assemblerBase.IsDefaultAssembler)
-					defaultAssemblerGenerator = assemblerGenerator;
+					defaultAssemblerGenerator = assemblerBase.AssemblerGenerator;
 			}
 
 			foreach (IMappingDescriptorProvider provider in _context.Providers)
@@ -66,10 +63,10 @@ namespace Otis
 
 					if (string.IsNullOrEmpty(classDescriptor.AssemblerBaseName) && defaultAssemblerGenerator == null)
 					{
-						throw new OtisException(
+						throw new OtisException(string.Format(
 							ErrNoAssemblerBaseNameAndNoDefaultAssemblerBase,
 							classDescriptor.SourceType.Name,
-							classDescriptor.TargetType.Name);
+							classDescriptor.TargetType.Name));
 					}
 
 					IAssemblerGenerator assemblerGenerator;
@@ -81,7 +78,7 @@ namespace Otis
 						continue;
 					}
 
-					throw new OtisException(ErrUnableToResolveAssemblerBase, classDescriptor.AssemblerBaseName);
+					throw new OtisException(string.Format(ErrUnableToResolveAssemblerBase, classDescriptor.AssemblerBaseName));
 				}
 			}
 

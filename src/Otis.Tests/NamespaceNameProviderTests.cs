@@ -1,3 +1,8 @@
+/*
+ * Created by: joe.garro
+ * Created: 2009-03-01
+ */
+
 using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -11,7 +16,7 @@ namespace Otis.Tests
 	public class NamespaceNameProviderTests
 	{
 		[Test]
-		public void Default_Namespace_Name_Provider_No_Namespace_Provided()
+		public void Default_Namespace_Provider_Generates_Correct_Namespace_When_None_Provided()
 		{
 			Configuration cfg1 = new Configuration();
 			cfg1.AddXmlFile("XmlMappings\\mappings.xml");
@@ -35,7 +40,7 @@ namespace Otis.Tests
 		}
 
 		[Test]
-		public void Default_Namespace_Name_Provider_Namespace_Provided()
+		public void Default_Namespace_Provider_Uses_Provided_Namespace()
 		{
 			const string Namespace = "ManualNamespace";
 
@@ -50,11 +55,35 @@ namespace Otis.Tests
 		}
 
 		[Test]
-		public void Custom_Namespace_Name_Provider_Generates_Correct_Namespace_When_None_Provided()
+		public void Custom_Namespace_Provider_Is_Injectible()
 		{
 			Configuration cfg = new Configuration();
 			cfg.AddXmlFile("XmlMappings\\mappings.xml");
-			cfg.GenerationOptions.NamespaceNameProvider = typeof (CustomNamespaceNameProvider).AssemblyQualifiedName;
+			cfg.GenerationOptions.NamespaceNameProviderName = typeof(CustomNamespaceNameProvider).AssemblyQualifiedName;
+			cfg.BuildAssemblers();
+
+			Assert.IsNotNull(cfg.GenerationOptions.NamespaceNameProvider);
+			Assert.That(cfg.GenerationOptions.NamespaceNameProvider.GetType().AssemblyQualifiedName, 
+				Is.EqualTo(typeof(CustomNamespaceNameProvider).AssemblyQualifiedName));
+		}
+
+		[Test]
+		[ExpectedException(typeof(OtisException), 
+			ExpectedMessage = "Error Loading NamespaceNameProvider. Unable to Create NamespaceNameProvider. See inner exception for details.")]
+		public void Custom_Namespace_Provider_Does_Not_Implement_Interface_Should_Fail()
+		{
+			Configuration cfg = new Configuration();
+			cfg.AddXmlFile("XmlMappings\\mappings.xml");
+			cfg.GenerationOptions.NamespaceNameProviderName = typeof(InvalidNamespaceNameProvider).AssemblyQualifiedName;
+			cfg.BuildAssemblers();
+		}
+
+		[Test]
+		public void Custom_Namespace_Provider_Generates_Correct_Namespace_When_None_Provided()
+		{
+			Configuration cfg = new Configuration();
+			cfg.AddXmlFile("XmlMappings\\mappings.xml");
+			cfg.GenerationOptions.NamespaceNameProviderName = typeof (CustomNamespaceNameProvider).AssemblyQualifiedName;
 			cfg.BuildAssemblers();
 
 			IAssembler<UserDTO, User> assembler = cfg.GetAssembler<IAssembler<UserDTO, User>>();
@@ -63,13 +92,13 @@ namespace Otis.Tests
 		}
 
 		[Test]
-		public void Custom_Namespace_Name_Provider_Generates_Correct_Namespace_When_Provided()
+		public void Custom_Namespace_Provider_Uses_Provided_Namespace()
 		{
 			const string Namespace = "ManualNamespace";
 
 			Configuration cfg = new Configuration();
 			cfg.AddXmlFile("XmlMappings\\mappings.xml");
-			cfg.GenerationOptions.NamespaceNameProvider = typeof(CustomNamespaceNameProvider).AssemblyQualifiedName;
+			cfg.GenerationOptions.NamespaceNameProviderName = typeof(CustomNamespaceNameProvider).AssemblyQualifiedName;
 			cfg.GenerationOptions.Namespace = Namespace;
 			cfg.BuildAssemblers();
 
@@ -77,37 +106,21 @@ namespace Otis.Tests
 
 			Assert.That(assembler.GetType().Namespace, Is.EqualTo(Namespace));
 		}
-
-		[Test]
-		[ExpectedException(typeof(OtisException), ExpectedMessage = "Namespace Name : \"\", is not valid")]
-		public void Custom_Namespace_Name_Provider_Without_Generate_On_Null_Or_Empty_Fails()
-		{
-			Configuration cfg = new Configuration();
-			cfg.AddXmlFile("XmlMappings\\mappings.xml");
-			cfg.GenerationOptions.NamespaceNameProvider = typeof(CustomNamespaceNameProviderNoAutoGenOnEmptyOrNull).AssemblyQualifiedName;
-			cfg.BuildAssemblers();
-		}
 	}
 
-	public class CustomNamespaceNameProvider : DefaultNamespaceNameProvider
+	public class CustomNamespaceNameProvider : INamespaceNameProvider
 	{
 		public const string AutoGenNamespace = "AutoGenNamespace";
 
-		#region Overrides of OtisNamespaceNameProvider
+		#region Implementation of INamespaceNameProvider
 
-		protected override void Generate()
+		public string GetNamespaceName()
 		{
-			_namespace = AutoGenNamespace;
+			return AutoGenNamespace;
 		}
 
 		#endregion
 	}
 
-	public class CustomNamespaceNameProviderNoAutoGenOnEmptyOrNull : DefaultNamespaceNameProvider
-	{
-		public CustomNamespaceNameProviderNoAutoGenOnEmptyOrNull()
-		{
-			_shouldAutoGenNamespaceNameWhenNullOrEmpty = false;
-		}
-	}
+	public class InvalidNamespaceNameProvider {}
 }

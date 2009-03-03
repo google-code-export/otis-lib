@@ -19,7 +19,7 @@ namespace Otis.Providers
 		private XmlDocument _xmlDoc;
 		private XmlNamespaceManager _nsMgr;
 
-		private static XmlSchema s_schema = GetSchema();
+		private static XmlSchema _schema = GetSchema();
 
 		protected XmlMappingDescriptionProvider(){}
 
@@ -33,7 +33,7 @@ namespace Otis.Providers
 			try
 			{	 
 				_xmlDoc = new XmlDocument();
-				_xmlDoc.Schemas.Add(s_schema);
+				_xmlDoc.Schemas.Add(_schema);
 				_xmlDoc.LoadXml(data);
 				_xmlDoc.Validate(OnValidation);
 			}
@@ -85,11 +85,11 @@ namespace Otis.Providers
 			}
 
 			desc.AssemblerBaseName = GetAttributeValue(node.Attributes["assemblerBaseName"]); //optional
-			desc.AssemblerName = GetAttributeValue(node.Attributes["assemblerName"]); //optional
+			string assemblerName = GetAttributeValue(node.Attributes["assemblerName"]); //optional
 
-			if(string.IsNullOrEmpty(desc.AssemblerName))
+			if (!string.IsNullOrEmpty(assemblerName))
 			{
-				desc.AssemblerName = CodeGen.Util.GetAssemblerName(desc.TargetType, desc.SourceType);
+				desc.AssemblerName = new NamedAssembler(desc.TargetType, desc.SourceType, assemblerName);
 			}
 
 			desc.MappingHelper = GetAttributeValue(node.Attributes["helper"]); // optional

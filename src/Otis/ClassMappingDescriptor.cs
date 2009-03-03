@@ -12,7 +12,7 @@ namespace Otis
 		private string _assemblerBaseName;
 		private Type _targetType;
 		private Type _sourceType;
-		private string _assemblerName;
+		private NamedAssembler _assemblerName;
 		private string _mappingHelper;
 		private bool _isHelperStatic;
 		private string _mappingPreparer;
@@ -60,10 +60,15 @@ namespace Otis
 		/// <summary>
 		/// Gets/sets the name of the assembler in the Generated Assembly
 		/// </summary>
-		public string AssemblerName
+		public NamedAssembler AssemblerName
 		{
 			get { return _assemblerName; }
 			set { _assemblerName = value; }
+		}
+
+		public bool HasNamedAssembler
+		{
+			get { return _assemblerName != null; }
 		}
 
 		/// <summary>

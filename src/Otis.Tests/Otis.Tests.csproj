@@ -44,6 +44,8 @@
     <Compile Include="AggregateFunctionTargetConstraintsTest.cs" />
     <Compile Include="AggregateFunctionTests.cs" />
     <Compile Include="AggregateMappingTest.cs" />
+    <Compile Include="AssemblerBaseTests.cs" />
+    <Compile Include="AssemblerNameProviderTests.cs" />
     <Compile Include="AssemblyGenerationTests.cs" />
     <Compile Include="CollectionMappingTest.cs" />
     <Compile Include="ComponentMappingTests.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="Dto\GenericEntityDTO.cs" />
     <Compile Include="Dto\MappingHelperDTO.cs" />
     <Compile Include="Dto\MappingPreparerDTO.cs" />
+    <Compile Include="Dto\NamedAssemblerUserDTO.cs" />
     <Compile Include="Dto\ProjectDTO.cs" />
     <Compile Include="Dto\TaskDTO.cs" />
     <Compile Include="Dto\UserDTO.cs" />
@@ -81,6 +84,7 @@
     <Compile Include="MappingHelperTests.cs" />
     <Compile Include="MappingPatternsTests.cs" />
     <Compile Include="MappingPreparerTests.cs" />
+    <Compile Include="NamespaceNameProviderTests.cs" />
     <Compile Include="NullValueHandlingTests.cs" />
     <Compile Include="PerformanceTest.cs" />
     <Compile Include="ProjectionParsingTests.cs" />
@@ -109,6 +113,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="XmlMappings\mapping_non_compliant.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XmlMappings\named_assembler_mappings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

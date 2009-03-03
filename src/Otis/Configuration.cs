@@ -43,6 +43,7 @@ namespace Otis
 		private readonly List<string> _referencedAssemblies = new List<string>(1);
 		private readonly AssemblerGenerationOptions _generationOptions;
 		private readonly FunctionMap _functionMap = new FunctionMap();
+		private readonly IAssemblerManager _assemblerManager;
 
 		private Type[] _assemblerTypes = new Type[0];
 		private Assembly _assemblerAssembly;
@@ -63,6 +64,7 @@ namespace Otis
 		/// <param name="useProvidedAssemblerBaseType">If true, uses the Default Otis Supplied <see cref="AssemblerBase" /></param>
 		public Configuration(bool useProvidedAssemblerBaseType)
 		{
+			_assemblerManager = new AssemblerManager();
 			_generationOptions = new AssemblerGenerationOptions(useProvidedAssemblerBaseType);
 
 			RegisterFunction<SumFunction>("sum");
@@ -90,6 +92,8 @@ namespace Otis
 		{
 			get { return _referencedAssemblies; }
 		}
+
+		public IAssemblerManager AssemblerManager { get { return _assemblerManager; } }
 
 		/// <summary>
 		/// Configures the assembler using metadata of types in the specified assembly

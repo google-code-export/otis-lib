@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otis-net3.5", "Otis\Otis-net3.5.csproj", "{B81906CB-F063-4D3F-AE7F-23C4475EE158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otis.Tests-net3.5", "Otis.Tests\Otis.Tests-net3.5.csproj", "{B4F4C787-2E9A-40E0-8D37-B112627CB2F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otis.Sample-net3.5", "Otis.Sample\Otis.Sample-net3.5.csproj", "{BAFA6C5F-0EF4-4329-954E-E333077425B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B81906CB-F063-4D3F-AE7F-23C4475EE158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B81906CB-F063-4D3F-AE7F-23C4475EE158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B81906CB-F063-4D3F-AE7F-23C4475EE158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B81906CB-F063-4D3F-AE7F-23C4475EE158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4F4C787-2E9A-40E0-8D37-B112627CB2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4F4C787-2E9A-40E0-8D37-B112627CB2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4F4C787-2E9A-40E0-8D37-B112627CB2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4F4C787-2E9A-40E0-8D37-B112627CB2F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAFA6C5F-0EF4-4329-954E-E333077425B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAFA6C5F-0EF4-4329-954E-E333077425B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAFA6C5F-0EF4-4329-954E-E333077425B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAFA6C5F-0EF4-4329-954E-E333077425B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

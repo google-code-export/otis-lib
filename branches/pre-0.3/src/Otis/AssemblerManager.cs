@@ -6,6 +6,15 @@ namespace Otis
 {
 	public class AssemblerManager : IAssemblerManager
 	{
+		private const string ErrTargetTypeCannotBeNull = "Target Type cannot be null";
+		private const string ErrSourceTypeCannotBeNull = "Source Type cannot be null";
+		private const string ErrAssemblerAlreadyExists = "Assembler for transformation [{1} - > {0}] already exists";
+		private const string ErrAssemblerNameAlreadyExists = "An Assembler with this Name: {0}, alread exists";
+		private const string ErrNamedAssemblerAlreadyExists = "A Named Assembler for transformation [{1} -> {0}] already exists";
+		private const string ErrMultipleAssemblers = "Unable to resolve Assembler for transformation [{1} -> {0}], multiple Assemblers for this transformation exist";
+		private const string ErrNoAssemblers = "Unable to resolve Assembler for transformation [{1} -> {0}], no Assemblers for this transformation exist";
+		private const string ErrAssemblerTypeHasInvalidGenericArguments = "AssemblerType: {0}, must have two Generic Arguments";
+
 		private readonly IDictionary<TargetSourceTypePair, string> _autoNamedAssemblers;
 		private readonly IDictionary<TargetSourceTypePair, string> _manualNamedAssemblers;
 		private readonly List<string> _assemblers;
@@ -22,27 +31,20 @@ namespace Otis
 		public void AddAssembler(Type target, Type source, IAssemblerNameProvider provider)
 		{
 			if (target == null)
-				throw new ArgumentException("Target Type cannot be null", "target");
+				throw new ArgumentException(ErrTargetTypeCannotBeNull, "target");
 
 			if (source == null)
-				throw new ArgumentException("Source Type cannot be null", "source");
+				throw new ArgumentException(ErrSourceTypeCannotBeNull, "source");
 
 			TargetSourceTypePair targetSourceTypePair = new TargetSourceTypePair(target, source);
 
 			if (_autoNamedAssemblers.ContainsKey(targetSourceTypePair))
-			{
-				throw new OtisException(
-					"Assembler for these Types: Target {0}, Source {1} already exists",
-					target.ToString(),
-					source.ToString());
-			}
+				throw new OtisException(String.Format(ErrAssemblerAlreadyExists, target, source));
 
 			string formattedName = provider.GenerateName(target, source);
 
 			if (_manualNamedAssemblers.Values.Contains(formattedName))
-			{
-				throw new OtisException("An Assembler with this Name: {0}, alread exists", formattedName);
-			}
+				throw new OtisException(String.Format(ErrAssemblerNameAlreadyExists, formattedName));
 
 			_autoNamedAssemblers.Add(targetSourceTypePair, formattedName);
 			_assemblers.Add(formattedName);
@@ -53,21 +55,19 @@ namespace Otis
 			AddAssembler(typeof(TargetType), typeof(SourceType), provider);
 		}
 
-		public void AddAssembler(NamedAssembler namedAssembler, IAssemblerNameProvider provider)
+		public void AddAssembler(NamedAssembler namedAssembler)
 		{
 			if (_assemblers.Contains(namedAssembler.Name))
-			{
-				throw new OtisException("An Assembler with this Name: {0}, alread exists", namedAssembler.Name);
-			}
+				throw new OtisException(String.Format(ErrAssemblerNameAlreadyExists, namedAssembler.Name));
 
 			TargetSourceTypePair targetSourceTypePair = new TargetSourceTypePair(namedAssembler.Target, namedAssembler.Source);
 
 			if (_manualNamedAssemblers.ContainsKey(targetSourceTypePair))
 			{
-				throw new OtisException(
-					"A Named Assembler for these Types: Target {0}, Source {1} already exists",
-					targetSourceTypePair.Target.ToString(),
-					targetSourceTypePair.Source.ToString());
+				throw new OtisException(String.Format(
+					ErrNamedAssemblerAlreadyExists,
+					targetSourceTypePair.Target,
+					targetSourceTypePair.Source));
 			}
 
 			_manualNamedAssemblers.Add(targetSourceTypePair, namedAssembler.Name);
@@ -82,10 +82,10 @@ namespace Otis
 		public string GetAssemblerName(Type target, Type source)
 		{
 			if (target == null)
-				throw new ArgumentException("Target Type cannot be null", "target");
+				throw new ArgumentException(ErrTargetTypeCannotBeNull, "target");
 
 			if (source == null)
-				throw new ArgumentException("Source Type cannot be null", "source");
+				throw new ArgumentException(ErrSourceTypeCannotBeNull, "source");
 
 			TargetSourceTypePair targetSourceTypePair = new TargetSourceTypePair(target, source);
 
@@ -93,10 +93,10 @@ namespace Otis
 			string manualNamedAssemblerName = GetManualNamedAssembler(targetSourceTypePair);
 
 			if (!string.IsNullOrEmpty(autoNamedAssemblerName) && !string.IsNullOrEmpty(manualNamedAssemblerName))
-				throw new OtisException("Unable to Resolve Assembler Name for: Target {0}, Source {1}, multiple assemblers for these Types exist");
+				throw new OtisException(String.Format(ErrMultipleAssemblers, target, source));
 
 			if (string.IsNullOrEmpty(autoNamedAssemblerName) && string.IsNullOrEmpty(manualNamedAssemblerName))
-				throw new OtisException("Unable to Resolve Assembler Name for: Target {0}, Source {1}, no assemblers for these Types exist");
+				throw new OtisException(String.Format(ErrNoAssemblers, target, source));
 
 			return autoNamedAssemblerName ?? manualNamedAssemblerName;
 		}
@@ -111,7 +111,7 @@ namespace Otis
 			Type[] typeParams = typeof(AssemblerType).GetGenericArguments();
 
 			if (typeParams.Length != 2)
-				throw new OtisException("AssemblerType: {0}, must have two Generic Arguments", typeof(AssemblerType).ToString());
+				throw new OtisException(String.Format(ErrAssemblerTypeHasInvalidGenericArguments, typeof(AssemblerType)));
 
 			return GetAssemblerName(typeParams[0], typeParams[1]);
 		}
@@ -161,10 +161,10 @@ namespace Otis
 			public TargetSourceTypePair(Type target, Type source)
 			{
 				if (target == null)
-					throw new ArgumentException("Target Type cannot be null", "target");
+					throw new ArgumentException(ErrTargetTypeCannotBeNull, "target");
 
 				if (source == null)
-					throw new ArgumentException("Source Type cannot be null", "source");
+					throw new ArgumentException(ErrSourceTypeCannotBeNull, "source");
 
 				_target = target;
 				_source = source;

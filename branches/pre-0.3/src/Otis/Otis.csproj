@@ -45,7 +45,6 @@
     <Compile Include="Cfg\AssemblerBase.cs" />
     <Compile Include="Cfg\AssemblerGenerationOptions.cs" />
     <Compile Include="Cfg\AssemblerNameProvider.cs" />
-    <Compile Include="Cfg\DefaultNamespaceNameProvider.cs" />
     <Compile Include="Cfg\IAssemblerNameProvider.cs" />
     <Compile Include="Cfg\INamespaceNameProvider.cs" />
     <Compile Include="Cfg\NamespaceNameProvider.cs" />

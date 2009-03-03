@@ -4,7 +4,6 @@ using System.Reflection;
 using Otis.Cfg;
 using Otis.CodeGen;
 using Otis.Functions;
-using Otis.Utils;
 
 namespace Otis
 {
@@ -221,9 +220,7 @@ namespace Otis
 		private AssemblerType ResolveAssembler<AssemblerType>()
 			where AssemblerType : class
 		{
-			Type[] typeParams = typeof (AssemblerType).GetGenericArguments();
-
-			string assemblerName = Util.GetAssemblerName(typeParams[0], typeParams[1]);
+			string assemblerName = AssemblerManager.GetAssemblerName<AssemblerType>();
 
 			try
 			{
@@ -238,6 +235,7 @@ namespace Otis
 			}
 			catch (Exception)
 			{
+				Type[] typeParams = typeof(AssemblerType).GetGenericArguments();
 				string msg = string.Format(ErrNotConfigured, typeParams[1].FullName, typeParams[0].FullName);
 				throw new OtisException(msg);
 			}
@@ -314,7 +312,10 @@ namespace Otis
 
 		void Build()
 		{
-			CodeGeneratorContext context = new CodeGeneratorContext(_providers, _functionMap, GenerationOptions);
+			if(!_generationOptions.IsInstantiated)
+				_generationOptions.PostInstantiate();
+
+			CodeGeneratorContext context = new CodeGeneratorContext(_providers, _functionMap, this);
 			AssemblerBuilder builder = new AssemblerBuilder(context, _referencedAssemblies);
 			_assemblerAssembly = builder.Build();
 			CacheAssemblerTypes();

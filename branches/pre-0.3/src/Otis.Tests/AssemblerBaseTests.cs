@@ -48,7 +48,7 @@ namespace Otis.Tests
 			AssemblerBase assemblerBase = new AssemblerBase();
 			assemblerBase.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBase.Name = "IAssembler";
-			assemblerBase.AssemblerGenerator = typeof(AssemblerGenerator).AssemblyQualifiedName;
+			assemblerBase.AssemblerGeneratorName = typeof(AssemblerGenerator).AssemblyQualifiedName;
 			assemblerBase.IsDefaultAssembler = true;
 
 			cfg.GenerationOptions.AddAssemblerBase(assemblerBase);
@@ -69,7 +69,7 @@ namespace Otis.Tests
 			AssemblerBase assemblerBase = new AssemblerBase();
 			assemblerBase.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBase.Name = "IAssembler";
-			assemblerBase.AssemblerGenerator = typeof(AssemblerGenerator).AssemblyQualifiedName;
+			assemblerBase.AssemblerGeneratorName = typeof(AssemblerGenerator).AssemblyQualifiedName;
 			assemblerBase.IsDefaultAssembler = false;
 
 			cfg.GenerationOptions.AddAssemblerBase(assemblerBase);
@@ -88,13 +88,13 @@ namespace Otis.Tests
 			AssemblerBase assemblerBaseType1 = new AssemblerBase();
 			assemblerBaseType1.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBaseType1.Name = "IAssembler";
-			assemblerBaseType1.AssemblerGenerator = typeof(AssemblerGenerator).AssemblyQualifiedName;
+			assemblerBaseType1.AssemblerGeneratorName = typeof(AssemblerGenerator).AssemblyQualifiedName;
 			assemblerBaseType1.IsDefaultAssembler = true;
 
 			AssemblerBase assemblerBaseType2 = new AssemblerBase();
 			assemblerBaseType2.AssemblerBaseType = typeof(AbstractAssembler<,>).AssemblyQualifiedName;
 			assemblerBaseType2.Name = "AbstractAssembler";
-			assemblerBaseType2.AssemblerGenerator = typeof(AbstractAssemblerGenerator).AssemblyQualifiedName;
+			assemblerBaseType2.AssemblerGeneratorName = typeof(AbstractAssemblerGenerator).AssemblyQualifiedName;
 			assemblerBaseType2.IsDefaultAssembler = false;
 
 			cfg.GenerationOptions.AddAssemblerBase(assemblerBaseType1);
@@ -146,7 +146,7 @@ namespace Otis.Tests
 
 		public override void AddMapping(ClassMappingDescriptor descriptor)
 		{
-			CodeTypeDeclaration assemblerClass = new CodeTypeDeclaration(descriptor.AssemblerName);
+			CodeTypeDeclaration assemblerClass = new CodeTypeDeclaration(GetAssemblerName(descriptor));
 			assemblerClass.IsClass = true;
 			assemblerClass.Attributes = MemberAttributes.Public;
 

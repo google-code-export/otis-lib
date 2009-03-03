@@ -4,7 +4,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using NUnit.Framework;
@@ -17,7 +16,7 @@ namespace Otis.Tests
 	[TestFixture]
 	public class IntegrationTests
 	{
-		private const string errInvalidTransformation = "Assembler for transformation [Otis.Tests.Entity.User -> System.String] is not configured";
+		private const string errInvalidTransformation = "Unable to resolve Assembler for transformation [Otis.Tests.Entity.User -> System.String], no Assemblers for this transformation exist";
 		private const string errSourceCodeGeneration = "It is not possible to retrieve assembler because source code generation is chosen.";
 		private const string errInstanceSuppressed = "It is not possible to retrieve assembler because SupressInstanceCreation option is turned on.";
 

@@ -1,5 +1,7 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using Otis.CodeGen;
 using Otis.Utils;
 
 namespace Otis.Cfg
@@ -12,29 +14,38 @@ namespace Otis.Cfg
 		private string _assemblerBaseType;
 		private string _assemblerBaseName;
 		private bool _isDefaultAssembler;
-		private string _assemblerGenerator;
+		private string _assemblerGeneratorName;
 		private List<string> _namespaceImports;
 		private IAssemblerNameProvider _assemblerNameProvider;
 		private string _assemblerNameProviderName;
+		private IAssemblerGenerator _assemblerGenerator;
 
-		private const string ErrLoadingAssemblyNameProvider = "Error Loading AssemblyNameProvider.";
+		private const string ErrLoadingAssemblyNameProvider = "Error Loading AssemblerNameProvider.";
 		private const string ErrUnableToCreateIAssemblyNameProvider = ErrLoadingAssemblyNameProvider +
-			" Unable to Create AssemblyNameProvider from: {0}, see inner exception for details.";
+			" Unable to Create AssemblerNameProvider. See inner exception for details.";
 		private const string ErrNoAssemblerNameProviderProvided = ErrLoadingAssemblyNameProvider +
-			" No AssemblyNameProvider Provided";
+			" No AssemblerNameProvider Provided";
+
+		private const string ErrLoadingAssemblerGenerator = "Error Loading AssemblerGenerator.";
+		private const string ErrUnableToCreateIAssemblerGenerator = ErrLoadingAssemblerGenerator +
+			" Unable to Create AssemblerGenerator. See inner exception for details.";
+		private const string ErrNoAssemblerGeneratorProvided = ErrLoadingAssemblerGenerator +
+			" No AssemblerGenerator Provided";
 
 		public AssemblerBase()
 		{
 			_isInstantiated = false;
 			_namespaceImports = new List<string>();
+			_assemblerGeneratorName = typeof (AssemblerGenerator).AssemblyQualifiedName;
 			_assemblerNameProviderName = typeof (AssemblerNameProvider).AssemblyQualifiedName;
 		}
 
 		/// <summary>
 		/// Lazy Instantiates some Properties, sets IsInstantiated to true if successful
 		/// </summary>
-		internal void PostInstantiate()
+		internal void PostInstantiate(CodeNamespace @namespace, CodeGeneratorContext context)
 		{
+			_assemblerGenerator = GetAssemblerGenerator(@namespace, context);
 			_assemblerNameProvider = GetAssemblerNameProvider();
 			_isInstantiated = true;
 		}
@@ -52,6 +63,10 @@ namespace Otis.Cfg
 			if (string.IsNullOrEmpty(_assemblerNameProviderName))
 				throw new OtisException(ErrNoAssemblerNameProviderProvided);
 
+			//avoid reflection if we can
+			if (_assemblerNameProviderName == typeof(AssemblerNameProvider).AssemblyQualifiedName)
+				return new AssemblerNameProvider();
+			
 			try
 			{
 				return (IAssemblerNameProvider) Activator.CreateInstance(
@@ -59,7 +74,27 @@ namespace Otis.Cfg
 			}
 			catch (Exception e)
 			{
-				throw new OtisException(ErrUnableToCreateIAssemblyNameProvider, e, _assemblerNameProviderName);
+				throw new OtisException(ErrUnableToCreateIAssemblyNameProvider, e);
+			}
+		}
+
+		private IAssemblerGenerator GetAssemblerGenerator(CodeNamespace @namespace, CodeGeneratorContext context)
+		{
+			if (string.IsNullOrEmpty(_assemblerGeneratorName))
+				throw new OtisException(ErrNoAssemblerGeneratorProvided);
+
+			//avoid reflection if we can
+			if(_assemblerGeneratorName == typeof(AssemblerGenerator).AssemblyQualifiedName)
+				return new AssemblerGenerator(@namespace, context, this);
+
+			try
+			{
+				return (IAssemblerGenerator)Activator.CreateInstance(
+					ReflectHelper.ClassForFullName(_assemblerGeneratorName), @namespace, context, this);
+			}
+			catch (TypeLoadException e)
+			{
+				throw new OtisException(ErrUnableToCreateIAssemblerGenerator, e);
 			}
 		}
 
@@ -93,10 +128,27 @@ namespace Otis.Cfg
 		/// <summary>
 		/// Gets/sets the Fully Qualified Name of the AssemblerGenerator to use for Generating Classes which Implement this AssemblerBase
 		/// </summary>
-		public string AssemblerGenerator
+		public string AssemblerGeneratorName
+		{
+			get { return _assemblerGeneratorName; }
+			set
+			{
+				if(string.IsNullOrEmpty(value))
+					throw new ArgumentException("Invalid value for AssemblerGeneratorName", "value");
+
+				_assemblerGeneratorName = value;
+
+				if(_assemblerGenerator == null || _assemblerGenerator.GetType().AssemblyQualifiedName != value)
+					_isInstantiated = false;
+			}
+		}
+
+		/// <summary>
+		/// Gets the <see cref="IAssemblerGenerator" />
+		/// </summary>
+		public IAssemblerGenerator AssemblerGenerator
 		{
 			get { return _assemblerGenerator; }
-			set { _assemblerGenerator = value; }
 		}
 
 		/// <summary>
@@ -117,7 +169,7 @@ namespace Otis.Cfg
 			set
 			{
 				if(string.IsNullOrEmpty(value))
-					throw new ArgumentException("Invalid value AssemblerNameProviderName", "value");
+					throw new ArgumentException("Invalid value for AssemblerNameProviderName", "value");
 
 				_assemblerNameProviderName = value;
 
@@ -126,6 +178,9 @@ namespace Otis.Cfg
 			}
 		}
 
+		/// <summary>
+		/// Gets the <see cref="IAssemblerNameProvider" />
+		/// </summary>
 		public IAssemblerNameProvider AssemblerNameProvider
 		{
 			get { return _assemblerNameProvider; }

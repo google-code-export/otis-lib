@@ -34,7 +34,7 @@ namespace Otis.CodeGen
 
 		public virtual void AddMapping(ClassMappingDescriptor descriptor)
 		{
-			CodeTypeDeclaration assemblerClass = new CodeTypeDeclaration(descriptor.AssemblerName);
+			CodeTypeDeclaration assemblerClass = new CodeTypeDeclaration(GetAssemblerName(descriptor));
 			assemblerClass.IsClass = true;
 			assemblerClass.Attributes = MemberAttributes.Public;
 			
@@ -71,6 +71,22 @@ namespace Otis.CodeGen
 
 		#endregion
 
+		protected string GetAssemblerName(ClassMappingDescriptor descriptor)
+		{
+			if (descriptor.HasNamedAssembler)
+			{
+				_context.AssemblerManager.AddAssembler(descriptor.AssemblerName);
+				return descriptor.AssemblerName.Name;
+			}
+
+			_context.AssemblerManager.AddAssembler(
+					descriptor.TargetType,
+					descriptor.SourceType,
+					_assemblerBase.AssemblerNameProvider);
+
+			return _assemblerBase.AssemblerNameProvider.GenerateName(descriptor.TargetType, descriptor.SourceType);
+		}
+
 		protected void AddAdditonalNamespaceImports()
 		{
 			foreach (string namespaceImport in _assemblerBase.NamespaceImports)
@@ -103,21 +119,6 @@ namespace Otis.CodeGen
 			string assembly = type.Assembly.GetName().CodeBase.Substring(8);
 			if (!_explicitAssemblies.Contains(assembly))
 				_explicitAssemblies.Add(assembly);
-		}
-
-		public static IAssemblerGenerator CreateAssemblerGenerator(
-			string assemblerGenerator, CodeNamespace @namepsace, CodeGeneratorContext context, AssemblerBase assemblerBase)
-		{
-			try
-			{
-				IAssemblerGenerator generator = (IAssemblerGenerator) Activator.CreateInstance(
-					ReflectHelper.ClassForFullName(assemblerGenerator), @namepsace, context, assemblerBase);
-				return generator;
-			}
-			catch(TypeLoadException e)
-			{
-				throw new OtisException("Unable to Create AssemblerGenerator from: {0}, see inner exception for details.", e, assemblerGenerator);
-			}
 		}
 	}
 }

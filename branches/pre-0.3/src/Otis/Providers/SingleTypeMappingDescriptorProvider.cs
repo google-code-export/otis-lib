@@ -52,11 +52,12 @@ namespace Otis.Providers
 			desc.SourceType = attr.SourceType;
 
 			desc.AssemblerBaseName = attr.AssemblerBaseName;
-			desc.AssemblerName = attr.AssemblerName;
 
-			if(string.IsNullOrEmpty(desc.AssemblerName))
+			string assemblerName = attr.AssemblerName;
+
+			if (!string.IsNullOrEmpty(assemblerName))
 			{
-				desc.AssemblerName = CodeGen.Util.GetAssemblerName(desc.TargetType, desc.SourceType);
+				desc.AssemblerName = new NamedAssembler(desc.TargetType, desc.SourceType, assemblerName);
 			}
 
 			desc.MappingHelper = attr.Helper;

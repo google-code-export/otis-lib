@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Otis.Descriptors;
 using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 

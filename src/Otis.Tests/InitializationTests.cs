@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using NUnit.Framework;
+using Otis.Attributes;
+using Otis.Descriptors;
 using Otis.Tests.Dto;
 using Otis.Tests.Entity;
 

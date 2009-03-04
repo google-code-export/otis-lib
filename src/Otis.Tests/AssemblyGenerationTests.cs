@@ -4,6 +4,7 @@
  */
 
 using NUnit.Framework;
+using Otis.Attributes;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests

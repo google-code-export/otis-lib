@@ -7,6 +7,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Otis.Attributes;
+using Otis.Descriptors;
 using Otis.Generation;
 using Otis.Functions;
 using Otis.Tests.Dto;

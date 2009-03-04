@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Otis.Descriptors;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests

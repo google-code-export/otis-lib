@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	public class AssemblerGeneratorResult
 	{

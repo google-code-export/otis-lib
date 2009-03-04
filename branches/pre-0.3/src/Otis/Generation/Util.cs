@@ -3,7 +3,7 @@ using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Text;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	internal class Util
 	{

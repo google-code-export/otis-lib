@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Otis.CodeGen;
+using Otis.Generation;
 using Otis.Utils;
 
 namespace Otis.Cfg

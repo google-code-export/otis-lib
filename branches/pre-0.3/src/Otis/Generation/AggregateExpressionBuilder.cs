@@ -1,12 +1,10 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
-using System.Text;
-using Otis.Functions;
 using Otis.Parsing;
 using Otis.Utils;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	class AggregateExpressionBuilder
 	{

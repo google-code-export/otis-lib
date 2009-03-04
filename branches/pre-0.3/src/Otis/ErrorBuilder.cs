@@ -1,5 +1,5 @@
 using System.Text;
-using Otis.CodeGen;
+using Otis.Generation;
 
 namespace Otis
 {

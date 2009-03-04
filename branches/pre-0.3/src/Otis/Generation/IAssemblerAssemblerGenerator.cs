@@ -2,7 +2,7 @@ using System.CodeDom;
 using Otis.Cfg;
 using Otis.Utils;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	public class IAssemblerAssemblerGenerator : AssemblerGenerator
 	{

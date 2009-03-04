@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Otis.Utils;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	public class ClassMappingGenerator
 	{

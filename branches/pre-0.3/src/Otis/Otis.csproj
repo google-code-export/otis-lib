@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -52,18 +52,18 @@
     <Compile Include="Cfg\OutputType.cs" />
     <Compile Include="Cfg\TargetFramework.cs" />
     <Compile Include="CodeGeneratorContext.cs" />
-    <Compile Include="CodeGen\AggregateExpressionBuilder.cs" />
-    <Compile Include="CodeGen\AggregateExpressionPathItem.cs" />
-    <Compile Include="CodeGen\AggregateFunctionContext.cs" />
-    <Compile Include="CodeGen\AssemblerGenerator.cs" />
-    <Compile Include="CodeGen\AssemblerGeneratorResult.cs" />
-    <Compile Include="CodeGen\ClassMappingGenerator.cs" />
-    <Compile Include="CodeGen\DefaultAggregateFunctionCodeGenerator.cs" />
-    <Compile Include="CodeGen\FunctionMappingGenerator.cs" />
-    <Compile Include="CodeGen\IAggregateFunctionCodeGenerator.cs" />
-    <Compile Include="CodeGen\IAssemblerAssemblerGenerator.cs" />
-    <Compile Include="CodeGen\IAssemblerGenerator.cs" />
-    <Compile Include="CodeGen\Util.cs" />
+    <Compile Include="Generation\AggregateExpressionBuilder.cs" />
+    <Compile Include="Generation\AggregateExpressionPathItem.cs" />
+    <Compile Include="Generation\AggregateFunctionContext.cs" />
+    <Compile Include="Generation\AssemblerGenerator.cs" />
+    <Compile Include="Generation\AssemblerGeneratorResult.cs" />
+    <Compile Include="Generation\ClassMappingGenerator.cs" />
+    <Compile Include="Generation\DefaultAggregateFunctionCodeGenerator.cs" />
+    <Compile Include="Generation\FunctionMappingGenerator.cs" />
+    <Compile Include="Generation\IAggregateFunctionCodeGenerator.cs" />
+    <Compile Include="Generation\IAssemblerAssemblerGenerator.cs" />
+    <Compile Include="Generation\IAssemblerGenerator.cs" />
+    <Compile Include="Generation\Util.cs" />
     <Compile Include="ErrorBuilder.cs" />
     <Compile Include="FunctionMap.cs" />
     <Compile Include="Functions\AvgFunction.cs" />

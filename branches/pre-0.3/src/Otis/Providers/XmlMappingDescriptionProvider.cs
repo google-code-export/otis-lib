@@ -7,7 +7,7 @@ using System.Resources;
 using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
-using Otis.CodeGen;
+using Otis.Generation;
 using Otis.Parsing;
 using Otis.Utils;
 

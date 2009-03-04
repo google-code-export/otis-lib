@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Otis.Parsing;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	public class AggregateFunctionContext
 	{

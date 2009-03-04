@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Otis.Parsing;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	class FunctionMappingGenerator
 	{

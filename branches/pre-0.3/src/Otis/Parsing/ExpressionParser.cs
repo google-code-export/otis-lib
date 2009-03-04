@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using Otis.CodeGen;
+using Otis.Generation;
 
 namespace Otis.Parsing
 {

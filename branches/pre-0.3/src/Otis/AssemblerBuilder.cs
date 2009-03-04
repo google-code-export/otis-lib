@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CSharp;
 using Otis.Cfg;
-using Otis.CodeGen;
+using Otis.Generation;
 using Otis.Utils;
 
 namespace Otis

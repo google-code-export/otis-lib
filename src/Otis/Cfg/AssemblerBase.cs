@@ -11,7 +11,7 @@ namespace Otis.Cfg
 		//internals
 		private bool _isInstantiated;
 
-		private string _assemblerBaseType;
+		private string _assemblerBaseTypeName;
 		private string _assemblerBaseName;
 		private bool _isDefaultAssembler;
 		private string _assemblerGeneratorName;
@@ -19,6 +19,7 @@ namespace Otis.Cfg
 		private IAssemblerNameProvider _assemblerNameProvider;
 		private string _assemblerNameProviderName;
 		private IAssemblerGenerator _assemblerGenerator;
+		private Type _assemblerBaseType;
 
 		private const string ErrLoadingAssemblyNameProvider = "Error Loading AssemblerNameProvider.";
 		private const string ErrUnableToCreateIAssemblyNameProvider = ErrLoadingAssemblyNameProvider +
@@ -45,6 +46,7 @@ namespace Otis.Cfg
 		/// </summary>
 		internal void PostInstantiate(CodeNamespace @namespace, CodeGeneratorContext context)
 		{
+			_assemblerBaseType = GetAssemblerBaseType();
 			_assemblerGenerator = GetAssemblerGenerator(@namespace, context);
 			_assemblerNameProvider = GetAssemblerNameProvider();
 			_isInstantiated = true;
@@ -56,6 +58,11 @@ namespace Otis.Cfg
 		internal bool IsInstantiated
 		{
 			get { return _isInstantiated; }
+		}
+
+		private Type GetAssemblerBaseType()
+		{
+			return ReflectHelper.ClassForFullName(_assemblerBaseTypeName);
 		}
 
 		private IAssemblerNameProvider GetAssemblerNameProvider()
@@ -101,10 +108,18 @@ namespace Otis.Cfg
 		/// <summary>
 		/// Gets/sets the Full Qualified Name of the AssemblerBase to Implement
 		/// </summary>
-		public string AssemblerBaseType
+		public string AssemblerBaseTypeName
+		{
+			get { return _assemblerBaseTypeName; }
+			set { _assemblerBaseTypeName = value; }
+		}
+
+		/// <summary>
+		/// Gets the Generic Type Definition for the supplied <see cref="AssemblerBaseTypeName" />
+		/// </summary>
+		public Type AssemblerBaseType
 		{
 			get { return _assemblerBaseType; }
-			set { _assemblerBaseType = value; }
 		}
 
 		/// <summary>

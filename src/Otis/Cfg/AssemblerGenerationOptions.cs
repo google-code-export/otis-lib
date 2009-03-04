@@ -11,14 +11,23 @@ namespace Otis.Cfg
 	/// </summary>
 	public class AssemblerGenerationOptions
 	{
+		private const string DefaultAssemblerBaseName = "Default";
+		private const string DefaultAssemblerFactoryName = "AssemblerFactory";
+
 		private const string ErrAssemblerBaseAlreadyExists = "An AssemblerBase with this Name: {0}, already exists.";
 		private const string ErrDefaultAssemblerBaseAlreadyExists = "A Default Assembler Base already Exists";
-		private const string DefaultAssemblerBaseName = "Default";
+
 		private const string ErrLoadingNamespaceNameProvider = "Error Loading NamespaceNameProvider.";
 		private const string ErrUnableToCreateINamespaceNameProvider = ErrLoadingNamespaceNameProvider +
 			" Unable to Create NamespaceNameProvider. See inner exception for details.";
 		private const string ErrNoNamespaceNameProviderProvided = ErrLoadingNamespaceNameProvider +
 			" No NamespaceNameProvider Provided";
+
+		private const string ErrLoadingAssemblerFactoryProvider = "Error Loading AssemblerFactoryProvider.";
+		private const string ErrUnableToCreateIAssemblerFactoryProvider = ErrLoadingAssemblerFactoryProvider +
+			" Unable to Create AssemblerFactoryProvider. See inner exception for details.";
+		private const string ErrNoAssemblerFactoryProvided = ErrLoadingAssemblerFactoryProvider +
+			" No AssemblerFactoryProvider Provided";
 
 		private string _namespace;
 		private OutputType _outputType;
@@ -28,6 +37,9 @@ namespace Otis.Cfg
 		private bool _supressInstanceCreation;
 		private string _namespaceNameProviderName;
 		private INamespaceNameProvider _namespaceNameProvider;
+		private string _assemblerFactoryProviderName;
+		private IAssemblerFactoryProvider _assemblerFactoryProvider;
+		private string _assemblerFactoryName;
 
 		private bool _isInstantiated;
 
@@ -42,7 +54,10 @@ namespace Otis.Cfg
 			_assemblerBases = new Dictionary<string, AssemblerBase>();
 
 			_namespaceNameProviderName = typeof(NamespaceNameProvider).AssemblyQualifiedName;
+			_assemblerFactoryProviderName = typeof (AssemblerFactoryProvider).AssemblyQualifiedName;
+
 			_namespace = string.Empty;
+			_assemblerFactoryName = DefaultAssemblerFactoryName;
 
 			if (useProvidedAssemblerBaseType)
 				_assemblerBases.Add(DefaultAssemblerBaseName, CreateDefaultAssemblerBaseType());
@@ -51,7 +66,7 @@ namespace Otis.Cfg
 		private static AssemblerBase CreateDefaultAssemblerBaseType()
 		{
 			AssemblerBase assemblerBase = new AssemblerBase();
-			assemblerBase.AssemblerBaseType = typeof (IAssembler<,>).AssemblyQualifiedName;
+			assemblerBase.AssemblerBaseTypeName = typeof (IAssembler<,>).AssemblyQualifiedName;
 			assemblerBase.Name = DefaultAssemblerBaseName;
 			assemblerBase.IsDefaultAssembler = true;
 			assemblerBase.AssemblerGeneratorName = typeof (IAssemblerAssemblerGenerator).AssemblyQualifiedName;
@@ -65,6 +80,7 @@ namespace Otis.Cfg
 		internal void PostInstantiate()
 		{
 			_namespaceNameProvider = GetNamespaceNameProvider();
+			_assemblerFactoryProvider = GetAssemblerFactoryProvider();
 			_isInstantiated = true;
 		}
 
@@ -92,7 +108,27 @@ namespace Otis.Cfg
 			}
 			catch (Exception e)
 			{
-				throw new OtisException(String.Format(ErrUnableToCreateINamespaceNameProvider, _namespaceNameProviderName), e);
+				throw new OtisException(ErrUnableToCreateINamespaceNameProvider, e);
+			}
+		}
+
+		private IAssemblerFactoryProvider GetAssemblerFactoryProvider()
+		{
+			if (string.IsNullOrEmpty(_assemblerFactoryProviderName))
+				throw new OtisException(ErrNoAssemblerFactoryProvided);
+
+			//avoid reflection if we can
+			if (_assemblerFactoryProviderName == typeof(AssemblerFactoryProvider).AssemblyQualifiedName)
+				return new AssemblerFactoryProvider();
+
+			try
+			{
+				return (IAssemblerFactoryProvider)
+					Activator.CreateInstance(ReflectHelper.ClassForFullName(_assemblerFactoryProviderName));
+			}
+			catch (Exception e)
+			{
+				throw new OtisException(ErrUnableToCreateIAssemblerFactoryProvider, e);
 			}
 		}
 
@@ -170,6 +206,42 @@ namespace Otis.Cfg
 		public INamespaceNameProvider NamespaceNameProvider
 		{
 			get { return _namespaceNameProvider; }
+		}
+
+		/// <summary>
+		/// Gets/sets the Assembly Qualified Name of the <see cref="IAssemblerFactoryProvider" /> 
+		/// to use when generating the AssemblyFactory for the Generated Assembly
+		/// </summary>
+		public string AssemblerFactoryProviderName
+		{
+			get { return _assemblerFactoryProviderName; }
+			set
+			{
+				if (string.IsNullOrEmpty(value))
+					throw new ArgumentException("Invalid value for AssemblerFactoryProviderName", "value");
+
+				_assemblerFactoryProviderName = value;
+
+				if (_assemblerFactoryProvider == null || _assemblerFactoryProvider.GetType().AssemblyQualifiedName != value)
+					_isInstantiated = false;
+			}
+		}
+
+		/// <summary>
+		/// Gets the <see cref="IAssemblerFactoryProvider" />
+		/// </summary>
+		public IAssemblerFactoryProvider AssemblerFactoryProvider
+		{
+			get { return _assemblerFactoryProvider; }
+		}
+
+		/// <summary>
+		/// Gets/sets the Name of the Generated AssemblerFactory Class, default is AssemblerFactory
+		/// </summary>
+		public string AssemblerFactoryName
+		{
+			get { return _assemblerFactoryName;  }
+			set { _assemblerFactoryName = value;}
 		}
 
 		/// <summary>

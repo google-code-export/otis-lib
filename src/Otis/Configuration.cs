@@ -32,11 +32,10 @@ namespace Otis
 	public class Configuration
 	{
 		private const string ErrNotConfigured = "Assembler for transformation [{0} -> {1}] is not configured";
-		private const string ErrSourceCodeGeneration = "It is not possible to retrieve assembler because source code generation is chosen.";
-		private const string ErrInstanceSuppressed = "It is not possible to retrieve assembler because SupressInstanceCreation option is turned on.";
-		private const string ErrNoDefaultAssemblerBaseTypeSpecified = "It is not possible to retrieve assembler because no Default Assembler Base Type was Configured";
+		private const string ErrAssemblerFactoryNotConfigured = "AssemblerFactory is not configured";
+		private const string ErrSourceCodeGeneration = "It is not possible to retrieve Assembler/AssemblerFactory because source code generation is chosen.";
+		private const string ErrInstanceSuppressed = "It is not possible to retrieve Assembler/AssemblerFactory because SupressInstanceCreation option is turned on.";
 		private const string DefaultXmlExtension = "otis.xml";
-
 
 		private readonly List<IMappingDescriptorProvider> _providers = new List<IMappingDescriptorProvider>(1);
 		private readonly List<string> _referencedAssemblies = new List<string>(1);
@@ -200,19 +199,7 @@ namespace Otis
 		public AssemblerType GetAssembler<AssemblerType>()
 			where AssemblerType : class
 		{
-			if (_generationOptions.OutputType == OutputType.SourceCode) // if still null
-			{
-				throw new OtisException(ErrSourceCodeGeneration);
-			}
-			if (_generationOptions.SupressInstanceCreation) // if still null
-			{
-				throw new OtisException(ErrInstanceSuppressed);
-			}
-
-			if (_assemblerAssembly == null)
-			{
-				Build();
-			}
+			DoLazyBuild();
 
 			return ResolveAssembler<AssemblerType>();
 		}
@@ -321,14 +308,60 @@ namespace Otis
 			CacheAssemblerTypes();
 		}
 
-		//TODO:
-		//public IAssemblerFactory GetAssemblerFactory()
+		/// <summary>
+		/// Gets the IAssemblerFactory
+		/// </summary>
+		public IAssemblerFactory GetAssemblerFactory()
+		{
+			DoLazyBuild();
+
+			return ResolveAssemblerFactory();
+		}
+
+		private IAssemblerFactory ResolveAssemblerFactory()
+		{
+			//shouldn't be hardcoded
+			const string assemblerFactoryName = "AssemblerFactory";
+
+			try
+			{
+				Type assemblerType = Array.Find(_assemblerTypes, delegate(Type type) { return type.Name == assemblerFactoryName; });
+
+				IAssemblerFactory assemblerFactory = (IAssemblerFactory) Activator.CreateInstance(assemblerType, _assemblerManager);
+
+				if (assemblerFactory == null)
+					throw new Exception();
+
+				return assemblerFactory;
+			}
+			catch (Exception)
+			{
+				throw new OtisException(ErrAssemblerFactoryNotConfigured);
+			}
+		}
 
 		private void CacheAssemblerTypes()
 		{
 			//may have chosen source code option
 			if (_assemblerAssembly != null)
 				_assemblerTypes = _assemblerAssembly.GetTypes();
+		}
+
+		private void DoLazyBuild()
+		{
+			if (_generationOptions.OutputType == OutputType.SourceCode) // if still null
+			{
+				throw new OtisException(ErrSourceCodeGeneration);
+			}
+			if (_generationOptions.SupressInstanceCreation) // if still null
+			{
+				throw new OtisException(ErrInstanceSuppressed);
+			}
+
+			if (_assemblerAssembly == null)
+			{
+				Build();
+			}
 		}
 	}
 }

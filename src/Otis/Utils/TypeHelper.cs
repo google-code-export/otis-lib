@@ -113,5 +113,31 @@ namespace Otis.Utils
 
 			return type;
 		}
+
+		public static string GetFormattedGenericTypeDefinition(Type type)
+		{
+			if (!type.IsGenericType)
+			{
+				return type.FullName;
+			}
+
+			StringBuilder builder = new StringBuilder();
+			string name = type.Name;
+			int index = name.IndexOf("`");
+			builder.AppendFormat("{0}.{1}", type.Namespace, name.Substring(0, index));
+			builder.Append('<');
+			bool first = true;
+			for (int i = 0; i < type.GetGenericArguments().Length; i++)
+			{
+				if (!first)
+				{
+					builder.Append(',');
+				}
+				builder.AppendFormat("{{{0}}}", i);
+				first = false;
+			}
+			builder.Append('>');
+			return builder.ToString();
+		}
 	}
 }

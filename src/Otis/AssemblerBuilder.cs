@@ -31,6 +31,9 @@ namespace Otis
 			_namespace.Imports.Add(new CodeNamespaceImport("System.Collections"));
 			_namespace.Imports.Add(new CodeNamespaceImport("System.Collections.Generic"));
 			_namespace.Imports.Add(new CodeNamespaceImport("Otis"));
+			_namespace.Imports.Add(new CodeNamespaceImport("Otis.Utils"));
+			_namespace.Imports.Add(new CodeNamespaceImport("System.Reflection"));
+
 
 			AddExplicitAssemblies(assemblies);
 		}
@@ -88,7 +91,18 @@ namespace Otis
 				AddExplicitAssemblies(result.ExplicitAssemblies);
 			}
 
+			GenerateAssemblerFactory();
 			return GetAssembler();
+		}
+
+		private void GenerateAssemblerFactory()
+		{
+			IAssemblerFactoryProvider factoryProvider = _context.AssemblerGenerationOptions.AssemblerFactoryProvider;
+			string factoryName = _context.AssemblerGenerationOptions.AssemblerFactoryName;
+
+			CodeTypeDeclaration assemblerFactory = factoryProvider.GenerateAssemblerFactory(factoryName, _context.AssemblerManager);
+
+			_namespace.Types.Add(assemblerFactory);
 		}
 
 		private void AddExplicitAssemblies(IEnumerable<string> assemblies)

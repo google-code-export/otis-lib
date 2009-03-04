@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="AggregateMappingDescription.cs" />
     <Compile Include="AssemblerBuilder.cs" />
+    <Compile Include="AssemblerFactoryProvider.cs" />
     <Compile Include="AssemblerManager.cs" />
     <Compile Include="Cfg\AssemblerBase.cs" />
     <Compile Include="Cfg\AssemblerGenerationOptions.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="Functions\SimpleFunctionBase.cs" />
     <Compile Include="Functions\SumFunction.cs" />
     <Compile Include="IAggregateFunction.cs" />
+    <Compile Include="IAssemblerFactory.cs" />
+    <Compile Include="IAssemblerFactoryProvider.cs" />
     <Compile Include="IAssemblerManager.cs" />
     <Compile Include="IExpressionFormatProvider.cs" />
     <Compile Include="MappingHelperAttribute.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="Providers\SingleTypeMappingDescriptorProvider.cs" />
     <Compile Include="Providers\XmlMappingDescriptionProvider.cs" />
     <Compile Include="OtisException.cs" />
+    <Compile Include="ResolvedAssembler.cs" />
     <Compile Include="Utils\AssemblyQualifiedTypeName.cs" />
     <Compile Include="Utils\EnumHelper.cs" />
     <Compile Include="Utils\ReflectHelper.cs" />

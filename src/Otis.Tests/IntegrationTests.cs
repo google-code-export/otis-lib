@@ -17,8 +17,8 @@ namespace Otis.Tests
 	public class IntegrationTests
 	{
 		private const string errInvalidTransformation = "Unable to resolve Assembler for transformation [Otis.Tests.Entity.User -> System.String], no Assemblers for this transformation exist";
-		private const string errSourceCodeGeneration = "It is not possible to retrieve assembler because source code generation is chosen.";
-		private const string errInstanceSuppressed = "It is not possible to retrieve assembler because SupressInstanceCreation option is turned on.";
+		private const string errSourceCodeGeneration = "It is not possible to retrieve Assembler/AssemblerFactory because source code generation is chosen.";
+		private const string errInstanceSuppressed = "It is not possible to retrieve Assembler/AssemblerFactory because SupressInstanceCreation option is turned on.";
 
 		private User _user;
 

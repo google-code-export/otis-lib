@@ -45,6 +45,7 @@
     <Compile Include="AggregateFunctionTests.cs" />
     <Compile Include="AggregateMappingTest.cs" />
     <Compile Include="AssemblerBaseTests.cs" />
+    <Compile Include="AssemblerFactoryTests.cs" />
     <Compile Include="AssemblerNameProviderTests.cs" />
     <Compile Include="AssemblyGenerationTests.cs" />
     <Compile Include="CollectionMappingTest.cs" />

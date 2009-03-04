@@ -2,6 +2,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Otis;
 using Otis.Cfg;
 using Otis.CodeGen;
 using Otis.Tests.Entity;
@@ -46,7 +47,7 @@ namespace Otis.Tests
 			Configuration cfg = new Configuration(false);
 
 			AssemblerBase assemblerBase = new AssemblerBase();
-			assemblerBase.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
+			assemblerBase.AssemblerBaseTypeName = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBase.Name = "IAssembler";
 			assemblerBase.AssemblerGeneratorName = typeof(IAssemblerAssemblerGenerator).AssemblyQualifiedName;
 			assemblerBase.IsDefaultAssembler = true;
@@ -67,7 +68,7 @@ namespace Otis.Tests
 			Configuration cfg = new Configuration(false);
 
 			AssemblerBase assemblerBase = new AssemblerBase();
-			assemblerBase.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
+			assemblerBase.AssemblerBaseTypeName = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBase.Name = "IAssembler";
 			assemblerBase.AssemblerGeneratorName = typeof(IAssemblerAssemblerGenerator).AssemblyQualifiedName;
 			assemblerBase.IsDefaultAssembler = false;
@@ -86,13 +87,13 @@ namespace Otis.Tests
 			Configuration cfg = new Configuration(false);
 
 			AssemblerBase assemblerBaseType1 = new AssemblerBase();
-			assemblerBaseType1.AssemblerBaseType = typeof(IAssembler<,>).AssemblyQualifiedName;
+			assemblerBaseType1.AssemblerBaseTypeName = typeof(IAssembler<,>).AssemblyQualifiedName;
 			assemblerBaseType1.Name = "IAssembler";
 			assemblerBaseType1.AssemblerGeneratorName = typeof(IAssemblerAssemblerGenerator).AssemblyQualifiedName;
 			assemblerBaseType1.IsDefaultAssembler = true;
 
 			AssemblerBase assemblerBaseType2 = new AssemblerBase();
-			assemblerBaseType2.AssemblerBaseType = typeof(AbstractAssembler<,>).AssemblyQualifiedName;
+			assemblerBaseType2.AssemblerBaseTypeName = typeof(AbstractAssembler<,>).AssemblyQualifiedName;
 			assemblerBaseType2.Name = "AbstractAssembler";
 			assemblerBaseType2.AssemblerGeneratorName = typeof(AbstractAssemblerGenerator).AssemblyQualifiedName;
 			assemblerBaseType2.IsDefaultAssembler = false;

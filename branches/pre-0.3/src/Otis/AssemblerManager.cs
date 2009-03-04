@@ -8,6 +8,7 @@ namespace Otis
 	{
 		private const string ErrTargetTypeCannotBeNull = "Target Type cannot be null";
 		private const string ErrSourceTypeCannotBeNull = "Source Type cannot be null";
+		private const string ErrAssemblerTypeCannotBeNull = "Assembler Type cannot be null";
 		private const string ErrAssemblerAlreadyExists = "Assembler for transformation [{1} - > {0}] already exists";
 		private const string ErrAssemblerNameAlreadyExists = "An Assembler with this Name: {0}, alread exists";
 		private const string ErrNamedAssemblerAlreadyExists = "A Named Assembler for transformation [{1} -> {0}] already exists";
@@ -15,20 +16,20 @@ namespace Otis
 		private const string ErrNoAssemblers = "Unable to resolve Assembler for transformation [{1} -> {0}], no Assemblers for this transformation exist";
 		private const string ErrAssemblerTypeHasInvalidGenericArguments = "AssemblerType: {0}, must have two Generic Arguments";
 
-		private readonly IDictionary<TargetSourceTypePair, string> _autoNamedAssemblers;
-		private readonly IDictionary<TargetSourceTypePair, string> _manualNamedAssemblers;
+		private readonly IDictionary<TargetSourceAssemblerTypeTrio, string> _autoNamedAssemblers;
+		private readonly IDictionary<TargetSourceAssemblerTypeTrio, string> _manualNamedAssemblers;
 		private readonly List<string> _assemblers;
 
 		public AssemblerManager()
 		{
-			_autoNamedAssemblers = new Dictionary<TargetSourceTypePair, string>();
-			_manualNamedAssemblers = new Dictionary<TargetSourceTypePair, string>();
+			_autoNamedAssemblers = new Dictionary<TargetSourceAssemblerTypeTrio, string>();
+			_manualNamedAssemblers = new Dictionary<TargetSourceAssemblerTypeTrio, string>();
 			_assemblers = new List<string>();
 		}
 
 		#region Implementation of IAssemblerManager
 
-		public void AddAssembler(Type target, Type source, IAssemblerNameProvider provider)
+		public void AddAssembler(Type target, Type source, Type assemblerBase, IAssemblerNameProvider provider)
 		{
 			if (target == null)
 				throw new ArgumentException(ErrTargetTypeCannotBeNull, "target");
@@ -36,9 +37,9 @@ namespace Otis
 			if (source == null)
 				throw new ArgumentException(ErrSourceTypeCannotBeNull, "source");
 
-			TargetSourceTypePair targetSourceTypePair = new TargetSourceTypePair(target, source);
+			TargetSourceAssemblerTypeTrio targetSourceAssemblerTypeTrio = new TargetSourceAssemblerTypeTrio(target, source, assemblerBase);
 
-			if (_autoNamedAssemblers.ContainsKey(targetSourceTypePair))
+			if (_autoNamedAssemblers.ContainsKey(targetSourceAssemblerTypeTrio))
 				throw new OtisException(String.Format(ErrAssemblerAlreadyExists, target, source));
 
 			string formattedName = provider.GenerateName(target, source);
@@ -46,31 +47,31 @@ namespace Otis
 			if (_manualNamedAssemblers.Values.Contains(formattedName))
 				throw new OtisException(String.Format(ErrAssemblerNameAlreadyExists, formattedName));
 
-			_autoNamedAssemblers.Add(targetSourceTypePair, formattedName);
+			_autoNamedAssemblers.Add(targetSourceAssemblerTypeTrio, formattedName);
 			_assemblers.Add(formattedName);
 		}
 
-		public void AddAssembler<TargetType, SourceType>(IAssemblerNameProvider provider)
+		public void AddAssembler<TargetType, SourceType, AssemblerType>(IAssemblerNameProvider provider)
 		{
-			AddAssembler(typeof(TargetType), typeof(SourceType), provider);
+			AddAssembler(typeof(TargetType), typeof(SourceType), typeof(AssemblerType), provider);
 		}
 
-		public void AddAssembler(NamedAssembler namedAssembler)
+		public void AddAssembler(NamedAssembler namedAssembler, Type assemblerBase)
 		{
 			if (_assemblers.Contains(namedAssembler.Name))
 				throw new OtisException(String.Format(ErrAssemblerNameAlreadyExists, namedAssembler.Name));
 
-			TargetSourceTypePair targetSourceTypePair = new TargetSourceTypePair(namedAssembler.Target, namedAssembler.Source);
+			TargetSourceAssemblerTypeTrio targetSourceAssemblerTypeTrio = new TargetSourceAssemblerTypeTrio(namedAssembler.Target, namedAssembler.Source, assemblerBase);
 
-			if (_manualNamedAssemblers.ContainsKey(targetSourceTypePair))
+			if (_manualNamedAssemblers.ContainsKey(targetSourceAssemblerTypeTrio))
 			{
 				throw new OtisException(String.Format(
 					ErrNamedAssemblerAlreadyExists,
-					targetSourceTypePair.Target,
-					targetSourceTypePair.Source));
+					targetSourceAssemblerTypeTrio.Target,
+					targetSourceAssemblerTypeTrio.Source));
 			}
 
-			_manualNamedAssemblers.Add(targetSourceTypePair, namedAssembler.Name);
+			_manualNamedAssemblers.Add(targetSourceAssemblerTypeTrio, namedAssembler.Name);
 			_assemblers.Add(namedAssembler.Name);
 		}
 
@@ -79,7 +80,7 @@ namespace Otis
 			return _assemblers.Contains(assemblerName);
 		}
 
-		public string GetAssemblerName(Type target, Type source)
+		public string GetAssemblerName(Type target, Type source, Type assemblerBase)
 		{
 			if (target == null)
 				throw new ArgumentException(ErrTargetTypeCannotBeNull, "target");
@@ -87,10 +88,10 @@ namespace Otis
 			if (source == null)
 				throw new ArgumentException(ErrSourceTypeCannotBeNull, "source");
 
-			TargetSourceTypePair targetSourceTypePair = new TargetSourceTypePair(target, source);
+			TargetSourceAssemblerTypeTrio targetSourceAssemblerTypeTrio = new TargetSourceAssemblerTypeTrio(target, source, assemblerBase);
 
-			string autoNamedAssemblerName = GetAutoNamedAssembler(targetSourceTypePair);
-			string manualNamedAssemblerName = GetManualNamedAssembler(targetSourceTypePair);
+			string autoNamedAssemblerName = GetAutoNamedAssembler(targetSourceAssemblerTypeTrio);
+			string manualNamedAssemblerName = GetManualNamedAssembler(targetSourceAssemblerTypeTrio);
 
 			if (!string.IsNullOrEmpty(autoNamedAssemblerName) && !string.IsNullOrEmpty(manualNamedAssemblerName))
 				throw new OtisException(String.Format(ErrMultipleAssemblers, target, source));
@@ -101,22 +102,20 @@ namespace Otis
 			return autoNamedAssemblerName ?? manualNamedAssemblerName;
 		}
 
-		public string GetAssemblerName<TargetType, SourceType>()
-		{
-			return GetAssemblerName(typeof(TargetType), typeof(SourceType));
-		}
-
 		public string GetAssemblerName<AssemblerType>() where AssemblerType : class
 		{
-			Type[] typeParams = typeof(AssemblerType).GetGenericArguments();
-
+			Type assemblerType = typeof (AssemblerType);
+			Type[] typeParams = assemblerType.GetGenericArguments();
+			
 			if (typeParams.Length != 2)
 				throw new OtisException(String.Format(ErrAssemblerTypeHasInvalidGenericArguments, typeof(AssemblerType)));
 
-			return GetAssemblerName(typeParams[0], typeParams[1]);
+			Type genericType = assemblerType.GetGenericTypeDefinition();
+
+			return GetAssemblerName(typeParams[0], typeParams[1], genericType);
 		}
 
-		public IEnumerable<string> Assemblers
+		public IEnumerable<string> AssemblerNames
 		{
 			get
 			{
@@ -127,38 +126,55 @@ namespace Otis
 			}
 		}
 
-		public IEnumerable<string> AutoNamedAssemblers
+		public IEnumerable<ResolvedAssembler> Assemblers
+		{
+			get
+			{
+				List<ResolvedAssembler> assemblers = new List<ResolvedAssembler>(_autoNamedAssemblers.Count + _manualNamedAssemblers.Count);
+
+				foreach (KeyValuePair<TargetSourceAssemblerTypeTrio, string> pair in _autoNamedAssemblers)
+					assemblers.Add(new ResolvedAssembler(pair.Key.Assembler, pair.Key.Target, pair.Key.Source, pair.Value));
+
+				foreach (KeyValuePair<TargetSourceAssemblerTypeTrio, string> pair in _manualNamedAssemblers)
+					assemblers.Add(new ResolvedAssembler(pair.Key.Assembler, pair.Key.Target, pair.Key.Source, pair.Value));
+
+				return assemblers;
+			}
+		}
+
+		public IEnumerable<string> AutoNamedAssemblerNamess
 		{
 			get { return _autoNamedAssemblers.Values; }
 		}
 
-		public IEnumerable<string> ManualNamedAssemblers
+		public IEnumerable<string> ManualNamedAssemblerNames
 		{
 			get { return _manualNamedAssemblers.Values; }
 		}
 
 		#endregion
 
-		private string GetAutoNamedAssembler(TargetSourceTypePair targetSourceTypePair)
+		private string GetAutoNamedAssembler(TargetSourceAssemblerTypeTrio targetSourceAssemblerTypeTrio)
 		{
 			string assemblerName;
-			_autoNamedAssemblers.TryGetValue(targetSourceTypePair, out assemblerName);
+			_autoNamedAssemblers.TryGetValue(targetSourceAssemblerTypeTrio, out assemblerName);
 			return assemblerName;
 		}
 
-		private string GetManualNamedAssembler(TargetSourceTypePair targetSourceTypePair)
+		private string GetManualNamedAssembler(TargetSourceAssemblerTypeTrio targetSourceAssemblerTypeTrio)
 		{
 			string assemblerName;
-			_manualNamedAssemblers.TryGetValue(targetSourceTypePair, out assemblerName);
+			_manualNamedAssemblers.TryGetValue(targetSourceAssemblerTypeTrio, out assemblerName);
 			return assemblerName;
 		}
 
-		private class TargetSourceTypePair
+		private class TargetSourceAssemblerTypeTrio
 		{
 			private readonly Type _target;
 			private readonly Type _source;
+			private readonly Type _assembler;
 
-			public TargetSourceTypePair(Type target, Type source)
+			public TargetSourceAssemblerTypeTrio(Type target, Type source, Type assembler)
 			{
 				if (target == null)
 					throw new ArgumentException(ErrTargetTypeCannotBeNull, "target");
@@ -166,8 +182,12 @@ namespace Otis
 				if (source == null)
 					throw new ArgumentException(ErrSourceTypeCannotBeNull, "source");
 
+				if (source == null)
+					throw new ArgumentException(ErrAssemblerTypeCannotBeNull, "assembler");
+
 				_target = target;
 				_source = source;
+				_assembler = assembler;
 			}
 
 			public Type Target
@@ -180,27 +200,32 @@ namespace Otis
 				get { return _source; }
 			}
 
-			public bool Equals(TargetSourceTypePair obj)
+			public Type Assembler
+			{
+				get { return _assembler; }
+			}
+
+			public bool Equals(TargetSourceAssemblerTypeTrio obj)
 			{
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
 
-				return Equals(obj.Target, _target) && Equals(obj.Source, _source);
+				return Equals(obj.Target, _target) && Equals(obj.Source, _source) && Equals(obj.Assembler, _assembler);
 			}
 
 			public override bool Equals(object obj)
 			{
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
-				if (obj.GetType() != typeof(TargetSourceTypePair)) return false;
-				return Equals((TargetSourceTypePair)obj);
+				if (obj.GetType() != typeof(TargetSourceAssemblerTypeTrio)) return false;
+				return Equals((TargetSourceAssemblerTypeTrio)obj);
 			}
 
 			public override int GetHashCode()
 			{
 				unchecked
 				{
-					return (_target.GetHashCode() * 397) ^ _source.GetHashCode();
+					return (_target.GetHashCode() * 397) ^ _source.GetHashCode() ^ _assembler.GetHashCode();
 				}
 			}
 		}

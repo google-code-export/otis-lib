@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Reflection;
 using Otis.Cfg;
+using Otis.Utils;
 
 namespace Otis.CodeGen
 {
@@ -106,15 +107,18 @@ namespace Otis.CodeGen
 
 		protected string GetAssemblerName(ClassMappingDescriptor descriptor)
 		{
+			Type assemblerBaseType = _assemblerBase.AssemblerBaseType;
+
 			if (descriptor.HasNamedAssembler)
 			{
-				_context.AssemblerManager.AddAssembler(descriptor.AssemblerName);
+				_context.AssemblerManager.AddAssembler(descriptor.AssemblerName, assemblerBaseType);
 				return descriptor.AssemblerName.Name;
 			}
 
 			_context.AssemblerManager.AddAssembler(
 				descriptor.TargetType,
 				descriptor.SourceType,
+				assemblerBaseType,
 				_assemblerBase.AssemblerNameProvider);
 
 			return _assemblerBase.AssemblerNameProvider.GenerateName(descriptor.TargetType, descriptor.SourceType);

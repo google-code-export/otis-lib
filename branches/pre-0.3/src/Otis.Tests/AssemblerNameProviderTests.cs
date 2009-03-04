@@ -17,7 +17,7 @@ namespace Otis.Tests
 	public class AssemblerNameProviderTests
 	{
 		[Test]
-		public void Custom_Assembler_Provider_Is_Injectible()
+		public void Custom_Assembler_Provider_Is_Injectable()
 		{
 			Configuration cfg = new Configuration();
 			cfg.AddAssemblyResources(Assembly.GetExecutingAssembly(), "mappings.xml");
@@ -63,7 +63,7 @@ namespace Otis.Tests
 			cfg.AddAssemblyResources(Assembly.GetExecutingAssembly());
 			cfg.BuildAssemblers();
 
-			string actual = cfg.AssemblerManager.GetAssemblerName(typeof(XmlUserDTO), typeof(User));
+			string actual = cfg.AssemblerManager.GetAssemblerName(typeof(XmlUserDTO), typeof(User), typeof(IAssembler<,>));
 			const string expected = "UserToXmlUserDTOAssembler";
 
 			Assert.That(actual, Is.EqualTo(expected));
@@ -90,7 +90,7 @@ namespace Otis.Tests
 			cfg.AddXmlFile("XmlMappings\\named_assembler_mappings.xml");
 			cfg.BuildAssemblers();
 
-			string actual = cfg.AssemblerManager.GetAssemblerName<NamedAssemblerUserDTO, User>();
+			string actual = cfg.AssemblerManager.GetAssemblerName<IAssembler<NamedAssemblerUserDTO,User>>();
 			const string expected = "NamedAssemblerFromUserDtoToUser";
 
 			Assert.That(actual, Is.EqualTo(expected));

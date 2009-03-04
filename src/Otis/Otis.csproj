@@ -88,7 +88,6 @@
     <Compile Include="Functions\SimpleFunctionBase.cs" />
     <Compile Include="Functions\SumFunction.cs" />
     <Compile Include="IAggregateFunction.cs" />
-    <Compile Include="IAssemblerFactory.cs" />
     <Compile Include="IAssemblerFactoryProvider.cs" />
     <Compile Include="IAssemblerManager.cs" />
     <Compile Include="IExpressionFormatProvider.cs" />

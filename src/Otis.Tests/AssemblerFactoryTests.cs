@@ -58,20 +58,7 @@ namespace Otis.Tests
 			cfg.GenerationOptions.OutputType = OutputType.SourceCode;
 			cfg.GenerationOptions.Namespace = "OtisTest";
 
-			IAssemblerFactory asm = cfg.GetAssemblerFactory();
-		}
-
-		[Test]
-		public void Default_Assembler_Factory_Interface_Implementation_Method()
-		{
-			Configuration cfg = new Configuration();
-			cfg.AddXmlFile("XmlMappings\\mappings.xml");
-
-			IAssemblerFactory factory = cfg.GetAssemblerFactory();
-
-			IAssembler<XmlUserDTO, User> assembler = factory.GetAssembler<IAssembler<XmlUserDTO, User>>();
-
-			Assert.IsNotNull(assembler);
+			object asm = cfg.GetAssemblerFactory();
 		}
 
 		[Test]
@@ -81,7 +68,7 @@ namespace Otis.Tests
 			cfg.AddXmlFile("XmlMappings\\mappings.xml");
 			cfg.AddXmlFile("XmlMappings\\named_assembler_mappings.xml");
 
-			IAssemblerFactory factory = cfg.GetAssemblerFactory();
+			object factory = cfg.GetAssemblerFactory();
 
 			Type factoryType = factory.GetType();
 
@@ -92,6 +79,10 @@ namespace Otis.Tests
 			Assert.IsNotNull(method1);
 			Assert.IsNotNull(method2);
 			Assert.IsNotNull(method3);
+
+			Assert.That(method1.ReturnType, Is.EqualTo(typeof(IAssembler<XmlUserDTO, User>)));
+			Assert.That(method2.ReturnType, Is.EqualTo(typeof(IAssembler<UserDTO, User>)));
+			Assert.That(method3.ReturnType, Is.EqualTo(typeof(IAssembler<NamedAssemblerUserDTO, User>)));
 		}
 	}
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using NUnit.Framework;
-using Otis.Providers;
+using Otis.Descriptors;
 using Otis.Tests.Dto;
 
 namespace Otis.Tests
@@ -39,7 +39,7 @@ namespace Otis.Tests
 			XmlNodeList members = xmlDoc.SelectNodes("//member");
 
 			XmlNodeList xmlGender = members[0].SelectNodes("map");
-			ProjectionInfo projections = XmlMappingDescriptionProvider.BuildProjections(_desc, xmlGender);
+			ProjectionInfo projections = XmlMappingDescriptorProvider.BuildProjections(_desc, xmlGender);
 			Assert.AreEqual(2, projections.Count);
 			Assert.AreEqual("Otis.Tests.Dto.Gender.Male", projections["\"M\""]);
 			Assert.AreEqual("Otis.Tests.Dto.Gender.Female", projections["\"W\""]);
@@ -49,7 +49,7 @@ namespace Otis.Tests
 			_desc.Member = "GenderCode";
 
 			XmlNodeList xmlGenderCode = members[1].SelectNodes("map");	 
-			projections = XmlMappingDescriptionProvider.BuildProjections(_desc, xmlGenderCode);
+			projections = XmlMappingDescriptorProvider.BuildProjections(_desc, xmlGenderCode);
 			Assert.AreEqual(2, projections.Count);
 			Assert.AreEqual("\"M\"", projections["\"M\""]);
 			Assert.AreEqual("\"W\"", projections["\"W\""]);
@@ -149,7 +149,7 @@ namespace Otis.Tests
 
 			try
 			{
-				XmlMappingDescriptionProvider.BuildProjections(null, nodes);
+				XmlMappingDescriptorProvider.BuildProjections(null, nodes);
 			}
 			catch (OtisException e)
 			{
@@ -172,7 +172,7 @@ namespace Otis.Tests
 			XmlDocument xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(xmlCfg);
 			XmlNodeList xmlGender = xmlDoc.SelectNodes("//member")[0].SelectNodes("map");
-			ProjectionInfo projections = XmlMappingDescriptionProvider.BuildProjections(_desc, xmlGender);
+			ProjectionInfo projections = XmlMappingDescriptorProvider.BuildProjections(_desc, xmlGender);
 		}
 	}
 }

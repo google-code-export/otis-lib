@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Otis.Attributes;
+using Otis.Descriptors;
 using Otis.Tests.Entity;
 
 namespace Otis.Tests

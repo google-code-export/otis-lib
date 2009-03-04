@@ -1,4 +1,5 @@
-﻿using Otis.Tests.Entity;
+using Otis.Attributes;
+using Otis.Tests.Entity;
 
 namespace Otis.Tests.Dto
 {

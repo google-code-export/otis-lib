@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Otis.Cfg;
-using Otis.CodeGen;
+using Otis.Generation;
 using Otis.Functions;
 
 namespace Otis

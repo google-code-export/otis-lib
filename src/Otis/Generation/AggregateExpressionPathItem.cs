@@ -1,6 +1,6 @@
 using System;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	public class AggregateExpressionPathItem
 	{

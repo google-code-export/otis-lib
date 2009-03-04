@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B81906CB-F063-4D3F-AE7F-23C4475EE158}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -59,19 +59,7 @@
     <Compile Include="Cfg\NamespaceNameProvider.cs" />
     <Compile Include="Cfg\OutputType.cs" />
     <Compile Include="Cfg\TargetFramework.cs" />
-    <Compile Include="CodeGen\AssemblerGenerator.cs" />
-    <Compile Include="CodeGen\AssemblerGeneratorResult.cs" />
     <Compile Include="CodeGeneratorContext.cs" />
-    <Compile Include="CodeGen\AggregateExpressionBuilder.cs" />
-    <Compile Include="CodeGen\AggregateExpressionPathItem.cs" />
-    <Compile Include="CodeGen\AggregateFunctionContext.cs" />
-    <Compile Include="CodeGen\IAssemblerAssemblerGenerator.cs" />
-    <Compile Include="CodeGen\ClassMappingGenerator.cs" />
-    <Compile Include="CodeGen\DefaultAggregateFunctionCodeGenerator.cs" />
-    <Compile Include="CodeGen\FunctionMappingGenerator.cs" />
-    <Compile Include="CodeGen\IAggregateFunctionCodeGenerator.cs" />
-    <Compile Include="CodeGen\IAssemblerGenerator.cs" />
-    <Compile Include="CodeGen\Util.cs" />
     <Compile Include="ErrorBuilder.cs" />
     <Compile Include="FunctionMap.cs" />
     <Compile Include="Functions\AvgFunction.cs" />
@@ -83,6 +71,18 @@
     <Compile Include="Functions\MinMaxFunctionBase.cs" />
     <Compile Include="Functions\SimpleFunctionBase.cs" />
     <Compile Include="Functions\SumFunction.cs" />
+    <Compile Include="Generation\AggregateExpressionBuilder.cs" />
+    <Compile Include="Generation\AggregateExpressionPathItem.cs" />
+    <Compile Include="Generation\AggregateFunctionContext.cs" />
+    <Compile Include="Generation\AssemblerGenerator.cs" />
+    <Compile Include="Generation\AssemblerGeneratorResult.cs" />
+    <Compile Include="Generation\ClassMappingGenerator.cs" />
+    <Compile Include="Generation\DefaultAggregateFunctionCodeGenerator.cs" />
+    <Compile Include="Generation\FunctionMappingGenerator.cs" />
+    <Compile Include="Generation\IAggregateFunctionCodeGenerator.cs" />
+    <Compile Include="Generation\IAssemblerAssemblerGenerator.cs" />
+    <Compile Include="Generation\IAssemblerGenerator.cs" />
+    <Compile Include="Generation\Util.cs" />
     <Compile Include="IAggregateFunction.cs" />
     <Compile Include="IAssemblerFactory.cs" />
     <Compile Include="IAssemblerFactoryProvider.cs" />

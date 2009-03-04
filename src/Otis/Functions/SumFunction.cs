@@ -1,5 +1,5 @@
 using System;
-using Otis.CodeGen;
+using Otis.Generation;
 
 namespace Otis.Functions
 {

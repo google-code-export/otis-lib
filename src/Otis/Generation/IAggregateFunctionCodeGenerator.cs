@@ -5,7 +5,7 @@ using System.Text;
 using Otis;
 using Otis.Functions;
 
-namespace Otis.CodeGen
+namespace Otis.Generation
 {
 	/// <summary>
 	/// Interface to code generation facility which is used to generate code for aggregate mappings.

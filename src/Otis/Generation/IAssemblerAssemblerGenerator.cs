@@ -1,5 +1,6 @@
 using System.CodeDom;
 using Otis.Cfg;
+using Otis.Descriptors;
 using Otis.Utils;
 
 namespace Otis.Generation

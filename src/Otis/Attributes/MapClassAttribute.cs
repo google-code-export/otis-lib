@@ -1,6 +1,6 @@
 using System;
 
-namespace Otis
+namespace Otis.Attributes
 {
 	/// <summary>
 	/// Marks a class as a part of some type transformation.

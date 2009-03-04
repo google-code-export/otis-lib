@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
-using Otis.Providers;
+using Otis.Descriptors;
 
 namespace Otis
 {
@@ -9,7 +9,7 @@ namespace Otis
 	{
 		public static IMappingDescriptorProvider FromAssembly(Assembly asm)
 		{
-			return new AssemblyMappingDescriptionProvider(asm);
+			return new AssemblyMappingDescriptorProvider(asm);
 		}
 
 		public static IMappingDescriptorProvider FromXmlFile(string filename)
@@ -25,7 +25,7 @@ namespace Otis
 
 		public static IMappingDescriptorProvider FromXmlString(string data)
 		{
-			return new XmlMappingDescriptionProvider(data);
+			return new XmlMappingDescriptorProvider(data);
 		}
 
 		public static IMappingDescriptorProvider FromType(Type type)

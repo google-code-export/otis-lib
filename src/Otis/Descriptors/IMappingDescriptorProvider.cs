@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
-using Otis.Providers;
 
-namespace Otis
+namespace Otis.Descriptors
 {
 	/// <summary>
 	/// This interface is used to provide <see cref="Configuration"/> object with mapping information
@@ -13,7 +10,7 @@ namespace Otis
 	/// contains mapped types, etc. Internally, <c>Configuration</c> class accesses this information through
 	/// instances of <see cref="IMappingDescriptorProvider"/> interface. For every supported source type, 
 	/// there is an implementation of <c>IMappingDescriptorProvider</c>. E.g. XML data is processed using
-	/// <see cref="XmlMappingDescriptionProvider"/> class, while assembly metadata is processed using
+	/// <see cref="XmlMappingDescriptorProvider"/> class, while assembly metadata is processed using
 	/// <see cref="AssemblyResourceMappingDescriptorProvider"/>. To provide support for custom mapping info
 	/// sources, client applications need to provide an implementation of <c>IMappingDescriptorProvider</c>
 	/// and call <see cref="Configuration.AddProvider"/>.

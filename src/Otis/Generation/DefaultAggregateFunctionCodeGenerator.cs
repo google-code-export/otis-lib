@@ -25,7 +25,7 @@ namespace Otis.Generation
 				if (pathItem.IsCollection)
 					finalTarget = pathItem.Object;
 
-			string finalExpression = context.Member.AggregateMappingDescription.FinalExpression;
+			string finalExpression = context.Member.AggregateMappingDescriptor.FinalExpression;
 
 			string processedExpression = "";
 			if ((string.IsNullOrEmpty(finalExpression) || lastPathItem.IsCollection))

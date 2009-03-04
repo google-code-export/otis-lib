@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Otis.Parsing;
 using Otis.Utils;
 
-namespace Otis
+namespace Otis.Descriptors
 {
 	/// <summary>
 	/// Describes a transformation for one field/property within a type transformation
@@ -13,7 +13,7 @@ namespace Otis
 	{
 		private string _expression;
 		private string _nullValue;
-		private AggregateMappingDescription _aggregateDescriptor = null;
+		private AggregateMappingDescriptor _aggregateDescriptor = null;
 
 		private string _member;
 		private string _format;
@@ -185,12 +185,12 @@ namespace Otis
 		/// <summary>
 		/// Returns the descriptor for aggregate expression
 		/// </summary>
-		public AggregateMappingDescription AggregateMappingDescription
+		public AggregateMappingDescriptor AggregateMappingDescriptor
 		{
 			get
 			{
 				if (_aggregateDescriptor == null)
-					_aggregateDescriptor = new AggregateMappingDescription(Expression, Type);
+					_aggregateDescriptor = new AggregateMappingDescriptor(Expression, Type);
 
 				return _aggregateDescriptor;
 			}

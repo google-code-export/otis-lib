@@ -1,6 +1,6 @@
 using System;
 
-namespace Otis
+namespace Otis.Attributes
 {
 	[AttributeUsage(AttributeTargets.Method)]
 	public sealed class MappingHelperAttribute : Attribute

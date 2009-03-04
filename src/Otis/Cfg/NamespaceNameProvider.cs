@@ -1,5 +1,4 @@
 using System;
-using Otis.Utils;
 
 namespace Otis.Cfg
 {

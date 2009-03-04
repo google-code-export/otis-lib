@@ -1,19 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Resources;
-using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
-using Otis.Generation;
 using Otis.Parsing;
 using Otis.Utils;
 
-namespace Otis.Providers
+namespace Otis.Descriptors
 {
-	internal class XmlMappingDescriptionProvider : IMappingDescriptorProvider
+	internal class XmlMappingDescriptorProvider : IMappingDescriptorProvider
 	{
 		private IList<ClassMappingDescriptor> _classDescriptors = new List<ClassMappingDescriptor>(10);
 		private XmlDocument _xmlDoc;
@@ -21,9 +17,9 @@ namespace Otis.Providers
 
 		private static XmlSchema _schema = GetSchema();
 
-		protected XmlMappingDescriptionProvider(){}
+		protected XmlMappingDescriptorProvider(){}
 
-		public XmlMappingDescriptionProvider(string data)
+		public XmlMappingDescriptorProvider(string data)
 		{
 			AddMapping(data);
 		}

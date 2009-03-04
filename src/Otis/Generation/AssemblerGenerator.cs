@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Reflection;
 using Otis.Cfg;
+using Otis.Descriptors;
 using Otis.Utils;
 
 namespace Otis.Generation

@@ -1,11 +1,11 @@
 using System;
 
-namespace Otis
+namespace Otis.Descriptors
 {
 	/// <summary>
 	/// Describes the aggregate mapping expression
 	/// </summary>
-	public class AggregateMappingDescription
+	public class AggregateMappingDescriptor
 	{
 		private string[] _parts;
 		private string _finalExpression;
@@ -13,7 +13,7 @@ namespace Otis
 		private string _functionObject;
 		private Type _targetType;
 
-		public AggregateMappingDescription(string expression, Type targetType)
+		public AggregateMappingDescriptor(string expression, Type targetType)
 		{
 			_targetType = targetType;
 			int pos = expression.IndexOf(':');

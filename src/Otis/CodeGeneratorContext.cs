@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Otis.Cfg;
+using Otis.Descriptors;
 
 namespace Otis
 {

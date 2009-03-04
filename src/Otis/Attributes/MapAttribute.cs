@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Otis
+namespace Otis.Attributes
 {
 	/// <summary>
 	/// Marks a field or property of a class as being mapped from another type.

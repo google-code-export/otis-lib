@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
+using Otis.Attributes;
 using Otis.Parsing;
 using Otis.Utils;
 
-namespace Otis.Providers
+namespace Otis.Descriptors
 {
 	class SingleTypeMappingDescriptorProvider : IMappingDescriptorProvider
 	{

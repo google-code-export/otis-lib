@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.CSharp;
 using Otis.Cfg;
+using Otis.Descriptors;
 using Otis.Generation;
 using Otis.Utils;
 

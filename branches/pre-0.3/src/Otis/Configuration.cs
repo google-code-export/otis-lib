@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Otis.Cfg;
+using Otis.Descriptors;
 using Otis.Generation;
 using Otis.Functions;
 

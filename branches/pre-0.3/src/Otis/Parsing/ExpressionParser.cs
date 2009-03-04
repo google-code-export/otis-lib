@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Otis.Descriptors;
 using Otis.Generation;
 
 namespace Otis.Parsing
@@ -31,13 +32,13 @@ namespace Otis.Parsing
 
 		public static IList<AggregateExpressionPathItem> BuildAggregatePathItem(ClassMappingDescriptor descriptor, MemberMappingDescriptor member)
 		{
-			string firstPart = member.AggregateMappingDescription.PathParts[0];
+			string firstPart = member.AggregateMappingDescriptor.PathParts[0];
 			string targetName = firstPart.StartsWith("$") ? "source" : "";
 			List<AggregateExpressionPathItem> pathItems = new List<AggregateExpressionPathItem>(3);
 			Type targetType = descriptor.SourceType;
 
 
-			foreach (string pathPart in member.AggregateMappingDescription.PathParts)
+			foreach (string pathPart in member.AggregateMappingDescriptor.PathParts)
 			{
 				if (pathPart.Contains("."))
 				{

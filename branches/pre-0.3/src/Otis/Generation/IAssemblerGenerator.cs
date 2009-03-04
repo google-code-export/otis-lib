@@ -1,3 +1,5 @@
+using Otis.Descriptors;
+
 namespace Otis.Generation
 {
 	public interface IAssemblerGenerator

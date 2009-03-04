@@ -18,62 +18,6 @@ namespace Otis.Utils
 			typeof (Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
 
 		/// <summary>
-		/// Determine if the specified <see cref="System.Type"/> overrides the
-		/// implementation of Equals from <see cref="Object"/>
-		/// </summary>
-		/// <param name="clazz">The <see cref="System.Type"/> to reflect.</param>
-		/// <returns><see langword="true" /> if any type in the hierarchy overrides Equals(object).</returns>
-		public static bool OverridesEquals(Type clazz)
-		{
-			try
-			{
-				MethodInfo equals = clazz.GetMethod("Equals", new Type[] {typeof (object)});
-				if (equals == null)
-				{
-					return false;
-				}
-
-				// make sure that the DeclaringType is not System.Object - if that is the
-				// declaring type then there is no override.
-				return !equals.DeclaringType.Equals(typeof (object));
-			}
-			catch (AmbiguousMatchException)
-			{
-				// an ambigious match means that there is an override and it
-				// can't determine which one to use.
-				return true;
-			}
-		}
-
-		/// <summary>
-		/// Determine if the specified <see cref="System.Type"/> overrides the
-		/// implementation of GetHashCode from <see cref="Object"/>
-		/// </summary>
-		/// <param name="clazz">The <see cref="System.Type"/> to reflect.</param>
-		/// <returns><see langword="true" /> if any type in the hierarchy overrides GetHashCode().</returns>
-		public static bool OverridesGetHashCode(Type clazz)
-		{
-			try
-			{
-				MethodInfo getHashCode = clazz.GetMethod("GetHashCode", new Type[0]);
-				if (getHashCode == null)
-				{
-					return false;
-				}
-
-				// make sure that the DeclaringType is not System.Object - if that is the
-				// declaring type then there is no override.
-				return !getHashCode.DeclaringType.Equals(typeof (object));
-			}
-			catch (AmbiguousMatchException)
-			{
-				// an ambiguous match means that there is an override and it
-				// can't determine which one to use.
-				return true;
-			}
-		}
-
-		/// <summary>
 		/// Returns a reference to the Type.
 		/// </summary>
 		/// <param name="name">The name of the class or a fully qualified name.</param>

@@ -1,6 +1,7 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using Otis.Descriptors;
 using Otis.Parsing;
 using Otis.Utils;
 
@@ -127,10 +128,10 @@ namespace Otis.Generation
 
 		private AggregateFunctionContext CreateMemberContext(ClassMappingDescriptor descriptor, MemberMappingDescriptor member, FunctionMap functionMap)
 		{
-			Type implementationType = functionMap.GetTypeForFunction(member.AggregateMappingDescription.FunctionName);
+			Type implementationType = functionMap.GetTypeForFunction(member.AggregateMappingDescriptor.FunctionName);
 
 			string functionObjectName = string.Format("_{0}_to_{1}_Fn_",
-				member.AggregateMappingDescription.FunctionObject,
+				member.AggregateMappingDescriptor.FunctionObject,
 				member.Member);
 
 			if (implementationType.IsGenericType)
@@ -138,13 +139,13 @@ namespace Otis.Generation
 				if (member.IsArray || member.IsList)
 				{
 					Type instanceType = member.IsArray ?
-						member.AggregateMappingDescription.TargetType.GetElementType() :
-						member.AggregateMappingDescription.TargetType.GetGenericArguments()[0];
+						member.AggregateMappingDescriptor.TargetType.GetElementType() :
+						member.AggregateMappingDescriptor.TargetType.GetGenericArguments()[0];
 					implementationType = implementationType.MakeGenericType(instanceType);
 				}
 				else
 				{
-					implementationType = implementationType.MakeGenericType(member.AggregateMappingDescription.TargetType);
+					implementationType = implementationType.MakeGenericType(member.AggregateMappingDescriptor.TargetType);
 				}
 			}
 

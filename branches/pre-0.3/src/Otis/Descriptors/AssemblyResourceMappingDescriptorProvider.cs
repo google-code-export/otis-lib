@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace Otis.Providers
+namespace Otis.Descriptors
 {
-	class AssemblyResourceMappingDescriptorProvider : XmlMappingDescriptionProvider 
+	class AssemblyResourceMappingDescriptorProvider : XmlMappingDescriptorProvider 
 	{
 		public AssemblyResourceMappingDescriptorProvider(Assembly asm, string suffix)
 		{

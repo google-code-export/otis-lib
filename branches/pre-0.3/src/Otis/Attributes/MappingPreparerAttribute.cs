@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Otis
+namespace Otis.Attributes
 {
 	[AttributeUsage(AttributeTargets.Method)]
 	public sealed class MappingPreparerAttribute : Attribute

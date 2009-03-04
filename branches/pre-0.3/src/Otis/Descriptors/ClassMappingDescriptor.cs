@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Otis.Attributes;
 
-namespace Otis
+namespace Otis.Descriptors
 {
 	/// <summary>
 	/// Describes the single type transformation. E.g. <c>Entity.User</c>-><c>DTO.User</c>

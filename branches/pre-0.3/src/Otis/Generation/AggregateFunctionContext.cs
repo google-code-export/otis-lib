@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Otis.Descriptors;
 using Otis.Parsing;
 
 namespace Otis.Generation

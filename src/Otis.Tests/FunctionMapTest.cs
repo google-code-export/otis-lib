@@ -7,7 +7,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Otis.CodeGen;
+using Otis.Generation;
 
 namespace Otis.Tests
 {

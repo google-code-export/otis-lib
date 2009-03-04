@@ -4,7 +4,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Otis;
 using Otis.Cfg;
-using Otis.CodeGen;
+using Otis.Generation;
 using Otis.Tests.Entity;
 using Otis.Utils;
 

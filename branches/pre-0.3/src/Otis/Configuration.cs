@@ -310,34 +310,39 @@ namespace Otis
 		}
 
 		/// <summary>
-		/// Gets the IAssemblerFactory
+		/// Gets the AssemblerFactory
 		/// </summary>
-		public IAssemblerFactory GetAssemblerFactory()
+		public object GetAssemblerFactory()
 		{
 			DoLazyBuild();
 
-			return ResolveAssemblerFactory();
+			return ResolveAssemblerFactory<object>();
 		}
 
-		private IAssemblerFactory ResolveAssemblerFactory()
+		/// <summary>
+		/// Gets the TypeSafe AssemblerFactory
+		/// </summary>
+		/// <typeparam name="T">The AssemblerFactory Type</typeparam>
+		public T GetAssemblerFactory<T>() where T : class
 		{
-			//shouldn't be hardcoded
-			const string assemblerFactoryName = "AssemblerFactory";
+			DoLazyBuild();
+
+			return ResolveAssemblerFactory<T>();
+		}
+
+		private T ResolveAssemblerFactory<T>() where T : class
+		{
+			string assemblerFactoryName = GenerationOptions.AssemblerFactoryName;
 
 			try
 			{
 				Type assemblerType = Array.Find(_assemblerTypes, delegate(Type type) { return type.Name == assemblerFactoryName; });
 
-				IAssemblerFactory assemblerFactory = (IAssemblerFactory) Activator.CreateInstance(assemblerType, _assemblerManager);
-
-				if (assemblerFactory == null)
-					throw new Exception();
-
-				return assemblerFactory;
+				return (T) Activator.CreateInstance(assemblerType);
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
-				throw new OtisException(ErrAssemblerFactoryNotConfigured);
+				throw new OtisException(ErrAssemblerFactoryNotConfigured, e);
 			}
 		}
 

@@ -15,10 +15,9 @@ namespace Otis
 	{
 		private const string ErrNoAssemblerBaseNameAndNoDefaultAssemblerBase = "{0} -> {1}, is missing an AssemblerBaseName and No Default Assembler Base was provided.";
 		private const string ErrUnableToResolveAssemblerBase = "Unable to Resolve AssemblerBase: {0}";
-		private readonly CodeGeneratorContext _context;
 
+		private readonly CodeGeneratorContext _context;
 		private readonly CodeNamespace _namespace;
-		readonly List<CodeNamespace> _namespaces = new List<CodeNamespace>(10);
 		readonly List<string> _explicitAssemblies = new List<string>(10);
 
 		public AssemblerBuilder(CodeGeneratorContext context, IEnumerable<string> assemblies)
@@ -32,9 +31,6 @@ namespace Otis
 			_namespace.Imports.Add(new CodeNamespaceImport("System.Collections"));
 			_namespace.Imports.Add(new CodeNamespaceImport("System.Collections.Generic"));
 			_namespace.Imports.Add(new CodeNamespaceImport("Otis"));
-			_namespace.Imports.Add(new CodeNamespaceImport("Otis.Utils"));
-			_namespace.Imports.Add(new CodeNamespaceImport("System.Reflection"));
-
 
 			AddExplicitAssemblies(assemblies);
 		}

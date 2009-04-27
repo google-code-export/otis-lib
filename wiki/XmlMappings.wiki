@@ -46,6 +46,8 @@ public class Util
 }
 }}}
 
+Please note that `dto` instance has already been transformed according to mapping configuration, so you should only transform the members which can't be expressed with Otis.
+
 `<class>` element can contain one `<member>` element for every property or field of the target type which must be mapped to some expression. For example, mapping `<member name="ProjectCount" expression="$Projects.Count" />` means that the !ProjectCount property will be set to the value of the Count property of the Projects property of source class. In the code, it would look like this:
 `target.ProjectCount = source.Projects.Count;`
 

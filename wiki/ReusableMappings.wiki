@@ -1,4 +1,5 @@
 #summary Proposal: Discusses a way to reuse mappings between unrelated classes.
+#labels Proposal
 
 = Introduction =
 

@@ -1,0 +1,5 @@
+#summary proposal for handling null values inside a mapping expression.
+
+= Introduction =
+
+Very often, there is a need to map a property to an expression which is a chain of property calls (forget Law of Demeter for the moment) or to a method call with the unknown implementation.

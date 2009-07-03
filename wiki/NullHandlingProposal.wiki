@@ -1,4 +1,5 @@
-#summary proposal for handling null values inside a mapping expression.
+#summary Proposal: handling null values inside a mapping expression.
+#labels Proposal
 
 = Introduction =
 
